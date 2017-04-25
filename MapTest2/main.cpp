@@ -1,5 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <marble/MarbleWidget.h>
 //test
 int main(int argc, char *argv[])
 {
