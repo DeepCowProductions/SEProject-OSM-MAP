@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/marker.png</file>
+        <file>res/scale.png</file>
+        <file>res/scale_end.png</file>
+    </qresource>
+</RCC>
