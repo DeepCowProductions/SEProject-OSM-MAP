@@ -1,0 +1,23 @@
+//    Settings {
+//        id: settings
+//    }
+
+//    Component {
+//        id: pointDelegate
+
+//        MapCircle {
+//            id: point
+//            radius: 5000
+//            color: "#4400FF"
+//            border.color: "#4400FF"
+//            border.width: 22
+//            smooth: false
+//            opacity: 0.5
+//            center: locationData.coodinate
+//        }
+//    }
+
+//    MapItemView {
+//        model: geocodeModel
+//        delegate: pointDelegate
+//    }
