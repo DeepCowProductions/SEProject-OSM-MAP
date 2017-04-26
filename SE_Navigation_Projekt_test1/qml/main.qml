@@ -6,9 +6,9 @@ import QtLocation 5.6
 import fhswf.se.tools.settings 1.0
 
 ApplicationWindow {
-//    property alias mapAlias: map
-//    property alias loactionsAlias: locations
-//    property alias settingsAlias: settings
+    //    property alias mapAlias: map
+    //    property alias loactionsAlias: locations
+    //    property alias settingsAlias: settings
     property alias mainStack: mainStack
 
     property variant mapInstance
@@ -24,10 +24,9 @@ ApplicationWindow {
 
     function initApp(value) {
         console.log("invoke initApp -  creating mapItem")
-//        placesModelInstance = placesModelComp.createObject();
+        //        placesModelInstance = placesModelComp.createObject();
         mapInstance = mapPageComp.createObject(mainStack);
-        locationsInstance = locationsPageComp.createObject(mainStack);
-        locationsInstance.placesModel = placesModel
+
         settingsInstance = settingsPageComp.createObject(mainStack);
         mainStack.push(mapInstance)
         mapInstance.forceActiveFocus()
@@ -105,7 +104,7 @@ ApplicationWindow {
     Component {
         id: mapPageComp
         MapPage {
-//            id: mapPage
+            //            id: mapPage
             onTestSignal123: {
                 console.log("mapComponent recieved test Signal")
             }
@@ -113,6 +112,16 @@ ApplicationWindow {
                 mainStack.push(settingsInstance)
             }
             locationPageButton.onClicked: {
+                if (!locationsInstance) {
+                    console.log("creating new instance of locations")
+                    locationsInstance = locationsPageComp.createObject(mainStack);
+                    locationsInstance.placesModel = placesModel
+                }
+                else{
+                    console.log("location instance already here...")
+                }
+
+                console.log("adding instance of locations to mainStack")
                 mainStack.push(locationsInstance)
             }
             Component.onCompleted: console.log("mapPage complete")
@@ -128,10 +137,10 @@ ApplicationWindow {
         }
     }
 
-//    Component {
-//        id: placesModelComp
-        PlacesModel {
-            id:placesModel
-        }
-//    }
+    //    Component {
+    //        id: placesModelComp
+    PlacesModel {
+        id:placesModel
+    }
+    //    }
 }

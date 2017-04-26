@@ -46,7 +46,7 @@ Page {
                 //                geocodeModel.query = fromAddress
                 //                geocodeModel.update()
                 //                map.clearMapItems()
-                marker.coordinate = positionSource.coordinate
+                //                marker.coordinate = positionSource.coordinate
                 //                map.addMapItem(marker)
             }
         }
@@ -61,8 +61,8 @@ Page {
 
     PositionSource {
         id: positionSource
-        updateInterval: 10
-        active: true
+        //        updateInterval: 10
+        active: false
 
         onPositionChanged: {
             var coord = position.coordinate;
@@ -117,12 +117,8 @@ Page {
         // }
     }
 
-    Column{
-        Label {
-            id:debugWindow
-            text:""
-        }
-
+    Rectangle {
+        anchors.fill: parent
         Map {
             id : map
             anchors.fill: parent
@@ -131,6 +127,7 @@ Page {
             zoomLevel: 10
 
             property MapCircle circle
+
         }
     }
 }
