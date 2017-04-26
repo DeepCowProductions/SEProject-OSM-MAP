@@ -1,6 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include "src/settings.h"
+#include "src/placesmodel.h"
 #include <QImage>
 int main(int argc, char *argv[])
 {
@@ -11,6 +12,7 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     qmlRegisterType<Settings>("fhswf.se.tools.settings", 1, 0, "Settings");
+    qmlRegisterType<PlacesModel>("fhswf.se.tools.settings", 1, 0, "PlacesModel");
     QQmlApplicationEngine engine;
     engine.load(QUrl(QLatin1String("qrc:/qml/main.qml")));
     QObject::connect(&engine, SIGNAL(quit()), qApp, SLOT(quit()));

@@ -3,6 +3,7 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
 import QtPositioning 5.6
 import QtLocation 5.6
+import fhswf.se.tools.settings 1.0
 
 ApplicationWindow {
 //    property alias mapAlias: map
@@ -14,6 +15,7 @@ ApplicationWindow {
     property variant locationsInstance
     property variant settingsInstance
 
+
     id: appWindow
     visible: true
     width: 640
@@ -22,8 +24,10 @@ ApplicationWindow {
 
     function initApp(value) {
         console.log("invoke initApp -  creating mapItem")
+//        placesModelInstance = placesModelComp.createObject();
         mapInstance = mapPageComp.createObject(mainStack);
         locationsInstance = locationsPageComp.createObject(mainStack);
+        locationsInstance.placesModel = placesModel
         settingsInstance = settingsPageComp.createObject(mainStack);
         mainStack.push(mapInstance)
         mapInstance.forceActiveFocus()
@@ -84,6 +88,16 @@ ApplicationWindow {
                 mainStack.pop()
                 mapInstance.setToState(1)
             }
+            testButton1.onClicked: {
+                placesModel.clearList()
+            }
+            testButton2.onClicked: {
+                placesModel.writeUserData()
+            }
+            testButton3.onClicked: {
+                placesModel.readUserData()
+            }
+
             Component.onCompleted: console.log("locationsPage complete")
         }
 
@@ -114,4 +128,10 @@ ApplicationWindow {
         }
     }
 
+//    Component {
+//        id: placesModelComp
+        PlacesModel {
+            id:placesModel
+        }
+//    }
 }

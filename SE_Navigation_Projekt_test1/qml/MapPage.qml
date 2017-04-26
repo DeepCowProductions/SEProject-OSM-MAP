@@ -65,7 +65,7 @@ Page {
         active: true
 
         onPositionChanged: {
-            var coord = src.position.coordinate;
+            var coord = position.coordinate;
             console.log("Coordinate:", coord.longitude, coord.latitude);
         }
     }

@@ -3,15 +3,14 @@
 Settings::Settings()
 {
     qDebug() << "Settings Construtor";
-    setHome("Ierlohn");
-    setUseOfflineCache(false);
-    m_settings = new QSettings("FH-SWF",qApp->applicationName(), Q_NULLPTR);
 
-    setUseOfflineCache(m_settings->value("useOfflineMapCache").toBool());
-//    [...]
-    qDebug() << m_settings->fileName() << m_settings->organizationName();
-    m_settings->setValue("useOfflineMapCache",m_useOfflineCache);
-    m_settings->sync();
+//    m_settings = new QSettings("FH-SWF",qApp->applicationName(), Q_NULLPTR);
+    m_settings = new QSettings();   // since we set app-name and company in main.cpp we can use dfault constructor
+
+    // read settings
+    readSettings();
+
+    qDebug() << "settings saved at: " << m_settings->fileName() << "  with organisation name: " << m_settings->organizationName();
 }
 
 Settings::~Settings()
@@ -26,35 +25,69 @@ QString Settings::home() const
     return m_home;
 }
 
-bool Settings::useOfflineCache() const
+bool Settings::useOfflineMap() const
 {
-    return m_useOfflineCache;
+    return m_useOfflineMap;
+}
+
+int Settings::maxNormalMapChacheSize() const
+{
+    return m_maxNormalMapChacheSize;
+}
+
+int Settings::currentOfflineMapSize() const
+{
+    return m_currentOfflineMapSize;
+}
+
+int Settings::maxOfflineMapSize() const
+{
+    return m_maxOfflineMapSize;
+}
+
+bool Settings::useNormalMapCache() const
+{
+    return m_useNormalMapCache;
 }
 
 void Settings::save()
 {
-    saveSettings();
-    m_settings->sync();
+//    m_settings->sync();
+    writeSettings();
+//    m_settings->sync();
 }
 
 void Settings::load()
 {
-    // entweder ?
-    m_settings->sync();
-
-    // oder ?
-    setUseOfflineCache(m_settings->value("useOfflineMapCache").toBool());
-//    [...]
+//    m_settings->sync();
+    readSettings();
+//    m_settings->sync();
 }
 
-void Settings::saveSettings()
+void Settings::readSettings()
 {
-    // entweder ?
-    m_settings->sync();
+    // get properties from settings
+    setHome(m_settings->value("home").toString());
+    setUseOfflineMap(m_settings->value("useOfflineMap").toBool());
+    setUseNormalMapCache(m_settings->value("useNormalMapCache").toBool());
+    setMaxNormalMapChacheSize(m_settings->value("maxNormalMapChacheSize").toInt());
+    setMaxOfflineMapSize(m_settings->value("maxOfflineMapSize").toInt());
+    setCurrentOfflineMapSize(m_settings->value("currentOfflineMapSize").toInt()); // #???#
 
-    // oder ?
-    m_settings->setValue("useOfflineMapCache",m_useOfflineCache);
-//    [...]
+}
+
+void Settings::writeSettings()
+{
+    // write properties to settings
+    m_settings->setValue("home",m_home);
+    m_settings->setValue("useOfflineMap",m_useOfflineMap);
+    m_settings->setValue("useNormalMapCache",m_useNormalMapCache);
+    m_settings->setValue("maxNormalMapChacheSize",m_maxNormalMapChacheSize);
+    m_settings->setValue("maxOfflineMapSize",m_maxOfflineMapSize);
+    m_settings->setValue("currentOfflineMapSize",m_currentOfflineMapSize);
+
+    // force writeing to storage by calling sync - not neccessary but makes things easier
+    m_settings->sync();
 }
 
 void Settings::setHome(QString home)
@@ -66,11 +99,47 @@ void Settings::setHome(QString home)
     emit homeChanged(home);
 }
 
-void Settings::setUseOfflineCache(bool useOfflineCache)
+void Settings::setUseOfflineMap(bool useOfflineMap)
 {
-    if (m_useOfflineCache == useOfflineCache)
+    if (m_useOfflineMap == useOfflineMap)
         return;
 
-    m_useOfflineCache = useOfflineCache;
-    emit useOfflineCacheChanged(useOfflineCache);
+    m_useOfflineMap = useOfflineMap;
+    emit useOfflineMapChanged(useOfflineMap);
+}
+
+void Settings::setMaxNormalMapChacheSize(int maxNormalMapChacheSize)
+{
+    if (m_maxNormalMapChacheSize == maxNormalMapChacheSize)
+        return;
+
+    m_maxNormalMapChacheSize = maxNormalMapChacheSize;
+    emit maxNormalMapChacheSizeChanged(maxNormalMapChacheSize);
+}
+
+void Settings::setCurrentOfflineMapSize(int currentOfflineMapSize)
+{
+    if (m_currentOfflineMapSize == currentOfflineMapSize)
+        return;
+
+    m_currentOfflineMapSize = currentOfflineMapSize;
+    emit currentOfflineMapSizeChanged(currentOfflineMapSize);
+}
+
+void Settings::setMaxOfflineMapSize(int maxOfflineMapSize)
+{
+    if (m_maxOfflineMapSize == maxOfflineMapSize)
+        return;
+
+    m_maxOfflineMapSize = maxOfflineMapSize;
+    emit maxOfflineMapSizeChanged(maxOfflineMapSize);
+}
+
+void Settings::setUseNormalMapCache(bool useNormalMapCache)
+{
+    if (m_useNormalMapCache == useNormalMapCache)
+        return;
+
+    m_useNormalMapCache = useNormalMapCache;
+    emit useNormalMapCacheChanged(useNormalMapCache);
 }
