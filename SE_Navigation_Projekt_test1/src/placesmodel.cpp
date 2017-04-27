@@ -78,6 +78,7 @@ bool PlacesModel::writeUserDataToJson(QJsonObject &object)
 // TODO: needs work
 bool PlacesModel::readUserData()
 {
+    clearList();
     QFile saveFile;
     saveFile.setFileName(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/" + saveFileNamePlaces );
     qDebug() << "saveFile Location: " << saveFile.fileName();
@@ -127,6 +128,16 @@ bool PlacesModel::writeUserData()
     QJsonDocument saveDoc(placesJasonObject);
     saveFile.write(saveDoc.toJson());
     saveFile.close();
+}
+
+bool PlacesModel::addItem(QString name, QGeoCoordinate coord)
+{
+    beginInsertRows(QModelIndex(),m_places.size(),m_places.size() ); // for updating the listView inside qml (required)
+    Place p;
+    p.setName(name);
+    p.setCoordinate(coord);
+    m_places.append(p);
+    endInsertRows();
 }
 
 bool PlacesModel::clearList()

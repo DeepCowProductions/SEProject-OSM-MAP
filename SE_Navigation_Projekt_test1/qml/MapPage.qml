@@ -12,6 +12,8 @@ Item {
     property alias settingsPageButton: settingsPageButton
     property alias locationPageButton: locationPageButton
 
+    property variant currentPosition: positionSource.valid ? positionSource.position.coordinate : map.center
+
     property bool followPerson
     property bool recordRoute
     property int coordCount
@@ -68,7 +70,7 @@ Item {
         }
         onRunningChanged: {
             if (!timer.running) {
-                messageDialog.createObject(map)
+                saveMsgWithTextDialog.createObject(map)
             }
         }
     }
@@ -212,7 +214,7 @@ Item {
             }
         }
         Component{
-            id: messageDialog
+            id: saveMsgWithTextDialog
             SimpleTextDialog {
                 title: "Do you want to save this route?"
                 labelText: "Enter a name to save"
@@ -220,9 +222,13 @@ Item {
                     console.log("acceptedd")
                     roadsModel.addItem(input,coordList)
                     coordList = []
+                    visible = false
+                    map.forceActiveFocus()
                 }
                 onRejected: {
                     coordList = []
+                    visible = false
+                    map.forceActiveFocus()
                 }
                 Component.onCompleted: visible = true
             }

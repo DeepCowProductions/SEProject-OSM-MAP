@@ -166,6 +166,10 @@ ApplicationWindow {
             backToLocationsButton.onClicked: {
                 mainStack.pop()
             }
+            savePlaceButton.onClicked: {
+                saveMsgWithTextDialog.createObject(mapInstance)
+            }
+
             onMapRequest: {
                 console.log(latitude + ", " + longitude)
             }
@@ -215,6 +219,24 @@ ApplicationWindow {
                 mainStack.pop(mapInstance)
             }
             Component.onCompleted: console.log("settingsPage complete")
+        }
+    }
+
+    Component{
+        id: saveMsgWithTextDialog
+        SimpleTextDialog {
+            title: "Do you want to save this Location?"
+            labelText: "Enter a name to save"
+            onAccepted: {
+                placesModel.addItem(input,mapInstance.currentPosition)
+                visible = false
+                mainStack.forceActiveFocus()
+            }
+            onRejected: {
+                visible = false
+                mainStack.forceActiveFocus()
+            }
+            Component.onCompleted: visible = true
         }
     }
 

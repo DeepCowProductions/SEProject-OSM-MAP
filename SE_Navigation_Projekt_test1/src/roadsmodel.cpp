@@ -68,6 +68,7 @@ bool RoadsModel::writeUserDataToJson(QJsonObject &object)
 // TODO: needs work
 bool RoadsModel::readUserData()
 {
+    clearList();
     QFile saveFile;
     saveFile.setFileName(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/" + saveFileNameRoads );
     qDebug() << "saveFile Location: " << saveFile.fileName();

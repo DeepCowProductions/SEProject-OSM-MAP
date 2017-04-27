@@ -45,6 +45,7 @@ public slots:
     Q_INVOKABLE bool writeTestData();
     Q_INVOKABLE bool readUserData();
     Q_INVOKABLE bool writeUserData();
+    Q_INVOKABLE bool addItem(QString name, QGeoCoordinate coord);
 
 protected:
 
