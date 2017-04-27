@@ -6,7 +6,7 @@ import QtLocation 5.6
 import fhswf.se.nav.settings 1.0
 import fhswf.se.nav.models 1.0
 
-Page {
+Item {
     id: placesPage
     property alias model: pLacesListView.model
     property alias testButton1: scrapIt
@@ -17,34 +17,13 @@ Page {
     property int listWidth: placesPage.width - 0.1
     property int listHeight: placesPage.height * 0.55
 
-    property alias locationsBackButton: placesBackButton
+    property alias backButton: backButton
     property alias backToLocationsButton: backToLocationsButton
     property alias newPlaceButton: newPlaceButton
     property alias savePlaceButton: savePlaceButton
 
 
     signal mapRequest(double latitude, double longitude)
-
-    function setToState (value) {
-        console.log("setting button index to "+value)
-        tabBar.currentIndex = value
-    }
-
-    header: TabBar {
-        id: tabBar
-        TabButton {
-            id: placesPageLabel
-            text: "Locations"
-        }
-
-        TabButton {
-            id: placesBackButton
-            text: "Back"
-            onClicked: {
-                console.log ("default hanlder for mapPageBackButton")
-            }
-        }
-    }
 
     Component{
         id: highLightComp
@@ -138,6 +117,35 @@ Page {
 
     Column {
         anchors.fill: parent
+        Row  {
+            id: buttonRow
+            width: parent.width
+            height: 50
+            Rectangle{
+                width: parent.width * 0.5
+                height: parent.height
+                Text{
+                    anchors.fill: parent
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    text: "Locations"
+                    color: "darkblue"
+                    font.family: "Helvetica"
+                    font.pointSize: 24
+                }
+            }
+            Button {
+                id: backButton
+                text: "back"
+                width: parent.width * 0.5
+                height: parent.height
+            }
+        }
+
+        HeaderSpacer {
+
+        }
+
         Rectangle {
             id: title
             width: parent.width

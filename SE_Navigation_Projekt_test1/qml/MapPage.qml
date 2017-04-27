@@ -4,8 +4,7 @@ import QtQuick.Layouts 1.0
 import QtPositioning 5.6
 import QtLocation 5.6
 
-Page {
-    property alias mapPageTabbar: mapPageTabbar
+Item {
     property alias toggleTrackingButton: toggleTrackingButton
     property alias toggleRecordRouteButton: toggleRecordRouteButton
     property alias centerOnMeButton: centerOnMeButton
@@ -34,56 +33,6 @@ Page {
     }
 
     signal testSignal123 ()
-
-    header: TabBar {
-        id: mapPageTabbar
-        currentIndex: 1
-        TabButton {
-            id: settingsPageButton
-            text: "settingsPageButton"
-            onClicked: {
-                console.log ("default hanlder for settingsPageButton ")
-            }
-        }
-        TabButton {
-            id: toggleTrackingButton
-            text: "toggleTrackingButton"
-            onClicked: {
-                console.log ("default hanlder for toggleTrackingButton")
-                toggleFollow()
-            }
-        }
-        TabButton {
-            id: centerOnMeButton
-            text: "centerOnMeButton"
-            onClicked: {
-                console.log ("default hanlder for centerOnMeButton")
-                //                geocodeModel.query = fromAddress
-                //                geocodeModel.update()
-                map.center = positionSource.position.coordinate
-                upDateMarker(positionSource.position.coordinate)
-            }
-        }
-        TabButton {
-            id: toggleRecordRouteButton
-            text: "toggleRecordRouteButton"
-            //            text: map.center.map.center.latitude
-            onClicked: {
-                console.log ("default hanlder for toggleRecordRouteButton ")
-                toggleRecordRoute()
-                // TBI
-//                geocodeModel.query = fromAddress
-//                geocodeModel.update()
-            }
-        }
-        TabButton {
-            id: locationPageButton
-            text: "locationPageButton"
-            onClicked: {
-                console.log ("default hanlder for locationPageButton ")
-            }
-        }
-    }
 
     PositionSource {
         id: positionSource
@@ -143,15 +92,82 @@ Page {
         //     value:
         // }
     }
-
-    Rectangle {
+    Item {
         anchors.fill: parent
-        Map {
-            id : map
-            anchors.fill: parent
-            plugin: osmPlugin
-            center: positionSource.position.coordinate
-            zoomLevel: 10
+        Row  {
+            anchors.top: parent.top
+            id: buttonRow
+            width: parent.width
+            height: 50
+            spacing: 4
+            Button {
+                id: settingsPageButton
+                text: "settingsPageButton"
+                width: (parent.width-16) * 0.2
+                height: parent.height
+                onClicked: {
+                    console.log ("default hanlder for settingsPageButton ")
+                }
+            }
+            Button {
+                id: toggleTrackingButton
+                text: "toggleTrackingButton"
+                width: (parent.width-16) * 0.2
+                height: parent.height
+                onClicked: {
+                    console.log ("default hanlder for toggleTrackingButton")
+                    toggleFollow()
+                }
+            }
+            Button {
+                id: centerOnMeButton
+                text: "centerOnMeButton"
+                width: (parent.width-16) * 0.2
+                height: parent.height
+                onClicked: {
+                    console.log ("default hanlder for centerOnMeButton")
+                    //                geocodeModel.query = fromAddress
+                    //                geocodeModel.update()
+                    map.center = positionSource.position.coordinate
+                    upDateMarker(positionSource.position.coordinate)
+                }
+            }
+            Button {
+                id: toggleRecordRouteButton
+                text: "back"
+                width: (parent.width-16) * 0.2
+                height: parent.height
+                //            text: map.center.map.center.latitude
+                onClicked: {
+                    console.log ("default hanlder for toggleRecordRouteButton ")
+                    toggleRecordRoute()
+                    // TBI
+                    //                geocodeModel.query = fromAddress
+                    //                geocodeModel.update()
+                }
+            }
+
+            Button {
+                id: locationPageButton
+                text: "locationPageButton"
+                width: (parent.width-16) * 0.2
+                height: parent.height
+                onClicked: {
+                    console.log ("default hanlder for locationPageButton ")
+                }
+            }
+        }
+        Rectangle {
+            anchors.top: buttonRow.bottom
+            width: parent.width
+            height: parent.height - buttonRow.height
+            Map {
+                id : map
+                anchors.fill: parent
+                plugin: osmPlugin
+                center: positionSource.position.coordinate
+                zoomLevel: 10
+            }
         }
     }
 }

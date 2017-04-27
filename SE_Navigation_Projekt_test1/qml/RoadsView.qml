@@ -6,7 +6,7 @@ import QtLocation 5.6
 import fhswf.se.nav.settings 1.0
 import fhswf.se.nav.models 1.0
 
-Page {
+Item {
     id: roadsPage
     property alias model: roadsListView.model
     property alias testButton1: scrapIt
@@ -17,33 +17,12 @@ Page {
     property int listWidth: roadsPage.width - 0.1
     property int listHeight: roadsPage.height * 0.55
 
-    property alias locationsBackButton: roadsBackButton
+    property alias backButton: backButton
     property alias backToLocationsButton: backToLocationsButton
     property alias savePlaceButton: saveRoadButton
 
     signal mapRequest(variant array)
 
-    function setToState (value) {
-        console.log("setting button index to "+value)
-        tabBar.currentIndex = value
-    }
-
-    header: TabBar {
-        id: tabBar
-        TabButton {
-            id: locationsPageLabel
-            text: "Locations"
-        }
-
-        TabButton {
-            id: roadsBackButton
-            text: "Back"
-            onClicked: {
-                console.log ("default hanlder for mapPageBackButton")
-
-            }
-        }
-    }
 
     Component{
         id: highLightComp
@@ -110,6 +89,34 @@ Page {
     }
     Column {
         anchors.fill: parent
+        Row  {
+            id: buttonRow
+            width: parent.width
+            height: 50
+            Rectangle{
+                width: parent.width * 0.5
+                height: parent.height
+                Text{
+                    anchors.fill: parent
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    text: "Locations"
+                    color: "darkblue"
+                    font.family: "Helvetica"
+                    font.pointSize: 24
+                }
+            }
+            Button {
+                id: backButton
+                text: "back"
+                width: parent.width * 0.5
+                height: parent.height
+            }
+        }
+        HeaderSpacer {
+
+        }
+
         Rectangle {
             id: title
             width: parent.width
@@ -131,7 +138,7 @@ Page {
         Rectangle {
             id: buttons
             width: parent.width
-//            anchors.top: title.bottom
+            //            anchors.top: title.bottom
             height: 50
             //                border.color: "lightgray"
             //                border.width: 1
@@ -157,7 +164,7 @@ Page {
         Column{
             id: listColumn
             //                anchors.fill: parent
-//            anchors.top: buttons.bottom
+            //            anchors.top: buttons.bottom
             Row{
                 id: headerRow
                 height: 30

@@ -6,59 +6,53 @@ import QtLocation 5.6
 import fhswf.se.nav.settings 1.0
 import fhswf.se.nav.models 1.0
 
-Page {
+Item {
     id: locationPage
 
-    property alias locationsBackButton: locationsBackButton
+    property alias backButton: backButton
     property alias viewPlacesButtonAlias: viewPlacesButton
     property alias viewRoadsButtonAlias: viewRoadsButton
     //    signal mapRequest(double latitude, double longitude)
-
-    function setToState (value) {
-        console.log("setting button index to "+value)
-        tabBar.currentIndex = value
-    }
-
-    header: TabBar {
-        id: tabBar
-        TabButton {
-            id: locationsPageLabel
-            text: "Locations"
-        }
-
-        TabButton {
-            id: locationsBackButton
-            text: "Back"
-        }
-    }
 
     Column {
         id: locationsMainColumn
         anchors.fill : parent
 
-        Rectangle {
+        Row  {
+            id: buttonRow
             width: parent.width
             height: 50
-//            border.color: "lightgray"
-//            border.width: 1
-            Text {
-                anchors.fill: parent
-                text: "Locations"
-                font.family: "Helvetica"
-                font.pointSize: 24
-                color: "darkblue"
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
+
+            Rectangle{
+                width: parent.width * 0.5
+                height: parent.height
+                Text{
+                    anchors.fill: parent
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    text: "Locations"
+                    color: "darkblue"
+                    font.family: "Helvetica"
+                    font.pointSize: 24
+                }
             }
+            Button {
+                id: backButton
+                text: "back"
+                width: parent.width * 0.5
+                height: parent.height
+            }
+        }
+
+        HeaderSpacer {
 
         }
 
-
         Rectangle {
             width: parent.width
             height: 50
-//            border.color: "lightgray"
-//            border.width: 1
+            //            border.color: "lightgray"
+            //            border.width: 1
             Row {
                 anchors.fill: parent
                 padding: 1
@@ -81,8 +75,8 @@ Page {
         Rectangle {
             width: parent.width
             height: 50
-//            border.color: "lightgray"
-//            border.width: 1
+            //            border.color: "lightgray"
+            //            border.width: 1
             Row {
                 anchors.fill: parent
                 padding: 1
@@ -93,8 +87,8 @@ Page {
         Rectangle {
             width: parent.width
             height: 50
-//            border.color: "lightgray"
-//            border.width: 1
+            //            border.color: "lightgray"
+            //            border.width: 1
             Row {
                 anchors.fill: parent
                 padding: 1
@@ -106,7 +100,5 @@ Page {
 
     }
     // end main Column
-
-
 
 }

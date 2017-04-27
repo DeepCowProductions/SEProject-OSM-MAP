@@ -6,5 +6,6 @@
         <file>qml/MapPage.qml</file>
         <file>qml/PlacesView.qml</file>
         <file>qml/RoadsView.qml</file>
+        <file>qml/HeaderSpacer.qml</file>
     </qresource>
 </RCC>

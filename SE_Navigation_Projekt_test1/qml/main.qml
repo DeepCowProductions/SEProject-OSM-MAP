@@ -29,8 +29,10 @@ ApplicationWindow {
         console.log("invoke initApp -  creating mapItem")
         //        placesModelInstance = placesModelComp.createObject();
         mapInstance = mapPageComp.createObject(mainStack);
-        settingsInstance = settingsPageComp.createObject(mainStack);
         mainStack.push(mapInstance)
+//        settingsInstance = settingsPageComp.createObject(mainStack);
+//        mainStack.push(settingsInstance)
+//        mainStack.pop()
         mapInstance.forceActiveFocus()
     }
 
@@ -85,9 +87,8 @@ ApplicationWindow {
         id: locationsPageComp
         LocationsPage {
             id: locationsPage
-            locationsBackButton.onClicked: {
+            backButton.onClicked: {
                 mainStack.pop(mapInstance)
-                mapInstance.setToState(1)
             }
             viewPlacesButtonAlias.onClicked: {
                 if (!placesInstance) {
@@ -98,7 +99,6 @@ ApplicationWindow {
                 else{
                     console.log("item instance already here...")
                 }
-                placesInstance.setToState(0)
                 console.log("adding instance of item to mainStack")
                 mainStack.push(placesInstance)
 
@@ -112,7 +112,6 @@ ApplicationWindow {
                 else{
                     console.log("item instance already here...")
                 }
-                roadsInstance.setToState(0)
                 console.log("adding instance of item to mainStack")
                 mainStack.push(roadsInstance)
             }
@@ -125,9 +124,8 @@ ApplicationWindow {
         id: roadsPageComp
         RoadsView {
             id: roadsPage
-            locationsBackButton.onClicked: {
+            backButton.onClicked: {
                 mainStack.pop(mapInstance)
-                mapInstance.setToState(1)
             }
             testButton1.onClicked: {
                 roadsModel.clearList()
@@ -153,9 +151,8 @@ ApplicationWindow {
         id: placesPageComp
         PlacesView {
             id: placesPage
-            locationsBackButton.onClicked: {
+            backButton.onClicked: {
                 mainStack.pop(mapInstance)
-                mapInstance.setToState(1)
             }
             testButton1.onClicked: {
                 placesModel.clearList()
@@ -185,6 +182,14 @@ ApplicationWindow {
                 console.log("mapComponent recieved test Signal")
             }
             settingsPageButton.onClicked: {
+                if (!settingsInstance) {
+                    console.log("creating new instance of item")
+                    settingsInstance = settingsPageComp.createObject(mainStack);
+                }
+                else{
+                    console.log("item instance already here...")
+                }
+                console.log("adding instance of item to mainStack")
                 mainStack.push(settingsInstance)
             }
             locationPageButton.onClicked: {
@@ -195,7 +200,6 @@ ApplicationWindow {
                 else{
                     console.log("item instance already here...")
                 }
-                locationsInstance.setToState(0)
                 console.log("adding instance of item to mainStack")
                 mainStack.push(locationsInstance)
             }
@@ -207,7 +211,9 @@ ApplicationWindow {
         id: settingsPageComp
         SettingsPage {
             id: settingsPage
-
+            backButton.onClicked: {
+                mainStack.pop(mapInstance)
+            }
             Component.onCompleted: console.log("settingsPage complete")
         }
     }
