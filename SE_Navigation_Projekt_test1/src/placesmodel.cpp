@@ -79,7 +79,7 @@ bool PlacesModel::writeUserDataToJson(QJsonObject &object)
 bool PlacesModel::readUserData()
 {
     QFile saveFile;
-    saveFile.setFileName(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/" + saveFileName );
+    saveFile.setFileName(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/" + saveFileNamePlaces );
     qDebug() << "saveFile Location: " << saveFile.fileName();
     // cal QDir::makePath?
     if (!saveFile.exists()){
@@ -109,7 +109,7 @@ bool PlacesModel::readUserData()
 bool PlacesModel::writeUserData()
 {
     QFile saveFile;
-    saveFile.setFileName(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/" + saveFileName );
+    saveFile.setFileName(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/" + saveFileNamePlaces );
     if (!saveFile.exists()){
         QDir d;
         qDebug() << "saveFile not found - trying to create a fresh one";

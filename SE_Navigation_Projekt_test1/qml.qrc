@@ -4,6 +4,7 @@
         <file>qml/SettingsPage.qml</file>
         <file>qml/LocationsPage.qml</file>
         <file>qml/MapPage.qml</file>
-        <file>qml/PageTemplate.qml</file>
+        <file>qml/PlacesView.qml</file>
+        <file>qml/RoadsView.qml</file>
     </qresource>
 </RCC>

@@ -3,7 +3,8 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
 import QtPositioning 5.6
 import QtLocation 5.6
-import fhswf.se.tools.settings 1.0
+import fhswf.se.nav.settings 1.0
+import fhswf.se.nav.models 1.0
 
 ApplicationWindow {
     //    property alias mapAlias: map
@@ -13,20 +14,21 @@ ApplicationWindow {
 
     property variant mapInstance
     property variant locationsInstance
+    property variant roadsInstance
+    property variant placesInstance
     property variant settingsInstance
 
 
     id: appWindow
     visible: true
-    width: 640
-    height: 480
+    width: 360
+    height: 640
     title: qsTr("SE Projekt - Mobile Navigation")
 
     function initApp(value) {
         console.log("invoke initApp -  creating mapItem")
         //        placesModelInstance = placesModelComp.createObject();
         mapInstance = mapPageComp.createObject(mainStack);
-
         settingsInstance = settingsPageComp.createObject(mainStack);
         mainStack.push(mapInstance)
         mapInstance.forceActiveFocus()
@@ -84,27 +86,107 @@ ApplicationWindow {
         LocationsPage {
             id: locationsPage
             locationsBackButton.onClicked: {
-                mainStack.pop()
+                mainStack.pop(mapInstance)
                 mapInstance.setToState(1)
             }
-            testButton1.onClicked: {
-                placesModel.clearList()
+            viewPlacesButtonAlias.onClicked: {
+                if (!placesInstance) {
+                    console.log("creating new instance of item")
+                    placesInstance = placesPageComp.createObject(mainStack);
+                    placesInstance.model = placesModel
+                }
+                else{
+                    console.log("item instance already here...")
+                }
+                placesInstance.setToState(0)
+                console.log("adding instance of item to mainStack")
+                mainStack.push(placesInstance)
+
             }
-            testButton2.onClicked: {
-                placesModel.writeUserData()
-            }
-            testButton3.onClicked: {
-                placesModel.readUserData()
+            viewRoadsButtonAlias.onClicked: {
+                if (!roadsInstance) {
+                    console.log("creating new instance of item")
+                    roadsInstance = roadsPageComp.createObject(mainStack);
+                    roadsInstance.model = roadsModel
+                }
+                else{
+                    console.log("item instance already here...")
+                }
+                roadsInstance.setToState(0)
+                console.log("adding instance of item to mainStack")
+                mainStack.push(roadsInstance)
             }
 
             Component.onCompleted: console.log("locationsPage complete")
         }
-
     }
+
+    Component {
+        id: roadsPageComp
+        RoadsView {
+            id: roadsPage
+            locationsBackButton.onClicked: {
+                mainStack.pop(mapInstance)
+                mapInstance.setToState(1)
+            }
+            testButton1.onClicked: {
+                placesModel.clearList()
+                roadsModel.clearList()
+            }
+            testButton2.onClicked: {
+                placesModel.writeUserData()
+                roadsModel.writeUserData()
+            }
+            testButton3.onClicked: {
+                placesModel.readUserData()
+                roadsModel.readUserData()
+            }
+            backToLocationsButton.onClicked: {
+                mainStack.pop()
+            }
+            onMapRequest: {
+                console.log("coords:" + array)
+            }
+
+            Component.onCompleted: console.log("raodsView complete")
+        }
+    }
+
+    Component {
+        id: placesPageComp
+        PlacesView {
+            id: placesPage
+            locationsBackButton.onClicked: {
+                mainStack.pop(mapInstance)
+                mapInstance.setToState(1)
+            }
+            testButton1.onClicked: {
+                placesModel.clearList()
+                roadsModel.clearList()
+            }
+            testButton2.onClicked: {
+                placesModel.writeUserData()
+                roadsModel.writeUserData()
+            }
+            testButton3.onClicked: {
+                placesModel.readUserData()
+                roadsModel.readUserData()
+            }
+            backToLocationsButton.onClicked: {
+                mainStack.pop()
+            }
+            onMapRequest: {
+                console.log(latitude + ", " + longitude)
+            }
+
+            Component.onCompleted: console.log("raodsView complete")
+        }
+    }
+
     Component {
         id: mapPageComp
         MapPage {
-            //            id: mapPage
+            id: mapPage
             onTestSignal123: {
                 console.log("mapComponent recieved test Signal")
             }
@@ -113,15 +195,14 @@ ApplicationWindow {
             }
             locationPageButton.onClicked: {
                 if (!locationsInstance) {
-                    console.log("creating new instance of locations")
+                    console.log("creating new instance of item")
                     locationsInstance = locationsPageComp.createObject(mainStack);
-                    locationsInstance.placesModel = placesModel
                 }
                 else{
-                    console.log("location instance already here...")
+                    console.log("item instance already here...")
                 }
-
-                console.log("adding instance of locations to mainStack")
+                locationsInstance.setToState(0)
+                console.log("adding instance of item to mainStack")
                 mainStack.push(locationsInstance)
             }
             Component.onCompleted: console.log("mapPage complete")
@@ -137,10 +218,10 @@ ApplicationWindow {
         }
     }
 
-    //    Component {
-    //        id: placesModelComp
     PlacesModel {
-        id:placesModel
+        id: placesModel
     }
-    //    }
+    RoadsModel {
+        id: roadsModel
+    }
 }

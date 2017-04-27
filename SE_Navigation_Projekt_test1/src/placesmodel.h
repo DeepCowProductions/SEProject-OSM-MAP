@@ -12,13 +12,11 @@
 #include <QDate>
 
 
-#define saveFileName "places.json"
+#define saveFileNamePlaces "places.json"
 
 class PlacesModel : public QAbstractListModel
 {
     Q_OBJECT
-
-
 
 public:
 

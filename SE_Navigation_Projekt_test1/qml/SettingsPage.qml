@@ -3,7 +3,8 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
 import QtPositioning 5.6
 import QtLocation 5.6
-import fhswf.se.tools.settings 1.0
+import fhswf.se.nav.settings 1.0
+
 
 Page {
 
@@ -11,7 +12,6 @@ Page {
 
     Settings {
         id: settingsObject
-
     }
 
 

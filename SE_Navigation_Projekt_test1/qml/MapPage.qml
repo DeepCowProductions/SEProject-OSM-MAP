@@ -61,12 +61,14 @@ Page {
 
     PositionSource {
         id: positionSource
-        //        updateInterval: 10
-        active: false
-
+        updateInterval: 10
+        active: valid
         onPositionChanged: {
             var coord = position.coordinate;
             console.log("Coordinate:", coord.longitude, coord.latitude);
+            map.clearMapItems()
+            marker.coordinate = coord
+            map.addMapItem(marker)
         }
     }
 
@@ -80,7 +82,7 @@ Page {
         anchorPoint.y: image.width
         smooth: false
         opacity: 0.8
-        coordinate: map.center
+        coordinate: positionSource.position.coordinate
     }
 
     GeocodeModel {

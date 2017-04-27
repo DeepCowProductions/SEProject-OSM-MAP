@@ -33,7 +33,7 @@ void Place::setSavedAtDate(QDate savedAtDate)
 
 void Place::readFromJason(QJsonObject &object)
 {
-    if (!object["city"].isUndefined())
+    if (!object["name"].isUndefined())
         m_name = object["name"].toString();
     else
         m_name = "name missing";

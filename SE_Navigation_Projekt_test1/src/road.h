@@ -13,11 +13,21 @@ class Road
 public:
     Road();
 
-    QString name() const;
-    QDate savedAtDate() const;
+    QList<QGeoCoordinate> coordinates() const;
+    void setCoordinates(const QList<QGeoCoordinate> &coordinates);
 
-    void setName(QString name);
-    void setSavedAtDate(QDate savedAtDate);
+    void addCoordinate(const QGeoCoordinate coord);
+    void clearCoordinateList();
+    void removeCoordinate(QGeoCoordinate coord);
+
+    QString name() const;
+    void setName(const QString &name);
+
+    QDate savedAtDate() const;
+    void setSavedAtDate(const QDate &savedAtDate);
+
+    void readFromJason(QJsonObject &object);
+    QJsonObject writeToJason();
 
 private:
     QList<QGeoCoordinate> m_coordinates;
