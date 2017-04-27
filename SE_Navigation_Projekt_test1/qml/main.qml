@@ -130,15 +130,12 @@ ApplicationWindow {
                 mapInstance.setToState(1)
             }
             testButton1.onClicked: {
-                placesModel.clearList()
                 roadsModel.clearList()
             }
             testButton2.onClicked: {
-                placesModel.writeUserData()
                 roadsModel.writeUserData()
             }
             testButton3.onClicked: {
-                placesModel.readUserData()
                 roadsModel.readUserData()
             }
             backToLocationsButton.onClicked: {
@@ -162,15 +159,12 @@ ApplicationWindow {
             }
             testButton1.onClicked: {
                 placesModel.clearList()
-                roadsModel.clearList()
             }
             testButton2.onClicked: {
                 placesModel.writeUserData()
-                roadsModel.writeUserData()
             }
             testButton3.onClicked: {
                 placesModel.readUserData()
-                roadsModel.readUserData()
             }
             backToLocationsButton.onClicked: {
                 mainStack.pop()

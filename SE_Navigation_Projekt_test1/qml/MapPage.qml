@@ -6,10 +6,27 @@ import QtLocation 5.6
 
 Page {
     property alias mapPageTabbar: mapPageTabbar
-    property alias trackPositionButton: trackPositionButton
-    property alias trackRouteButton: trackRouteButton
+    property alias toggleTrackingButton: toggleTrackingButton
+    property alias toggleRecordRouteButton: toggleRecordRouteButton
+    property alias centerOnMeButton: centerOnMeButton
     property alias settingsPageButton: settingsPageButton
     property alias locationPageButton: locationPageButton
+
+    property bool followPerson
+    property bool recordRoute
+
+    function toggleFollow () {
+        followPerson = !followPerson
+    }
+    function toggleRecordRoute () {
+        recordRoute =!recordRoute
+    }
+
+    function upDateMarker (newCoord) {
+        map.clearMapItems()
+        marker.coordinate = newCoord
+        map.addMapItem(marker)
+    }
 
     function setToState (value) {
         console.log("setting mapState to "+value)
@@ -29,25 +46,34 @@ Page {
             }
         }
         TabButton {
-            id: trackPositionButton
-            text: "trackPositionButton"
+            id: toggleTrackingButton
+            text: "toggleTrackingButton"
             onClicked: {
-                console.log ("default hanlder for trackPositionButton")
-                geocodeModel.query = fromAddress
-                geocodeModel.update()
+                console.log ("default hanlder for toggleTrackingButton")
+                toggleFollow()
             }
         }
         TabButton {
-            id: trackRouteButton
-            text: "trackRouteButton"
-            //            text: map.center.map.center.latitude
+            id: centerOnMeButton
+            text: "centerOnMeButton"
             onClicked: {
-                console.log ("default hanlder for trackRouteButton ")
+                console.log ("default hanlder for centerOnMeButton")
                 //                geocodeModel.query = fromAddress
                 //                geocodeModel.update()
-                //                map.clearMapItems()
-                //                marker.coordinate = positionSource.coordinate
-                //                map.addMapItem(marker)
+                map.center = positionSource.position.coordinate
+                upDateMarker(positionSource.position.coordinate)
+            }
+        }
+        TabButton {
+            id: toggleRecordRouteButton
+            text: "toggleRecordRouteButton"
+            //            text: map.center.map.center.latitude
+            onClicked: {
+                console.log ("default hanlder for toggleRecordRouteButton ")
+                toggleRecordRoute()
+                // TBI
+//                geocodeModel.query = fromAddress
+//                geocodeModel.update()
             }
         }
         TabButton {
@@ -65,10 +91,11 @@ Page {
         active: valid
         onPositionChanged: {
             var coord = position.coordinate;
-            console.log("Coordinate:", coord.longitude, coord.latitude);
-            map.clearMapItems()
-            marker.coordinate = coord
-            map.addMapItem(marker)
+            console.log("Coordinate from positionSource:", coord.longitude, coord.latitude);
+            if (followPerson) {
+                upDateMarker(coord)
+                map.center =  positionSource.position.coordinate
+            }
         }
     }
 
@@ -82,7 +109,6 @@ Page {
         anchorPoint.y: image.width
         smooth: false
         opacity: 0.8
-        coordinate: positionSource.position.coordinate
     }
 
     GeocodeModel {
@@ -94,8 +120,7 @@ Page {
                 map.center.latitude = get(0).coordinate.latitude
                 map.center.longitude = get(0).coordinate.longitude
             }
-            marker.coordinate = get(0).coordinate
-            map.addMapItem(marker)
+            upDateMarker(get(0).coordinate)
         }
     }
 
@@ -127,9 +152,6 @@ Page {
             plugin: osmPlugin
             center: positionSource.position.coordinate
             zoomLevel: 10
-
-            property MapCircle circle
-
         }
     }
 }
