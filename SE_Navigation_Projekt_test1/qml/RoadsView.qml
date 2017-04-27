@@ -126,102 +126,102 @@ Page {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
+        }
 
-            Rectangle {
-                id: buttons
-                width: parent.width
-                anchors.top: title.bottom
-                height: 50
-//                border.color: "lightgray"
-//                border.width: 1
-                Row {
-                    anchors.fill: parent
-                    padding: 1
-                    spacing: 4
-                    Button {
-                        id: saveRoadButton
-                        width: parent.width * 0.60
-                        height: parent.height
-                        text: "Save currently tracked Road"
-                    }
-                    Button {
-                        id: backToLocationsButton
-                        width: parent.width * 0.4
-                        height: parent.height
-                        text: "Back to Locations"
-                    }
-                }
-            }
-
-            Column{
-                id: listColumn
-//                anchors.fill: parent
-                anchors.top: buttons.bottom
-                Row{
-                    id: headerRow
-                    height: 30
-                    Rectangle{
-                        width: roadsListView.width * 0.8
-                        height: 30
-                        color: "white"
-                        border.width: 1
-                        border.color: "gray"
-                        Text{
-                            anchors.fill: parent
-                            verticalAlignment: Text.AlignVCenter
-                            horizontalAlignment: Text.AlignHCenter
-                            text: "name"
-                            color: "black"
-                        }
-                    }
-                    Rectangle{
-                        width: roadsListView.width * 0.2
-                        height: 30
-                        color: "white"
-                        border.width: 1
-                        border.color: "gray"
-                        Text{
-                            anchors.fill: parent
-                            verticalAlignment: Text.AlignVCenter
-                            horizontalAlignment: Text.AlignHCenter
-                            text: "date"
-                            color: "black"
-                        }
-                    }
-                }
-                Rectangle{
-                    id:listRect
-                    color: "white"
-                    width: listWidth
-                    height: listHeight
-
-                    ListView{
-                        id: roadsListView
-                        anchors.fill: parent
-                        snapMode: ListView.SnapToItem
-                        clip: true
-
-                        highlight: highLightComp
-                        highlightFollowsCurrentItem: false
-
-                        delegate: itemDelegate
-                    }
+        Rectangle {
+            id: buttons
+            width: parent.width
+//            anchors.top: title.bottom
+            height: 50
+            //                border.color: "lightgray"
+            //                border.width: 1
+            Row {
+                anchors.fill: parent
+                padding: 1
+                spacing: 4
+                Button {
+                    id: saveRoadButton
+                    width: parent.width * 0.60
+                    height: parent.height
+                    text: "Save currently tracked Road"
                 }
                 Button {
-                    id: scrapIt
-                    text: "scrap it"
+                    id: backToLocationsButton
+                    width: parent.width * 0.4
+                    height: parent.height
+                    text: "Back to Locations"
                 }
-                Button {
-                    id: saveIt
-                    text: "save it"
-                }
-                Button {
-                    id: readIt
-                    text: "read it"
-                }
-
             }
         }
 
+        Column{
+            id: listColumn
+            //                anchors.fill: parent
+//            anchors.top: buttons.bottom
+            Row{
+                id: headerRow
+                height: 30
+                Rectangle{
+                    width: roadsListView.width * 0.8
+                    height: 30
+                    color: "white"
+                    border.width: 1
+                    border.color: "gray"
+                    Text{
+                        anchors.fill: parent
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        text: "name"
+                        color: "black"
+                    }
+                }
+                Rectangle{
+                    width: roadsListView.width * 0.2
+                    height: 30
+                    color: "white"
+                    border.width: 1
+                    border.color: "gray"
+                    Text{
+                        anchors.fill: parent
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        text: "date"
+                        color: "black"
+                    }
+                }
+            }
+            Rectangle{
+                id:listRect
+                color: "white"
+                width: listWidth
+                height: listHeight
+
+                ListView{
+                    id: roadsListView
+                    anchors.fill: parent
+                    snapMode: ListView.SnapToItem
+                    clip: true
+
+                    highlight: highLightComp
+                    highlightFollowsCurrentItem: false
+
+                    delegate: itemDelegate
+                }
+            }
+            Button {
+                id: scrapIt
+                text: "scrap it"
+            }
+            Button {
+                id: saveIt
+                text: "save it"
+            }
+            Button {
+                id: readIt
+                text: "read it"
+            }
+
+        }
     }
+
 }
