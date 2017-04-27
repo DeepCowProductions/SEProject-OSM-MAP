@@ -119,6 +119,17 @@ bool RoadsModel::writeUserData()
     saveFile.close();
 }
 
+bool RoadsModel::addItem( QString name, QList<QGeoCoordinate> coords )
+{
+    beginInsertRows(QModelIndex(),m_roads.size(),m_roads.size() ); // for updating the listView inside qml (required)
+    Road r;
+    r.setName(name);
+    r.setSavedAtDate(QDate::currentDate());
+    r.setCoordinates(coords);
+    m_roads.append(r);
+    endInsertRows();
+}
+
 QList<QVariant> RoadsModel::getCoordsAtIndex(int index)
 {
 //    return m_roads[index].coordinates();

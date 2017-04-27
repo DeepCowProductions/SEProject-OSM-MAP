@@ -38,6 +38,7 @@ public slots:
     Q_INVOKABLE bool writeTestData();
     Q_INVOKABLE bool readUserData();
     Q_INVOKABLE bool writeUserData();
+    Q_INVOKABLE bool addItem(QString name, QList<QGeoCoordinate> coords);
     Q_INVOKABLE QList<QVariant> getCoordsAtIndex(int index);
 
 public slots:

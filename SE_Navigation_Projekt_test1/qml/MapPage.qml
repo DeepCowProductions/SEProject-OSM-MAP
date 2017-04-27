@@ -1,4 +1,5 @@
 import QtQuick 2.7
+import QtQuick.Dialogs 1.2
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
 import QtPositioning 5.6
@@ -13,6 +14,9 @@ Item {
 
     property bool followPerson
     property bool recordRoute
+    property int coordCount
+
+    property variant coordList: []
 
     function toggleFollow () {
         followPerson = !followPerson
@@ -44,6 +48,27 @@ Item {
             if (followPerson) {
                 upDateMarker(coord)
                 map.center =  positionSource.position.coordinate
+            }
+            if (recordRoute) {
+                coordList[coordCount] = positionSource.position.coordinate
+                coordCount++
+                console.log("Recorded Coordinate list:" + coordList)
+            }
+        }
+    }
+
+    Timer {
+        id: timer
+        interval: 1000
+        repeat: true
+        onTriggered: {
+            coordList[coordCount] = map.center
+            coordCount++
+            console.log("Recorded Coordinate list:" + coordList)
+        }
+        onRunningChanged: {
+            if (!timer.running) {
+                messageDialog.createObject(map)
             }
         }
     }
@@ -105,6 +130,7 @@ Item {
                 text: "settingsPageButton"
                 width: (parent.width-16) * 0.2
                 height: parent.height
+
                 onClicked: {
                     console.log ("default hanlder for settingsPageButton ")
                 }
@@ -117,6 +143,11 @@ Item {
                 onClicked: {
                     console.log ("default hanlder for toggleTrackingButton")
                     toggleFollow()
+                }
+                background: Rectangle {
+                    implicitWidth: toggleTrackingButton.width
+                    implicitHeight: toggleTrackingButton.height
+                    color: followPerson ? "lightgreen" : "#E0E0E0"
                 }
             }
             Button {
@@ -134,16 +165,22 @@ Item {
             }
             Button {
                 id: toggleRecordRouteButton
-                text: "back"
+                text: "toggleRecordRouteButton"
                 width: (parent.width-16) * 0.2
                 height: parent.height
                 //            text: map.center.map.center.latitude
                 onClicked: {
                     console.log ("default hanlder for toggleRecordRouteButton ")
                     toggleRecordRoute()
+                    // for testing on Desktop:
+                    timer.running ? timer.stop() : timer.start()
+
                     // TBI
-                    //                geocodeModel.query = fromAddress
-                    //                geocodeModel.update()
+                }
+                background: Rectangle {
+                    implicitWidth: toggleTrackingButton.width
+                    implicitHeight: toggleTrackingButton.height
+                    color: recordRoute ? "lightgreen" : "#E0E0E0"
                 }
             }
 
@@ -157,16 +194,37 @@ Item {
                 }
             }
         }
-        Rectangle {
+        HeaderSpacer {
+            id: headerSpacer
             anchors.top: buttonRow.bottom
+        }
+
+        Rectangle {
+            anchors.top: headerSpacer.bottom
             width: parent.width
-            height: parent.height - buttonRow.height
+            height: parent.height - buttonRow.height -headerSpacer.height
             Map {
                 id : map
                 anchors.fill: parent
                 plugin: osmPlugin
                 center: positionSource.position.coordinate
                 zoomLevel: 10
+            }
+        }
+        Component{
+            id: messageDialog
+            SimpleTextDialog {
+                title: "Do you want to save this route?"
+                labelText: "Enter a name to save"
+                onAccepted: {
+                    console.log("acceptedd")
+                    roadsModel.addItem(input,coordList)
+                    coordList = []
+                }
+                onRejected: {
+                    coordList = []
+                }
+                Component.onCompleted: visible = true
             }
         }
     }
