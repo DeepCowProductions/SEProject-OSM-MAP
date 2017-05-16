@@ -89,6 +89,7 @@ ApplicationWindow {
             id: locationsPage
             backButton.onClicked: {
                 mainStack.pop(mapInstance)
+                mapInstance.forceActiveFocus()
             }
             viewPlacesButtonAlias.onClicked: {
                 if (!placesInstance) {
@@ -101,6 +102,7 @@ ApplicationWindow {
                 }
                 console.log("adding instance of item to mainStack")
                 mainStack.push(placesInstance)
+                placesInstance.forceActiveFocus()
 
             }
             viewRoadsButtonAlias.onClicked: {
@@ -114,6 +116,7 @@ ApplicationWindow {
                 }
                 console.log("adding instance of item to mainStack")
                 mainStack.push(roadsInstance)
+                roadsInstance.forceActiveFocus()
             }
 
             Component.onCompleted: console.log("locationsPage complete")
@@ -141,6 +144,7 @@ ApplicationWindow {
             }
             onMapRequest: {
                 console.log("coords:" + array)
+                mapInstance
             }
 
             Component.onCompleted: console.log("raodsView complete")
@@ -195,6 +199,7 @@ ApplicationWindow {
                 }
                 console.log("adding instance of item to mainStack")
                 mainStack.push(settingsInstance)
+                settingsInstance.forceActiveFocus()
             }
             locationPageButton.onClicked: {
                 if (!locationsInstance) {
@@ -206,17 +211,20 @@ ApplicationWindow {
                 }
                 console.log("adding instance of item to mainStack")
                 mainStack.push(locationsInstance)
+                locationsInstance.forceActiveFocus()
             }
             Component.onCompleted: console.log("mapPage complete")
         }
 
     }
+
     Component {
         id: settingsPageComp
         SettingsPage {
             id: settingsPage
             backButton.onClicked: {
                 mainStack.pop(mapInstance)
+                mapInstance.forceActiveFocus()
             }
             Component.onCompleted: console.log("settingsPage complete")
         }

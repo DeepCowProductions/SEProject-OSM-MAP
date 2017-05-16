@@ -101,4 +101,10 @@ Item {
     }
     // end main Column
 
+    Component.onCompleted: {
+        Keys.backPressed.connect(backButton.clicked)
+        Keys.escapePressed.connect(backButton.clicked)
+        forceActiveFocus()
+    }
+
 }

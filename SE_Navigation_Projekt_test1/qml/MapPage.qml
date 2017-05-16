@@ -12,25 +12,46 @@ Item {
     property alias settingsPageButton: settingsPageButton
     property alias locationPageButton: locationPageButton
 
-    property variant currentPosition: positionSource.valid ? positionSource.position.coordinate : map.center
+    property var currentPosition: positionSource.valid ? positionSource.position.coordinate : map.center
+
+    property var postest: QtPositioning.coordinate(0.1,0.3)
 
     property bool followPerson
     property bool recordRoute
-    property int coordCount
 
-    property variant coordList: []
+    property alias path: polylineItem.path
+    property alias polyline: polylineItem
 
     function toggleFollow () {
         followPerson = !followPerson
     }
+
     function toggleRecordRoute () {
         recordRoute =!recordRoute
     }
 
-    function upDateMarker (newCoord) {
-        map.clearMapItems()
-        marker.coordinate = newCoord
-        map.addMapItem(marker)
+    function clearPath () {
+        while (polyline.pathLength() > 0) {
+            polylineItem.removeCoordinate(0)
+        }
+    }
+
+    function updatePath (newPath) {
+        map.removeMapItem(polyline)
+        path = newPath
+        map.addMapItem(polyline)
+    }
+
+    function upateLocationMarker (newCoord) {
+        map.removeMapItem(locationMarker)
+        locationMarker.coordinate = newCoord
+        map.addMapItem(locationMarker)
+    }
+
+    function updateCurrenPosttionMarker (newCoord) {
+        map.removeMapItem(currentPositionMarker)
+        currentPositionMarker.coordinate = newCoord
+        map.addMapItem(currentPositionMarker)
     }
 
     function setToState (value) {
@@ -48,7 +69,7 @@ Item {
             var coord = position.coordinate;
             console.log("Coordinate from positionSource:", coord.longitude, coord.latitude);
             if (followPerson) {
-                upDateMarker(coord)
+                upateLocationMarker(coord)
                 map.center =  positionSource.position.coordinate
             }
             if (recordRoute) {
@@ -64,9 +85,12 @@ Item {
         interval: 1000
         repeat: true
         onTriggered: {
-            coordList[coordCount] = map.center
-            coordCount++
-            console.log("Recorded Coordinate list:" + coordList)
+            polyline.addCoordinate(map.center)
+//            updatePath()
+//            marker.coordinate = map.center
+//            map.addMapItem(marker)
+            console.log(polylineItem.pathLength())
+            console.log("Recorded Coordinate list:" + path)
         }
         onRunningChanged: {
             if (!timer.running) {
@@ -75,49 +99,65 @@ Item {
         }
     }
 
+    MapPolyline {
+        id: polylineItem
+        line.width: 2
+        line.color: 'red'
+    }
+
+    Image {
+        id:image
+        source: "../res/marker.png"
+    }
     MapQuickItem {
-        id: marker
-        sourceItem: Image {
-            id:image
-            source: "../res/marker.png"
-        }
+        id: locationMarker
+        sourceItem: image
         anchorPoint.x: image.width/2
         anchorPoint.y: image.width
         smooth: false
         opacity: 0.8
     }
 
-    GeocodeModel {
-        id: geocodeModel
-        plugin: map.plugin
-        onLocationsChanged:
-        {
-            if (count == 1) {
-                map.center.latitude = get(0).coordinate.latitude
-                map.center.longitude = get(0).coordinate.longitude
-            }
-            upDateMarker(get(0).coordinate)
-        }
+    MapQuickItem {
+        id: currentPositionMarker
+        sourceItem: image
+        anchorPoint.x: image.width/2
+        anchorPoint.y: image.width
+        smooth: false
+        opacity: 0.8
     }
 
-    Address {
-        id :fromAddress
-        street: "Hochstraße 16"
-        city: "Iserlohn"
-        country: "Germany"
-        state : ""
-        postalCode: ""
-    }
+//    GeocodeModel {
+//        id: geocodeModel
+//        plugin: map.plugin
+//        onLocationsChanged:
+//        {
+//            if (count == 1) {
+//                map.center.latitude = get(0).coordinate.latitude
+//                map.center.longitude = get(0).coordinate.longitude
+//            }
+//            upateLocationMarker(get(0).coordinate)
+//        }
+//    }
+
+//    Address {
+//        id :fromAddress
+//        street: "Hochstraße 16"
+//        city: "Iserlohn"
+//        country: "Germany"
+//        state : ""
+//        postalCode: ""
+//    }
 
 
     Plugin {
         id: osmPlugin
         name: "osm"
         // specify plugin parameters if necessary
-        // PluginParameter {
-        //     name:
-        //     value:
-        // }
+         PluginParameter {
+             name: ""
+             value: ""
+         }
     }
     Item {
         anchors.fill: parent
@@ -162,7 +202,7 @@ Item {
                     //                geocodeModel.query = fromAddress
                     //                geocodeModel.update()
                     map.center = positionSource.position.coordinate
-                    upDateMarker(positionSource.position.coordinate)
+                    upateLocationMarker(positionSource.position.coordinate)
                 }
             }
             Button {
@@ -219,19 +259,32 @@ Item {
                 title: "Do you want to save this route?"
                 labelText: "Enter a name to save"
                 onAccepted: {
-                    console.log("acceptedd")
-                    roadsModel.addItem(input,coordList)
-                    coordList = []
+                    console.log("accepted")
+                    console.log(input)
+                    console.log(path)
+                    roadsModel.addItem(input,path)
+                    clearPath()
+                    console.log(input)
                     visible = false
+                    updatePath()
                     map.forceActiveFocus()
                 }
                 onRejected: {
-                    coordList = []
+                    console.log("Rejected")
+                    console.log(polyline.path)
+                    // only temp
+                    updatePath(roadsModel.getCoordsAtIndex(3))
+                    // ...
                     visible = false
                     map.forceActiveFocus()
                 }
                 Component.onCompleted: visible = true
             }
         }
+    }
+
+    // Only Temporary
+    Component.onCompleted: {
+        map.addMapItem(polyline)
     }
 }
