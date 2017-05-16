@@ -52,6 +52,7 @@ bool Settings::useNormalMapCache() const
 
 void Settings::save()
 {
+    qDebug() << "invoke Settings:save";
 //    m_settings->sync();
     writeSettings();
 //    m_settings->sync();
@@ -59,6 +60,7 @@ void Settings::save()
 
 void Settings::load()
 {
+    qDebug() << "invoke Settings::load";
 //    m_settings->sync();
     readSettings();
 //    m_settings->sync();
@@ -66,6 +68,7 @@ void Settings::load()
 
 void Settings::readSettings()
 {
+    qDebug() << "Settings::readSettings: reading settings from file " << m_settings->fileName();
     // get properties from settings
     setHome(m_settings->value("home").toString());
     setUseOfflineMap(m_settings->value("useOfflineMap").toBool());
@@ -78,6 +81,7 @@ void Settings::readSettings()
 
 void Settings::writeSettings()
 {
+    qDebug() << "Settings::writeSettings: writing settings to file " << m_settings->fileName();
     // write properties to settings
     m_settings->setValue("home",m_home);
     m_settings->setValue("useOfflineMap",m_useOfflineMap);
@@ -86,7 +90,7 @@ void Settings::writeSettings()
     m_settings->setValue("maxOfflineMapSize",m_maxOfflineMapSize);
     m_settings->setValue("currentOfflineMapSize",m_currentOfflineMapSize);
 
-    // force writeing to storage by calling sync - not neccessary but makes things easier
+    // force writing to storage by calling sync - not neccessary but makes things easier
     m_settings->sync();
 }
 
@@ -106,6 +110,7 @@ void Settings::setUseOfflineMap(bool useOfflineMap)
 
     m_useOfflineMap = useOfflineMap;
     emit useOfflineMapChanged(useOfflineMap);
+    qDebug() << "useOfflineMap: " << m_useOfflineMap;
 }
 
 void Settings::setMaxNormalMapChacheSize(int maxNormalMapChacheSize)
@@ -142,4 +147,5 @@ void Settings::setUseNormalMapCache(bool useNormalMapCache)
 
     m_useNormalMapCache = useNormalMapCache;
     emit useNormalMapCacheChanged(useNormalMapCache);
+    qDebug() << "useNormalMapCache: " << m_useNormalMapCache;
 }

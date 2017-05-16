@@ -18,6 +18,8 @@ ApplicationWindow {
     property variant placesInstance
     property variant settingsInstance
 
+    property alias settings : settingsObject
+
 
     id: appWindow
     visible: true
@@ -34,6 +36,10 @@ ApplicationWindow {
 //        mainStack.push(settingsInstance)
 //        mainStack.pop()
         mapInstance.forceActiveFocus()
+    }
+
+    Settings {
+        id: settingsObject
     }
 
     StackView {
