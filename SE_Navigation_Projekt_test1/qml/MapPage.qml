@@ -39,6 +39,7 @@ Item {
     }
 
     signal testSignal123 ()
+    signal saveTiles(variant center, int zoomlevel);
 
     PositionSource {
         id: positionSource
@@ -114,10 +115,10 @@ Item {
         id: osmPlugin
         name: "osm"
         // specify plugin parameters if necessary
-        // PluginParameter {
-        //     name:
-        //     value:
-        // }
+         PluginParameter {
+             name: "osm.mapping.offline.directory"
+             value: "/home/maik/Schreibtisch/OSM-Data/"
+         }
     }
     Item {
         anchors.fill: parent
@@ -232,6 +233,13 @@ Item {
                 }
                 Component.onCompleted: visible = true
             }
+        }
+        Button{
+            id: saveButton
+            text: "Save Data"
+            onClicked: saveTiles(map.center, map.zoomLevel)
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
         }
     }
 }

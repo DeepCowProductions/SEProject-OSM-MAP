@@ -10,7 +10,8 @@ SOURCES += main.cpp \
     src/place.cpp \
     src/road.cpp \
     src/placesmodel.cpp \
-    src/roadsmodel.cpp
+    src/roadsmodel.cpp \
+    src/tilesdownloader.cpp
 
 RESOURCES += qml.qrc \
     res.qrc
@@ -29,7 +30,8 @@ HEADERS += \
     src/place.h \
     src/road.h \
     src/placesmodel.h \
-    src/roadsmodel.h
+    src/roadsmodel.h \
+    src/tilesdownloader.h
 
 DISTFILES += \
     dump

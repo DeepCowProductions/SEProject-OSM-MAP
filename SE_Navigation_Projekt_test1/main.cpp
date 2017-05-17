@@ -4,6 +4,9 @@
 #include "src/placesmodel.h"
 #include "src/roadsmodel.h"
 #include <QImage>
+#include <QGeoCoordinate>
+#include "src/tilesdownloader.h"
+
 int main(int argc, char *argv[])
 {
     QCoreApplication::setOrganizationName("FH-SWF");
@@ -16,12 +19,19 @@ int main(int argc, char *argv[])
     qmlRegisterType<PlacesModel>("fhswf.se.nav.models", 1, 0, "PlacesModel");
     qmlRegisterType<RoadsModel>("fhswf.se.nav.models", 1, 0, "RoadsModel");
 
+
+    TilesDownloader downloader;
+    //    saveTiles
+
+
     QQmlApplicationEngine engine;
     engine.load(QUrl(QLatin1String("qrc:/qml/main.qml")));
     QObject::connect(&engine, SIGNAL(quit()), qApp, SLOT(quit()));
-
     QObject *item = engine.rootObjects().first();
     Q_ASSERT(item);
+
+    QObject::connect(item, SIGNAL(saveTiles(QVariant, int)), &downloader, SLOT(downloadTiles(QVariant, int)));
+
     QMetaObject::invokeMethod(item, "initApp",
                               Q_ARG(QVariant, QVariant::fromValue(1)));
     return app.exec();

@@ -18,6 +18,7 @@ ApplicationWindow {
     property variant placesInstance
     property variant settingsInstance
 
+    signal saveTiles(variant coordinates, int zoomlevel);
 
     id: appWindow
     visible: true
@@ -185,6 +186,7 @@ ApplicationWindow {
             onTestSignal123: {
                 console.log("mapComponent recieved test Signal")
             }
+            onSaveTiles: appWindow.saveTiles(center, zoomlevel);
             settingsPageButton.onClicked: {
                 if (!settingsInstance) {
                     console.log("creating new instance of item")

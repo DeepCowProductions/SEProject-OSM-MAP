@@ -1,0 +1,3 @@
+[submodule "SE_Navigation_Projekt_test1/3rdParty/mapnik"]
+	path = SE_Navigation_Projekt_test1/3rdParty/mapnik
+	url = https://github.com/mapnik/mapnik.git
