@@ -7,12 +7,16 @@ import fhswf.se.nav.settings 1.0
 
 
 Item {
-
-    property alias settings: settingsObject
     property alias backButton: backButton
 
-    Settings {
-        id: settingsObject
+    signal configurationChanged ()
+    onConfigurationChanged:  {
+        console.log("saving settings from qml")
+        // instert new options here:
+        settings.useOfflineMap = cb1.checked
+        settings.useNormalMapCache = cb2.checked
+
+        settings.save()
     }
 
     Column{
@@ -21,13 +25,6 @@ Item {
             id: buttonRow
             width: parent.width
             height: 50
-
-            Button {
-                id: backButton
-                text: "back"
-                width: parent.width * 0.5
-                height: parent.height
-            }
 
             Rectangle{
                 width: parent.width * 0.5
@@ -42,7 +39,101 @@ Item {
                     font.pointSize: 24
                 }
             }
+
+            Button {
+                id: backButton
+                text: "back"
+                width: parent.width * 0.5
+                height: parent.height
+            }
+
         }
+
+        HeaderSpacer {
+            id: headerSpacer
+        }
+
+
+        Row {
+            width: parent.width
+            height: 50
+            Rectangle{
+                width: parent.width * 0.7
+                height: parent.height
+                Text{
+                    anchors.leftMargin: 10
+                    anchors.fill: parent
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignLeft
+                    text: "Use Offline Map"
+                    color: "navy"
+                    font.pointSize: 12
+                }
+            }
+
+            CheckBox {
+                id: cb1
+                onCheckedChanged: configurationChanged()
+                checked: settings.useOfflineMap
+            }
+        }
+
+
+        Row {
+            width: parent.width
+            height: 50
+            Rectangle{
+                width: parent.width * 0.7
+                height: parent.height
+                Text{
+                    anchors.leftMargin: 10
+                    anchors.fill: parent
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignLeft
+                    text: "Use Map Cache"
+                    color: "navy"
+                    font.pointSize: 12
+                }
+            }
+
+            CheckBox {
+                id: cb2
+                onCheckedChanged: configurationChanged()
+                checked: settings.useNormalMapCache
+            }
+        }
+
+
+        Row {
+            width: parent.width
+            height: 50
+            Rectangle{
+                width: parent.width * 0.7
+                height: parent.height
+                Text{
+                    anchors.leftMargin: 10
+                    anchors.fill: parent
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignLeft
+                    text: "<Setting Item here>"
+                    color: "navy"
+                    font.pointSize: 12
+                }
+            }
+
+            CheckBox {
+                id: cb3
+                onCheckedChanged: configurationChanged()
+
+            }
+        }
+
+
+    }
+    Component.onCompleted: {
+        Keys.backPressed.connect(backButton.clicked)
+        Keys.escapePressed.connect(backButton.clicked)
+        forceActiveFocus()
 
     }
 }

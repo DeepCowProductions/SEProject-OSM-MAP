@@ -9,7 +9,7 @@ QHash<int, QByteArray> RoadsModel::roleNames() const
 {
     QHash<int, QByteArray> roles = QAbstractListModel::roleNames();
     roles[NameRole] = "name";
-//    roles[CoordinatesRole] = "coordinates";
+    //    roles[CoordinatesRole] = "coordinates";
     roles[SavedAtDateRole] = "savedAtDate";
     return roles;
 }
@@ -30,7 +30,7 @@ QVariant RoadsModel::data(const QModelIndex &index, int role) const
     int row = index.row();
     switch (role) {
     case NameRole       : value = m_roads[row].name();         break;
-//    case CoordinatesRole: value = m_roads[row];                break;
+        //    case CoordinatesRole: value = m_roads[row];                break;
     case SavedAtDateRole: value = m_roads[row].savedAtDate();  break;
     }
 
@@ -120,26 +120,74 @@ bool RoadsModel::writeUserData()
     saveFile.close();
 }
 
-bool RoadsModel::addItem( QString name, QList<QGeoCoordinate> coords )
+/* @see http://code.qt.io/cgit/qt/qtlocation.git/tree/src/imports/location/locationvaluetypehelper.cpp#n40 */
+QGeoCoordinate RoadsModel::parseCoordinate(const QJSValue &value, bool *ok)
 {
+    QGeoCoordinate c;
+    if (value.isObject()) {
+        if (value.hasProperty(QStringLiteral("latitude")))
+            c.setLatitude(value.property(QStringLiteral("latitude")).toNumber());
+        if (value.hasProperty(QStringLiteral("longitude")))
+            c.setLongitude(value.property(QStringLiteral("longitude")).toNumber());
+        if (value.hasProperty(QStringLiteral("altitude")))
+            c.setAltitude(value.property(QStringLiteral("altitude")).toNumber());
+        if (ok)
+            *ok = true;
+    }
+    return c;
+}
+
+
+bool RoadsModel::addItem( QString name, QJSValue value )
+{
+    if (!value.isArray())
+        return false;
+
+    QList<QGeoCoordinate> pathList;
+    quint32 length = value.property(QStringLiteral("length")).toUInt();
+    for (quint32 i = 0; i < length; ++i) {
+        bool ok;
+        QGeoCoordinate c = parseCoordinate(value.property(i), &ok);
+        if (!ok || !c.isValid()) {
+            qDebug() << "Unsupported path type";
+            return false;
+        }
+
+        pathList.append(c);
+    }
+
+    qDebug() << name << pathList;
     beginInsertRows(QModelIndex(),m_roads.size(),m_roads.size() ); // for updating the listView inside qml (required)
     Road r;
     r.setName(name);
     r.setSavedAtDate(QDate::currentDate());
-    r.setCoordinates(coords);
+    r.setCoordinates(pathList);
     m_roads.append(r);
     endInsertRows();
+    return true;
 }
+
+//bool RoadsModel::addItem( QString name, QList<QGeoCoordinate> coords )
+//{
+//    qDebug() << name << coords;
+//    beginInsertRows(QModelIndex(),m_roads.size(),m_roads.size() ); // for updating the listView inside qml (required)
+//    Road r;
+//    r.setName(name);
+//    r.setSavedAtDate(QDate::currentDate());
+//    r.setCoordinates(coords);
+//    m_roads.append(r);
+//    endInsertRows();
+//}
 
 QList<QVariant> RoadsModel::getCoordsAtIndex(int index)
 {
-//    return m_roads[index].coordinates();
+    //    return m_roads[index].coordinates();
     QVariantList tmp;
 
     tmp.reserve(m_roads[index].coordinates().size());
 
     for (const QGeoCoordinate& i: m_roads[index].coordinates())
-      tmp.push_back(QVariant::fromValue(i));
+        tmp.push_back(QVariant::fromValue(i));
 
     return tmp;
 }

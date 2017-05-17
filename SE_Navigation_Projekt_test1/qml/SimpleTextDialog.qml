@@ -68,9 +68,9 @@ Dialog {
                 }
             }
         }
-        //        Keys.onPressed: if (event.key === Qt.Key_R && (event.modifiers & Qt.ControlModifier)) filledDialog.click(StandardButton.Retry)
-        //        Keys.onEnterPressed: filledDialog.accept()
-        //        Keys.onEscapePressed: filledDialog.reject()
-        //        Keys.onBackPressed: filledDialog.reject() // especially necessary on Android
+//                Keys.onPressed: if (event.key === Qt.Key_R && (event.modifiers & Qt.ControlModifier)) filledDialog.click(StandardButton.Retry)
+                Keys.onEnterPressed: filledDialog.accept()
+                Keys.onEscapePressed: filledDialog.reject()
+                Keys.onBackPressed: filledDialog.reject() // especially necessary on Android
     }
 }

@@ -10,6 +10,8 @@
 #include <QJsonObject>
 #include <QtPositioning>
 #include <QDate>
+#include <QVariant>
+#include <QJSEngine>
 
 #define saveFileNameRoads "roads.json"
 
@@ -38,7 +40,8 @@ public slots:
     Q_INVOKABLE bool writeTestData();
     Q_INVOKABLE bool readUserData();
     Q_INVOKABLE bool writeUserData();
-    Q_INVOKABLE bool addItem(QString name, QList<QGeoCoordinate> coords);
+//    Q_INVOKABLE bool addItem(QString name, QList<QGeoCoordinate> coords);
+    Q_INVOKABLE bool addItem(QString name, QJSValue value);
     Q_INVOKABLE QList<QVariant> getCoordsAtIndex(int index);
 
 public slots:
@@ -46,6 +49,15 @@ public slots:
 protected:
     bool readUserDataFromJson (QJsonObject &object);
     bool writeUserDataToJson (QJsonObject &object);
+
+    /**
+     * @brief parseCoordinate
+     * Parses a JS-value to a QGeoCoordinate.
+     * Code snippet taken from the original qt location api source code.
+     * @see http://code.qt.io/cgit/qt/qtlocation.git/tree/src/imports/location/locationvaluetypehelper.cpp#n40
+     * @attention no copyright violation intended, no rights reserved.
+     */
+    QGeoCoordinate parseCoordinate(const QJSValue &value, bool *ok);
 
 private:
 
