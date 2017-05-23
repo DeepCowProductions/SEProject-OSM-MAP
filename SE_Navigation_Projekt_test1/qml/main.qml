@@ -18,8 +18,18 @@ ApplicationWindow {
     property variant placesInstance
     property variant settingsInstance
 
-    signal saveTiles(variant coordinates, int zoomlevel);
+    signal saveTiles(variant coordinates, string tilesProvider, int zoomlevel);
     property alias settings : settingsObject
+
+    signal enableButton()
+
+    onEnableButton: {
+        console.log("Tiles saved in Offline directory!");
+        mapInstance.saveButtonEnabled = true
+    }
+    function test () {
+        console.log("test2")
+    }
 
     id: appWindow
     visible: true
@@ -27,16 +37,20 @@ ApplicationWindow {
     height: 640
     title: qsTr("SE Projekt - Mobile Navigation")
 
-    function initApp(value) {
-        console.log("invoke initApp -  creating mapItem")
+    function initApp() {
+        console.log("invoke initApp -  creating mapItem - started")
         //        placesModelInstance = placesModelComp.createObject();
         mapInstance = mapPageComp.createObject(mainStack);
+        console.log("invoke initApp -  creating mapItem - created dynamic items")
         mainStack.push(mapInstance)
-//        settingsInstance = settingsPageComp.createObject(mainStack);
-//        mainStack.push(settingsInstance)
-//        mainStack.pop()
+        //        settingsInstance = settingsPageComp.createObject(mainStack);
+        //        mainStack.push(settingsInstance)
+        //        mainStack.pop()
         mapInstance.forceActiveFocus()
+        console.log("invoke initApp -  creating mapItem - finished")
+
     }
+
 
     Settings {
         id: settingsObject
@@ -195,7 +209,10 @@ ApplicationWindow {
             onTestSignal123: {
                 console.log("mapComponent recieved test Signal")
             }
-            onSaveTiles: appWindow.saveTiles(center, zoomlevel);
+            onSaveTiles: {
+                appWindow.saveTiles(center, fileProvider, zoomlevel);
+                mapPage.saveButtonEnabled = false;
+            }
             settingsPageButton.onClicked: {
                 if (!settingsInstance) {
                     console.log("creating new instance of item")

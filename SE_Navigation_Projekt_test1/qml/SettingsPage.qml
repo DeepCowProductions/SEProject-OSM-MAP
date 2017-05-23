@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.0
 import QtPositioning 5.6
 import QtLocation 5.6
 import fhswf.se.nav.settings 1.0
+import fhswf.se.nav.utility 1.0
 
 
 Item {
@@ -125,6 +126,29 @@ Item {
                 id: cb3
                 onCheckedChanged: configurationChanged()
 
+            }
+        }
+
+        Row {
+            width: parent.width
+            height: 50
+            Rectangle{
+                width: parent.width * 0.7
+                height: parent.height
+                Text{
+                    anchors.leftMargin: 10
+                    anchors.fill: parent
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignLeft
+                    text: "Offline Directory"
+                    color: "navy"
+                    font.pointSize: 12
+                }
+            }
+
+            TextEdit {
+                id: offlineDirectory
+                text: "<Path>"
             }
         }
 
