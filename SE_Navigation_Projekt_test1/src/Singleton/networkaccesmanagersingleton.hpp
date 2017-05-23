@@ -14,28 +14,35 @@
  *
  *       https://wiki.qt.io/Qt_thread-safe_singleton
  */
-//class NetworkAccessManagerSingleton : public QObject
-//{
+class NetworkAccessManagerSingleton : public QObject
+{
 
-//public:
-//    NetworkAccessManagerSingleton(QObject * parent = 0) : QObject(parent){
+public:
+    static QNetworkAccessManager * getInstance();
 
-//    }
+private:
 
-//    ~NetworkAccessManagerSingleton(){
-//        if(m_manager)
-//            delete m_manager;
-//    }
+    static QNetworkAccessManager * m_manager;
 
-//    static QNetworkAccessManager * getInstance(){
+    NetworkAccessManagerSingleton(QObject * parent = 0) : QObject(parent){
 
-//        if(!m_manager)
-//            m_manager = new QNetworkAccessManager();
-//        return m_manager;
-//    }
+    }
 
-//private:
-//    static QNetworkAccessManager * m_manager = 0;
+    ~NetworkAccessManagerSingleton();/*{
+        if(m_manager)
+            delete m_manager;
+    }*/
 
-//};
+
+};
+
+QNetworkAccessManager * NetworkAccessManagerSingleton::m_manager = 0;
+
+QNetworkAccessManager * NetworkAccessManagerSingleton::getInstance()
+{
+    if(!m_manager)
+        m_manager = new QNetworkAccessManager();
+    return m_manager;
+}
+
 #endif // NETWORKACCESMANAGERSINGLETON_HPP

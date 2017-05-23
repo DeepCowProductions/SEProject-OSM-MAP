@@ -4,7 +4,6 @@ import QtQuick.Layouts 1.0
 import QtPositioning 5.6
 import QtLocation 5.6
 import fhswf.se.nav.settings 1.0
-import fhswf.se.nav.utility 1.0
 
 
 Item {
