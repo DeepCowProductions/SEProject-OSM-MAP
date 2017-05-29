@@ -5,7 +5,7 @@
 #include "src/roadsmodel.h"
 #include <QImage>
 #include <QGeoCoordinate>
-#include "src/tilesdownloader.h"
+#include "src/OsmTilesOffline/tilesdownloader.h"
 
 int main(int argc, char *argv[])
 {
@@ -20,19 +20,19 @@ int main(int argc, char *argv[])
     qmlRegisterType<RoadsModel>("fhswf.se.nav.models", 1, 0, "RoadsModel");
 
 
-    TilesDownloader downloader;
-    //    saveTiles
-
-
     QQmlApplicationEngine engine;
     engine.load(QUrl(QLatin1String("qrc:/qml/main.qml")));
     QObject::connect(&engine, SIGNAL(quit()), qApp, SLOT(quit()));
     QObject *item = engine.rootObjects().first();
     Q_ASSERT(item);
 
-    QObject::connect(item, SIGNAL(saveTiles(QVariant, int)), &downloader, SLOT(downloadTiles(QVariant, int)));
+    TilesDownloader * downloader = new TilesDownloader(item);
 
-    QMetaObject::invokeMethod(item, "initApp",
-                              Q_ARG(QVariant, QVariant::fromValue(1)));
+    QObject::connect(downloader, SIGNAL(downloadFinished()), item, SIGNAL(enableButton()));
+
+    QObject::connect(item, SIGNAL(saveTiles(QVariant,QString, int)), downloader, SLOT(downloadTiles(QVariant,QString, int)));
+    QMetaObject::invokeMethod(item, "initApp"
+//                             , Q_ARG(QVariant, QVariant::fromValue(1)));
+                              );
     return app.exec();
 }

@@ -11,7 +11,10 @@ SOURCES += main.cpp \
     src/road.cpp \
     src/placesmodel.cpp \
     src/roadsmodel.cpp \
-    src/tilesdownloader.cpp
+    src/OsmTilesOffline/tilesdownloader.cpp \
+    src/OsmTilesOffline/tilereply.cpp \
+    src/OsmTilesOffline/tile.cpp \
+    src/OsmTilesOffline/tileofflinemanager.cpp \
 
 RESOURCES += qml.qrc \
     res.qrc
@@ -31,7 +34,11 @@ HEADERS += \
     src/road.h \
     src/placesmodel.h \
     src/roadsmodel.h \
-    src/tilesdownloader.h
+    src/OsmTilesOffline/tilesdownloader.h \
+    src/OsmTilesOffline/tilereply.h \
+    src/OsmTilesOffline/tile.h \
+    src/OsmTilesOffline/tileofflinemanager.h \
+    src/Singleton/networkaccesmanagersingleton.hpp
 
 DISTFILES += \
     dump

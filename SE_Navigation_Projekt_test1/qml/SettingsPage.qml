@@ -128,6 +128,29 @@ Item {
             }
         }
 
+        Row {
+            width: parent.width
+            height: 50
+            Rectangle{
+                width: parent.width * 0.7
+                height: parent.height
+                Text{
+                    anchors.leftMargin: 10
+                    anchors.fill: parent
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignLeft
+                    text: "Offline Directory"
+                    color: "navy"
+                    font.pointSize: 12
+                }
+            }
+
+            TextEdit {
+                id: offlineDirectory
+                text: "<Path>"
+            }
+        }
+
 
     }
     Component.onCompleted: {

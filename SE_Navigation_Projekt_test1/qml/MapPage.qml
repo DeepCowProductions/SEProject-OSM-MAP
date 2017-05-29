@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.0
 import QtPositioning 5.6
 import QtLocation 5.6
 
+
 Item {
     property alias toggleTrackingButton: toggleTrackingButton
     property alias toggleRecordRouteButton: toggleRecordRouteButton
@@ -25,6 +26,7 @@ Item {
             //            map.removeMapItem(currentPositionMarker)
         }
     }
+    property bool saveButtonEnabled: true
 
     property bool recordRoute
     onRecordRouteChanged: {
@@ -101,11 +103,15 @@ Item {
         clearPath()
         updatePath(coords)
     }
+    signal saveTiles(variant center,string fileProvider, int zoomlevel);
 
     PositionSource {
         id: positionSource
         updateInterval: 10
         active: valid
+        Component.onCompleted: {
+            console.log("Position source loaded")
+        }
         onPositionChanged: {
             if (Qt.platform.os == "android") {
                 var coord = position.coordinate;
@@ -128,6 +134,9 @@ Item {
         id: timer
         interval: 1000
         repeat: true
+        Component.onCompleted: {
+            console.log("Timer loaded")
+        }
         onTriggered: {
             if (recordRoute) {
                 polyline.addCoordinate(map.center)
@@ -147,11 +156,17 @@ Item {
         id: polylineItem
         line.width: 2
         line.color: 'red'
+        Component.onCompleted: {
+            console.log("PlayLine loaded")
+        }
     }
 
     Image {
         id:image
         source: "../res/marker.png"
+        Component.onCompleted: {
+            console.log("Image loaded")
+        }
     }
     Image {
         id:image2
@@ -164,6 +179,9 @@ Item {
         anchorPoint.y: image.width
         smooth: false
         opacity: 0.8
+        Component.onCompleted: {
+            console.log("LocationMarker loaded")
+        }
     }
 
     MapQuickItem {
@@ -173,6 +191,9 @@ Item {
         anchorPoint.y: image.width
         smooth: false
         opacity: 0.8
+        Component.onCompleted: {
+            console.log("CurrentPositionMarker loaded")
+        }
     }
 
     //    GeocodeModel {
@@ -202,11 +223,17 @@ Item {
         id: osmPlugin
         name: "osm"
         // specify plugin parameters if necessary
-        PluginParameter {
-            name: "osm.mapping.offline.directory"
-            value: "/home/maik/Schreibtisch/OSM-Data/"
-        }
+
+         PluginParameter {
+             name: "osm.mapping.offline.directory"
+             value: "/home/maik/Schreibtisch/OSM-Data"
+         }
+         Component.onCompleted: {
+             console.log("OsmPlugin loaded")
+//             console.log(osmPlugin.OfflineMappingFeature.)
+         }
     }
+
     Item {
         anchors.fill: parent
         Row  {
@@ -220,6 +247,9 @@ Item {
                 text: "settingsPageButton"
                 width: (parent.width-16) * 0.2
                 height: parent.height
+                Component.onCompleted: {
+                    console.log("Settingsbutton loaded")
+                }
 
                 onClicked: {
                     console.log ("default hanlder for settingsPageButton ")
@@ -345,10 +375,15 @@ Item {
         }
         Button{
             id: saveButton
+            enabled: saveButtonEnabled
             text: "Save Data"
-            onClicked: appWindow.saveTiles(map.center, map.zoomLevel)
+//            onClicked: appWindow.saveTiles(map.center, map.zoomLevel)
+            onClicked: saveTiles(map.center, "korona.geog.uni-heidelberg.de", map.zoomLevel)
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
+            Component.onCompleted: {
+                console.log("Save Button erstellt")
+            }
         }
     }
 
