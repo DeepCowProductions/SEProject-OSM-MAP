@@ -23,7 +23,6 @@ Item {
 
     signal mapRequest(variant array)
 
-
     Component{
         id: highLightComp
         Rectangle{

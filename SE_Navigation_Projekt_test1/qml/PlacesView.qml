@@ -106,7 +106,6 @@ Item {
                 anchors.fill: parent
                 onClicked: {
                     pLacesListView.currentIndex = index
-
                 }
                 onDoubleClicked: {
                     mapRequest(longitude, latitude)
