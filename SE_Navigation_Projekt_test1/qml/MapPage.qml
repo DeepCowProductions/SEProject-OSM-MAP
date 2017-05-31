@@ -1,6 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Dialogs 1.2
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.0
 import QtPositioning 5.6
 import QtLocation 5.6
@@ -224,14 +224,14 @@ Item {
         name: "osm"
         // specify plugin parameters if necessary
 
-         PluginParameter {
-             name: "osm.mapping.offline.directory"
-             value: "/home/maik/Schreibtisch/OSM-Data"
-         }
-         Component.onCompleted: {
-             console.log("OsmPlugin loaded")
-//             console.log(osmPlugin.OfflineMappingFeature.)
-         }
+        PluginParameter {
+            name: "osm.mapping.offline.directory"
+            value: "/home/maik/Schreibtisch/OSM-Data"
+        }
+        Component.onCompleted: {
+            console.log("OsmPlugin loaded")
+            //             console.log(osmPlugin.OfflineMappingFeature.)
+        }
     }
 
     Item {
@@ -242,7 +242,7 @@ Item {
             width: parent.width
             height: 50
             spacing: 4
-            Button {
+            HighlightButton {
                 id: settingsPageButton
                 text: "settingsPageButton"
                 width: (parent.width-16) * 0.2
@@ -254,8 +254,12 @@ Item {
                 onClicked: {
                     console.log ("default hanlder for settingsPageButton ")
                 }
+                contentItem: Image {
+                    source: "qrc:/settings"
+                    fillMode: Image.PreserveAspectFit
+                }
             }
-            Button {
+            HighlightButton {
                 id: toggleTrackingButton
                 text: "toggleTrackingButton"
                 width: (parent.width-16) * 0.2
@@ -272,15 +276,17 @@ Item {
                         }
                     }
                 }
-                background: Rectangle {
-                    implicitWidth: toggleTrackingButton.width
-                    implicitHeight: toggleTrackingButton.height
-                    color: followPerson ? "lightgreen" : "#E0E0E0"
+                contentItem: Image {
+                    source: "qrc:/targetInf"
+                    fillMode: Image.PreserveAspectFit
                 }
+
+                activeCondition: followPerson
             }
-            Button {
+            HighlightButton {
                 id: centerOnMeButton
                 text: "centerOnMeButton"
+
                 width: (parent.width-16) * 0.2
                 height: parent.height
                 onClicked: {
@@ -288,10 +294,15 @@ Item {
                     //                geocodeModel.query = fromAddress
                     //                geocodeModel.update()
                     map.center = positionSource.position.coordinate
-                    upateLocationMarker(positionSource.position.coordinate)
+                    updateLocationMarker(positionSource.position.coordinate)
                 }
+                contentItem: Image {
+                    source: "qrc:/target"
+                    fillMode: Image.PreserveAspectFit
+                }
+
             }
-            Button {
+            HighlightButton {
                 id: toggleRecordRouteButton
                 text: "toggleRecordRouteButton"
                 width: (parent.width-16) * 0.2
@@ -309,20 +320,24 @@ Item {
                         }
                     }
                 }
-                background: Rectangle {
-                    implicitWidth: toggleTrackingButton.width
-                    implicitHeight: toggleTrackingButton.height
-                    color: recordRoute ? "lightgreen" : "#E0E0E0"
+                contentItem: Image {
+                    source: "qrc:/track"
+                    fillMode: Image.PreserveAspectFit
                 }
+                activeCondition: recordRoute
             }
 
-            Button {
+            HighlightButton {
                 id: locationPageButton
                 text: "locationPageButton"
                 width: (parent.width-16) * 0.2
                 height: parent.height
                 onClicked: {
                     console.log ("default hanlder for locationPageButton ")
+                }
+                contentItem: Image {
+                    source: "qrc:/directions"
+                    fillMode: Image.PreserveAspectFit
                 }
             }
         }
@@ -373,17 +388,25 @@ Item {
                 Component.onCompleted: visible = true
             }
         }
-        Button{
+        RoundHighlightButton{
             id: saveButton
             enabled: saveButtonEnabled
             text: "Save Data"
-//            onClicked: appWindow.saveTiles(map.center, map.zoomLevel)
+            //            onClicked: appWindow.saveTiles(map.center, map.zoomLevel)
             onClicked: saveTiles(map.center, "korona.geog.uni-heidelberg.de", map.zoomLevel)
             anchors.bottom: parent.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.right: parent.right
+            width: (parent.width -16)  * 0.2
+            height: (parent.height - 8) * 0.1
+
             Component.onCompleted: {
                 console.log("Save Button erstellt")
             }
+            contentItem: Image {
+                source: "qrc:/file"
+                fillMode: Image.PreserveAspectFit
+            }
+            radius: 9000
         }
     }
 

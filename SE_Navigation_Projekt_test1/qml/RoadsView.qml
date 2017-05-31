@@ -105,7 +105,7 @@ Item {
                     font.pointSize: 24
                 }
             }
-            Button {
+            HighlightButton {
                 id: backButton
                 text: "back"
                 width: parent.width * 0.5
@@ -145,13 +145,13 @@ Item {
                 anchors.fill: parent
                 padding: 1
                 spacing: 4
-                Button {
+                HighlightButton {
                     id: saveRoadButton
                     width: parent.width * 0.60
                     height: parent.height
                     text: "Save currently tracked Road"
                 }
-                Button {
+                HighlightButton {
                     id: backToLocationsButton
                     width: parent.width * 0.4
                     height: parent.height

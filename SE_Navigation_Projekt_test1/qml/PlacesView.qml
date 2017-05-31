@@ -133,7 +133,7 @@ Item {
                     font.pointSize: 24
                 }
             }
-            Button {
+            HighlightButton {
                 id: backButton
                 text: "back"
                 width: parent.width * 0.5
@@ -174,19 +174,19 @@ Item {
                 anchors.fill: parent
                 padding: 1
                 spacing: 4
-                Button {
+                HighlightButton {
                     id: newPlaceButton
                     width: parent.width * 0.2
                     height: parent.height
                     text: "New"
                 }
-                Button {
+                HighlightButton {
                     id: savePlaceButton
                     width: parent.width * 0.4
                     height: parent.height
                     text: "Save current Place"
                 }
-                Button {
+                HighlightButton {
                     id: backToLocationsButton
                     width: parent.width * 0.4
                     height: parent.height
