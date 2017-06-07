@@ -226,14 +226,21 @@ Item {
                 text: "centerOnMeButton"
                 width: (parent.width-16) * 0.2
                 height: parent.height
+                function toggleSaveButton () {
+                    saveButton.enabled = !saveButton.enabled
+                   }
                 onClicked: {
                     console.log ("default hanlder for centerOnMeButton")
                     //                geocodeModel.query = fromAddress
                     //                geocodeModel.update()
                     map.center = positionSource.position.coordinate
                     upateLocationMarker(positionSource.position.coordinate)
+                    toggleSaveButton()
                 }
             }
+
+
+
             Button {
                 id: toggleRecordRouteButton
                 text: "toggleRecordRouteButton"

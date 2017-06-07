@@ -7,6 +7,10 @@ TileOfflineManager::TileOfflineManager(QString format, QObject *parent) : QObjec
 
 bool TileOfflineManager::saveToFile(Tile *tile)
 {
+    if(tile->imageData().isEmpty()){
+        qDebug() << "Datei ist leer";
+        return false;
+    }
      QDir saveDirectory = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
     bool ret = false;
     QDir dir;
@@ -47,8 +51,12 @@ bool TileOfflineManager::deleteTile(Tile * tile)
 bool TileOfflineManager::contains(Tile* tile, QStandardPaths::StandardLocation location)
 {
     QDir saveDirectory = QStandardPaths::writableLocation(location);
-    return saveDirectory.entryList().contains(createFileName(tile));
+    bool ret = false;
+    if(searchSubdirectoriesForTile(tile, saveDirectory.absolutePath()) != "")
+        ret = true;
+    return ret;
 }
+
 
 bool TileOfflineManager::copyChacheTileIfPossible(Tile * tile)
 {
@@ -61,23 +69,37 @@ bool TileOfflineManager::copyChacheTileIfPossible(Tile * tile)
     QDir saveDirectory = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
 
     QString tileName = createFileName(tile);
-    QDir cacheDirectory =  QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
-    QDir genericCacheOsm = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation);
-    QString genericPath = genericCacheOsm.absolutePath().append("/QtLocation/5.8/tiles/osm");
-
 
     if(contains(tile, QStandardPaths::CacheLocation)){
-        QDir cacheDirectory =  QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+        QString path = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+        QDir cacheDirectory(searchSubdirectoriesForTile(tile, path));
         QFile cacheFile(cacheDirectory.filePath(tileName));
         ret = cacheFile.copy(saveDirectory.filePath(tileName));
+        qDebug() << "Got tiles from Cache";
 
     }
-    else if(QDir(genericPath).entryList().contains(createFileName(tile))){
-
-        QFile cacheFile(genericPath.append("/" + tileName));
+    else if(contains(tile, QStandardPaths::GenericCacheLocation)){
+        QDir generic(searchSubdirectoriesForTile(tile, QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation)));
+        QFile cacheFile(generic.absolutePath().append("/" + tileName));
         ret = cacheFile.copy(saveDirectory.filePath(tileName));
+        qDebug() << "Got tile from generic Cache";
     }
     return ret;
+}
+
+QString TileOfflineManager::searchSubdirectoriesForTile(Tile *tile, QString directory)
+{
+    QString tileDirectory = "";
+    bool ret = false;
+    QDirIterator it(directory,QDir::Dirs, QDirIterator::Subdirectories );
+    while(it.hasNext() && !ret){
+        QDir dir(it.next());
+        if(dir.entryList().contains(createFileName(tile))){
+            tileDirectory = dir.absolutePath();
+            ret = true;
+        }
+    }
+    return tileDirectory;
 }
 
 QString TileOfflineManager::createFileName(Tile *tile)
