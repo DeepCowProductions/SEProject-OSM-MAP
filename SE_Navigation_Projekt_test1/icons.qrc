@@ -1,0 +1,26 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="target">icons/ic_my_location_black_18dp.png</file>
+        <file alias="targetInf">icons/ic_my_location_megerd.png</file>
+        <file alias="track">icons/ic_timeline_merged.png</file>
+        <file alias="swapV">icons/ic_swap_vert_black_24dp_2x.png</file>
+        <file alias="swapH">icons/ic_swap_horiz_black_24dp_2x.png</file>
+        <file alias="settings">icons/ic_settings_black_24dp_2x.png</file>
+        <file alias="search">icons/ic_search_black_24dp_2x.png</file>
+        <file alias="marker">icons/ic_room_black_24dp_2x.png</file>
+        <file alias="power">icons/ic_power_settings_new_black_24dp_2x.png</file>
+        <file alias="searchView">icons/ic_pageview_black_24dp_2x.png</file>
+        <file alias="list">icons/ic_list_black_24dp_2x.png</file>
+        <file alias="info">icons/ic_info_black_24dp_2x.png</file>
+        <file alias="question">icons/ic_help_black_24dp_2x.png</file>
+        <file alias="explore">icons/ic_explore_black_24dp_2x.png</file>
+        <file alias="directions">icons/ic_directions_black_18dp.png</file>
+        <file alias="file">icons/ic_description_black_24dp_2x.png</file>
+        <file alias="delete">icons/ic_delete_forever_black_24dp_2x.png</file>
+        <file>icons/005-question.png</file>
+        <file>icons/004-placeholder.png</file>
+        <file>icons/003-infinite-symbol.png</file>
+        <file>icons/002-infinite-mathematical-symbol.png</file>
+        <file>icons/001-infinity.png</file>
+    </qresource>
+</RCC>

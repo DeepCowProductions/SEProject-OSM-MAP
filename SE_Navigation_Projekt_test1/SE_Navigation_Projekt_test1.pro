@@ -17,7 +17,8 @@ SOURCES += main.cpp \
     src/OsmTilesOffline/tileofflinemanager.cpp \
 
 RESOURCES += qml.qrc \
-    res.qrc
+    res.qrc \
+    icons.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

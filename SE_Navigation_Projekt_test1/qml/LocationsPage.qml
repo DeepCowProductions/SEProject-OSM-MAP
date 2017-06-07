@@ -22,7 +22,7 @@ Item {
             id: buttonRow
             width: parent.width
             height: 50
-
+            spacing: 4
             Rectangle{
                 width: parent.width * 0.5
                 height: parent.height
@@ -36,9 +36,9 @@ Item {
                     font.pointSize: 24
                 }
             }
-            Button {
+            HighlightButton {
                 id: backButton
-                text: "back"
+                text: "Back"
                 width: parent.width * 0.5
                 height: parent.height
             }
@@ -57,18 +57,13 @@ Item {
                 anchors.fill: parent
                 padding: 1
                 spacing: 4
-                Button {
+                HighlightButton {
                     id: viewPlacesButton
-                    width: parent.width * 0.5
+                    width: parent.width
                     height: parent.height
                     text: "View my Saved Places"
                 }
-                Button {
-                    id: viewRoadsButton
-                    width: parent.width * 0.5
-                    height: parent.height
-                    text: "View my Saved Roads"
-                }
+
             }
         }
 
@@ -81,6 +76,12 @@ Item {
                 anchors.fill: parent
                 padding: 1
                 spacing: 4
+                HighlightButton {
+                    id: viewRoadsButton
+                    width: parent.width
+                    height: parent.height
+                    text: "View my Saved Roads"
+                }
             }
         }
 
