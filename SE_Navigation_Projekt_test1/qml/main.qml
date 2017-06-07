@@ -21,11 +21,12 @@ ApplicationWindow {
     signal saveTiles(variant coordinates, string tilesProvider, int zoomlevel);
     property alias settings : settingsObject
 
-    signal enableButton()
+    signal enableButton();
 
     onEnableButton: {
         console.log("Tiles saved in Offline directory!");
-        mapInstance.saveButtonEnabled = true
+        mapInstance.saveButtonEnabled = true;
+        console.log(mapInstance.saveButtonEnabled);
     }
     function test () {
         console.log("test2")
@@ -212,8 +213,12 @@ ApplicationWindow {
         MapPage {
             id: mapPage
             onSaveTiles: {
+                 console.log("before, efore" + mapInstance.saveButtonEnabled)
+                mapInstance.saveButtonEnabled = false;
                 appWindow.saveTiles(center, fileProvider, zoomlevel);
-                mapPage.saveButtonEnabled = false;
+                console.log("before" + mapInstance.saveButtonEnabled)
+
+                console.log("after<" + mapInstance.saveButtonEnabled)
             }
             settingsPageButton.onClicked: {
                 if (!settingsInstance) {

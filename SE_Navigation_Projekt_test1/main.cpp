@@ -5,6 +5,7 @@
 #include "src/roadsmodel.h"
 #include <QImage>
 #include <QGeoCoordinate>
+#include <QScreen>
 #include "src/OsmTilesOffline/tilesdownloader.h"
 
 int main(int argc, char *argv[])
@@ -25,7 +26,13 @@ int main(int argc, char *argv[])
     QObject::connect(&engine, SIGNAL(quit()), qApp, SLOT(quit()));
     QObject *item = engine.rootObjects().first();
     Q_ASSERT(item);
-    TilesDownloader * downloader = new TilesDownloader(item);
+    for(int i = 0; i < app.screens().size(); i++){
+        QScreen* screen = app.screens().at(i);
+        qDebug() << screen->name();
+    }
+    QPoint screenSize(item->property("width").toInt(), item->property("height").toInt());
+    qDebug() << screenSize.x() << " " << screenSize.y();
+    TilesDownloader * downloader = new TilesDownloader(item, screenSize);
 
     QObject::connect(downloader, SIGNAL(downloadFinished()), item, SIGNAL(enableButton()));
 

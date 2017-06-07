@@ -7,6 +7,7 @@
 #include <QStandardPaths>
 #include <QDir>
 #include <QDebug>
+#include <QDirIterator>
 
 class TileOfflineManager : public QObject
 {
@@ -52,6 +53,15 @@ public:
      *          Andernfalls false
      */
     bool copyChacheTileIfPossible(Tile *tile);
+
+    /**
+     * @brief searchSubdirectoriesForTile durchsucht das mitgegebene Verzeichnis nach dem tile und gibt den Pfad
+     *          zum tile zurück.
+     * @param tile das tile, das gesucht wird
+     * @param directory das Verzeichnis in dem gesucht wird
+     * @return Der Pfad zum Tile falls eins gefunden wurde ansonsten wird ein leerstring zurück gegeben.
+     */
+    QString searchSubdirectoriesForTile(Tile * tile, QString directory);
 
 signals:
 
