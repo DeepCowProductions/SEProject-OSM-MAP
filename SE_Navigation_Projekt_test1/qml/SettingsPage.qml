@@ -15,7 +15,8 @@ Item {
         // instert new options here:
         settings.useOfflineMap = cb1.checked
         settings.useNormalMapCache = cb2.checked
-
+        settings.offlineDirectory = offlineDirectory.text
+        settings.maxOfflineMapSize = 1000000
         settings.save()
     }
 
@@ -25,7 +26,7 @@ Item {
             id: buttonRow
             width: parent.width
             height: 50
-
+            spacing: 4
             Rectangle{
                 width: parent.width * 0.5
                 height: parent.height
@@ -40,9 +41,9 @@ Item {
                 }
             }
 
-            Button {
+            HighlightButton {
                 id: backButton
-                text: "back"
+                text: "Back"
                 width: parent.width * 0.5
                 height: parent.height
             }
@@ -71,7 +72,7 @@ Item {
                 }
             }
 
-            CheckBox {
+            HighlightCheckBox {
                 id: cb1
                 onCheckedChanged: configurationChanged()
                 checked: settings.useOfflineMap
@@ -96,13 +97,12 @@ Item {
                 }
             }
 
-            CheckBox {
+            HighlightCheckBox {
                 id: cb2
                 onCheckedChanged: configurationChanged()
                 checked: settings.useNormalMapCache
             }
         }
-
 
         Row {
             width: parent.width
@@ -121,10 +121,9 @@ Item {
                 }
             }
 
-            CheckBox {
+            HighlightCheckBox {
                 id: cb3
                 onCheckedChanged: configurationChanged()
-
             }
         }
 
@@ -145,9 +144,12 @@ Item {
                 }
             }
 
-            TextEdit {
+            TextField {
                 id: offlineDirectory
-                text: "<Path>"
+                width: parent.width * 0.25
+                text: settings.offlineDirectory
+                placeholderText: "<Path>"
+                onEditingFinished: configurationChanged()
             }
         }
 

@@ -1,6 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Dialogs 1.2
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.0
 import QtPositioning 5.6
 import QtLocation 5.6
@@ -12,56 +12,97 @@ Item {
     property alias centerOnMeButton: centerOnMeButton
     property alias settingsPageButton: settingsPageButton
     property alias locationPageButton: locationPageButton
+    property alias path: polylineItem.path
+    property alias polyline: polylineItem
+    property alias map: map
 
-    property var currentPosition : positionSource.valid ? positionSource.position.coordinate : map.center
-
+    property var currentPosition: positionSource.valid ? positionSource.position.coordinate : map.center
     property var postest: QtPositioning.coordinate(0.1,0.3)
 
     property bool followPerson
-    property bool recordRoute
+    onFollowPersonChanged: {
+        console.log("followPerson changed, new value is: " + followPerson)
+        if (!followPerson) {
+            //            map.removeMapItem(currentPositionMarker)
+        }
+    }
     property bool saveButtonEnabled: true
 
-    property alias path: polylineItem.path
-    property alias polyline: polylineItem
+    property bool recordRoute
+    onRecordRouteChanged: {
+        console.log("racordroute changed, new value is: " + recordRoute)
+        if(!recordRoute) {
+            console.log("opening save dialog...")
+            saveMsgWithTextDialog.createObject(map)
+        }
+    }
 
     function toggleFollow () {
+        console.log("toggle follow")
         followPerson = !followPerson
     }
 
     function toggleRecordRoute () {
+        console.log("toggle Record Route")
         recordRoute =!recordRoute
     }
 
     function clearPath () {
+        console.log("clearing path")
+        //        map.removeMapItem(polyline)
         while (polyline.pathLength() > 0) {
             polylineItem.removeCoordinate(0)
         }
+        //        map.addMapItem(polyline)
+        polyline.visible = false
+        //        polyline.update()
     }
 
     function updatePath (newPath) {
+        console.log("updating path")
         map.removeMapItem(polyline)
-        path = newPath
+        if ( typeof(newPath) == "undefined" || !newPath ) {
+            console.log("updatePath: no new path defined")
+        }else{
+            console.log("new path: " + newPath)
+            path = newPath
+        }
         map.addMapItem(polyline)
+        polyline.visible = true
     }
 
-    function upateLocationMarker (newCoord) {
+    function updateLocationMarker (newCoord) {
+        console.log("update Loaction marker")
         map.removeMapItem(locationMarker)
         locationMarker.coordinate = newCoord
         map.addMapItem(locationMarker)
     }
 
     function updateCurrenPosttionMarker (newCoord) {
+        console.log("update current location marker")
         map.removeMapItem(currentPositionMarker)
         currentPositionMarker.coordinate = newCoord
         map.addMapItem(currentPositionMarker)
     }
 
-    function setToState (value) {
-        console.log("setting mapState to "+value)
-        mapPageTabbar.currentIndex = value
+    signal mapRequestPosition (var coord)
+    onMapRequestPosition: {
+        if(followPerson) {
+            toggleFollow()
+        }
+        updateLocationMarker(coord)
+        map.center = coord
+        map.zoomLevel = 8
     }
 
-    signal testSignal123 ()
+    signal mapRequestRoute(var coords)
+    onMapRequestRoute: {
+        if(recordRoute) {
+            toggleRecordRoute()
+        }
+        clearPath()
+        updatePath(coords)
+    }
     signal saveTiles(variant center,string fileProvider, int zoomlevel);
 
     PositionSource {
@@ -72,16 +113,19 @@ Item {
             console.log("Position source loaded")
         }
         onPositionChanged: {
-            var coord = position.coordinate;
-            console.log("Coordinate from positionSource:", coord.longitude, coord.latitude);
-            if (followPerson) {
-                upateLocationMarker(coord)
-                map.center =  positionSource.position.coordinate
-            }
-            if (recordRoute) {
-                coordList[coordCount] = positionSource.position.coordinate
-                coordCount++
-                console.log("Recorded Coordinate list:" + coordList)
+            if (Qt.platform.os == "android") {
+                var coord = position.coordinate;
+                console.log("Coordinate from positionSource:", coord.longitude, coord.latitude,coord.altitude);
+                if (followPerson) {
+                    upateLocationMarker(coord)
+                    map.center =  positionSource.position.coordinate
+                }
+                if (recordRoute) {
+                    polyline.addCoordinate(coord)
+                    console.log("Recorded Coordinate list:" + coordList)
+                    console.log(polylineItem.pathLength())
+                    updatePath()
+                }
             }
         }
     }
@@ -94,16 +138,16 @@ Item {
             console.log("Timer loaded")
         }
         onTriggered: {
-            polyline.addCoordinate(map.center)
-//            updatePath()
-//            marker.coordinate = map.center
-//            map.addMapItem(marker)
-            console.log(polylineItem.pathLength())
-            console.log("Recorded Coordinate list:" + path)
-        }
-        onRunningChanged: {
-            if (!timer.running) {
-                saveMsgWithTextDialog.createObject(map)
+            if (recordRoute) {
+                polyline.addCoordinate(map.center)
+                updatePath()
+                //            marker.coordinate = map.center
+                //            map.addMapItem(marker)
+                console.log(polylineItem.pathLength())
+                console.log("Recorded Coordinate list:" + path)
+            }
+            if (followPerson) {
+                updateCurrenPosttionMarker(map.center)
             }
         }
     }
@@ -124,6 +168,10 @@ Item {
             console.log("Image loaded")
         }
     }
+    Image {
+        id:image2
+        source: "../res/marker.png"
+    }
     MapQuickItem {
         id: locationMarker
         sourceItem: image
@@ -138,7 +186,7 @@ Item {
 
     MapQuickItem {
         id: currentPositionMarker
-        sourceItem: image
+        sourceItem: image2
         anchorPoint.x: image.width/2
         anchorPoint.y: image.width
         smooth: false
@@ -148,41 +196,42 @@ Item {
         }
     }
 
-//    GeocodeModel {
-//        id: geocodeModel
-//        plugin: map.plugin
-//        onLocationsChanged:
-//        {
-//            if (count == 1) {
-//                map.center.latitude = get(0).coordinate.latitude
-//                map.center.longitude = get(0).coordinate.longitude
-//            }
-//            upateLocationMarker(get(0).coordinate)
-//        }
-//    }
+    //    GeocodeModel {
+    //        id: geocodeModel
+    //        plugin: map.plugin
+    //        onLocationsChanged:
+    //        {
+    //            if (count == 1) {
+    //                map.center.latitude = get(0).coordinate.latitude
+    //                map.center.longitude = get(0).coordinate.longitude
+    //            }
+    //            upateLocationMarker(get(0).coordinate)
+    //        }
+    //    }
 
-//    Address {
-//        id :fromAddress
-//        street: "Hochstraße 16"
-//        city: "Iserlohn"
-//        country: "Germany"
-//        state : ""
-//        postalCode: ""
-//    }
+    //    Address {
+    //        id :fromAddress
+    //        street: "Hochstraße 16"
+    //        city: "Iserlohn"
+    //        country: "Germany"
+    //        state : ""
+    //        postalCode: ""
+    //    }
 
 
     Plugin {
         id: osmPlugin
         name: "osm"
         // specify plugin parameters if necessary
-         PluginParameter {
-             name: "osm.mapping.offline.directory"
-             value: "/home/maik/Schreibtisch/OSM-Data"
-         }
-         Component.onCompleted: {
-             console.log("OsmPlugin loaded")
-//             console.log(osmPlugin.OfflineMappingFeature.)
-         }
+
+        PluginParameter {
+            name: "osm.mapping.offline.directory"
+            value: "/home/maik/Schreibtisch/OSM-Data"
+        }
+        Component.onCompleted: {
+            console.log("OsmPlugin loaded")
+            //             console.log(osmPlugin.OfflineMappingFeature.)
+        }
     }
 
     Item {
@@ -193,7 +242,7 @@ Item {
             width: parent.width
             height: 50
             spacing: 4
-            Button {
+            HighlightButton {
                 id: settingsPageButton
                 text: "settingsPageButton"
                 width: (parent.width-16) * 0.2
@@ -205,8 +254,12 @@ Item {
                 onClicked: {
                     console.log ("default hanlder for settingsPageButton ")
                 }
+                contentItem: Image {
+                    source: "qrc:/settings"
+                    fillMode: Image.PreserveAspectFit
+                }
             }
-            Button {
+            HighlightButton {
                 id: toggleTrackingButton
                 text: "toggleTrackingButton"
                 width: (parent.width-16) * 0.2
@@ -214,16 +267,26 @@ Item {
                 onClicked: {
                     console.log ("default hanlder for toggleTrackingButton")
                     toggleFollow()
+                    if (Qt.platform.os != "android") {
+                        // TEMP only for desktop
+                        if (timer.running) {
+                            timer.stop()
+                        }else {
+                            timer.start()
+                        }
+                    }
                 }
-                background: Rectangle {
-                    implicitWidth: toggleTrackingButton.width
-                    implicitHeight: toggleTrackingButton.height
-                    color: followPerson ? "lightgreen" : "#E0E0E0"
+                contentItem: Image {
+                    source: "qrc:/targetInf"
+                    fillMode: Image.PreserveAspectFit
                 }
+
+                activeCondition: followPerson
             }
-            Button {
+            HighlightButton {
                 id: centerOnMeButton
                 text: "centerOnMeButton"
+
                 width: (parent.width-16) * 0.2
                 height: parent.height
                 function toggleSaveButton () {
@@ -236,12 +299,18 @@ Item {
                     map.center = positionSource.position.coordinate
                     upateLocationMarker(positionSource.position.coordinate)
                     toggleSaveButton()
+                    updateLocationMarker(positionSource.position.coordinate)
                 }
+                contentItem: Image {
+                    source: "qrc:/target"
+                    fillMode: Image.PreserveAspectFit
+                }
+
             }
 
 
 
-            Button {
+            HighlightButton {
                 id: toggleRecordRouteButton
                 text: "toggleRecordRouteButton"
                 width: (parent.width-16) * 0.2
@@ -250,25 +319,33 @@ Item {
                 onClicked: {
                     console.log ("default hanlder for toggleRecordRouteButton ")
                     toggleRecordRoute()
-                    // for testing on Desktop:
-                    timer.running ? timer.stop() : timer.start()
-
-                    // TBI
+                    // TEMP only for desktop
+                    if (Qt.platform.os != "android") {
+                        if (timer.running) {
+                            timer.stop()
+                        }else {
+                            timer.start()
+                        }
+                    }
                 }
-                background: Rectangle {
-                    implicitWidth: toggleTrackingButton.width
-                    implicitHeight: toggleTrackingButton.height
-                    color: recordRoute ? "lightgreen" : "#E0E0E0"
+                contentItem: Image {
+                    source: "qrc:/track"
+                    fillMode: Image.PreserveAspectFit
                 }
+                activeCondition: recordRoute
             }
 
-            Button {
+            HighlightButton {
                 id: locationPageButton
                 text: "locationPageButton"
                 width: (parent.width-16) * 0.2
                 height: parent.height
                 onClicked: {
                     console.log ("default hanlder for locationPageButton ")
+                }
+                contentItem: Image {
+                    source: "qrc:/directions"
+                    fillMode: Image.PreserveAspectFit
                 }
             }
         }
@@ -295,38 +372,49 @@ Item {
                 title: "Do you want to save this route?"
                 labelText: "Enter a name to save"
                 onAccepted: {
-                    console.log("accepted")
-                    console.log(input)
-                    console.log(path)
+                    console.log("saveDialog accepted")
+                    console.log("input is: " + input)
+                    console.log("path to save s : " + path)
+                    console.log("qml: call roadsModel.addItem(...)")
                     roadsModel.addItem(input,path)
+                    // TODO: option to keep path displayed???
                     clearPath()
-                    console.log(input)
                     visible = false
-                    updatePath()
+                    //                    updatePath()
                     map.forceActiveFocus()
                 }
                 onRejected: {
                     console.log("Rejected")
-                    console.log(polyline.path)
-                    // only temp
-                    updatePath(roadsModel.getCoordsAtIndex(3))
-                    // ...
+                    console.log("This path will be gone: " + polyline.path)
                     visible = false
+                    clearPath()
+                    //                    updatePath()
+                    //                    map.removeMapItem(polyline)
+                    //                    map.addMapItem(polyline)
                     map.forceActiveFocus()
                 }
                 Component.onCompleted: visible = true
             }
         }
-        Button{
+        RoundHighlightButton{
             id: saveButton
             enabled: saveButtonEnabled
             text: "Save Data"
+            //            onClicked: appWindow.saveTiles(map.center, map.zoomLevel)
             onClicked: saveTiles(map.center, "korona.geog.uni-heidelberg.de", map.zoomLevel)
             anchors.bottom: parent.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.right: parent.right
+            width: (parent.width -16)  * 0.2
+            height: (parent.height - 8) * 0.1
+
             Component.onCompleted: {
                 console.log("Save Button erstellt")
             }
+            contentItem: Image {
+                source: "qrc:/file"
+                fillMode: Image.PreserveAspectFit
+            }
+            radius: 9000
         }
     }
 

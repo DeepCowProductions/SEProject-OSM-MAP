@@ -165,7 +165,10 @@ ApplicationWindow {
             }
             onMapRequest: {
                 console.log("coords:" + array)
-                mapInstance
+                mapInstance.mapRequestRoute(array)
+                mainStack.pop(mapInstance)
+                mapInstance.map.center = array[0]
+                mapInstance.map.zoomLevel = 10
             }
 
             Component.onCompleted: console.log("raodsView complete")
@@ -196,7 +199,9 @@ ApplicationWindow {
             }
 
             onMapRequest: {
-                console.log(latitude + ", " + longitude)
+                console.log(longitude + ", " + latitude)
+                mapInstance.mapRequestPosition(QtPositioning.coordinate(longitude, latitude))
+                mainStack.pop(mapInstance)
             }
 
             Component.onCompleted: console.log("raodsView complete")
@@ -207,9 +212,6 @@ ApplicationWindow {
         id: mapPageComp
         MapPage {
             id: mapPage
-            onTestSignal123: {
-                console.log("mapComponent recieved test Signal")
-            }
             onSaveTiles: {
                  console.log("before, efore" + mapInstance.saveButtonEnabled)
                 mapInstance.saveButtonEnabled = false;
@@ -265,7 +267,8 @@ ApplicationWindow {
             title: "Do you want to save this Location?"
             labelText: "Enter a name to save"
             onAccepted: {
-                placesModel.addItem(input,mapInstance.currentPosition)
+//                placesModel.addItem(input,mapInstance.currentPosition)
+                placesModel.addItem(input,mapInstance.map.center)
                 visible = false
                 mainStack.forceActiveFocus()
             }

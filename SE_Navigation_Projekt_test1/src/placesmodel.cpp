@@ -1,7 +1,8 @@
 #include "placesmodel.h"
 PlacesModel::PlacesModel(QObject *parent) : QAbstractListModel(parent)
 {
-    writeTestData();
+//    writeTestData();
+    readUserData();
 }
 
 QHash<int, QByteArray> PlacesModel::roleNames() const
@@ -128,6 +129,7 @@ bool PlacesModel::writeUserData()
     QJsonDocument saveDoc(placesJasonObject);
     saveFile.write(saveDoc.toJson());
     saveFile.close();
+    return true;
 }
 
 bool PlacesModel::addItem(QString name, QGeoCoordinate coord)
@@ -138,6 +140,8 @@ bool PlacesModel::addItem(QString name, QGeoCoordinate coord)
     p.setCoordinate(coord);
     m_places.append(p);
     endInsertRows();
+    writeUserData();
+    return true;
 }
 
 bool PlacesModel::clearList()
@@ -146,6 +150,7 @@ bool PlacesModel::clearList()
     beginRemoveRows(QModelIndex() , 0 , m_places.size()-1);
     m_places.clear();
     endRemoveRows();
+    return true;
 }
 
 bool PlacesModel::writeTestData()
@@ -165,6 +170,6 @@ bool PlacesModel::writeTestData()
     p3.setName("test3");
     p3.setSavedAtDate(QDate::currentDate());
     m_places.append(p3);
-
+    return true;
 //    writeUserData();
 }

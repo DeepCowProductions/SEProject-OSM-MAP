@@ -2,7 +2,8 @@
 
 RoadsModel::RoadsModel(QObject *parent) : QAbstractListModel(parent)
 {
-    writeTestData();
+//    writeTestData();
+    readUserData();
 }
 
 QHash<int, QByteArray> RoadsModel::roleNames() const
@@ -118,6 +119,7 @@ bool RoadsModel::writeUserData()
     QJsonDocument saveDoc(jasonObject);
     saveFile.write(saveDoc.toJson());
     saveFile.close();
+    return true;
 }
 
 /* @see http://code.qt.io/cgit/qt/qtlocation.git/tree/src/imports/location/locationvaluetypehelper.cpp#n40 */
@@ -164,6 +166,7 @@ bool RoadsModel::addItem( QString name, QJSValue value )
     r.setCoordinates(pathList);
     m_roads.append(r);
     endInsertRows();
+    writeUserData();
     return true;
 }
 
@@ -198,6 +201,7 @@ bool RoadsModel::clearList()
     beginRemoveRows(QModelIndex() , 0 , m_roads.size()-1);
     m_roads.clear();
     endRemoveRows();
+    return true;
 }
 
 bool RoadsModel::writeTestData()
@@ -220,6 +224,6 @@ bool RoadsModel::writeTestData()
     p3.setName("test3");
     p3.setSavedAtDate(QDate::currentDate());
     m_roads.append(p3);
-
+    return true;
     //    writeUserData();
 }

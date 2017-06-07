@@ -8,5 +8,8 @@
         <file>qml/RoadsView.qml</file>
         <file>qml/HeaderSpacer.qml</file>
         <file>qml/SimpleTextDialog.qml</file>
+        <file>qml/HighlightButton.qml</file>
+        <file>qml/RoundHighlightButton.qml</file>
+        <file>qml/HighlightCheckBox.qml</file>
     </qresource>
 </RCC>

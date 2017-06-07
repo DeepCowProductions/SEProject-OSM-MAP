@@ -16,6 +16,8 @@ TilesDownloader::~TilesDownloader()
         delete m_downloadTiles.at(i);
     for(int i = 0; i< m_requests.size(); i++)
         delete m_requests.at(i);
+    if(m_tom)
+        delete m_tom;
 }
 
 
@@ -27,25 +29,24 @@ void TilesDownloader::downloadTiles(QVariant center, QString tileProvider, int z
     const double longi = coordinates.longitude();
     const double lati = coordinates.latitude();
     m_startTile = new Tile((double)longi, (double)lati, zoomLevel, "osm", 1, this);
-    m_x = m_startTile->x();
-    m_y = m_startTile->y();
-    m_zoomlevel = m_startTile->zoomlevel();
     int requestCounter = 0;
     int tileCounter = 1; // 1 aufgrund des StartTiles
 
-
+    int x = m_startTile->x();
+    int y = m_startTile->y();
+    int zLevel = zoomLevel;
 
 
     //Äußere Schleife für zoomlevel
-    for(int z = 1; z < 2; z++){
+    for(int z = 0; z < 2; z++){
         //Schleife die abhängig von der Bildschirmgröße die benötigte Anzahl an Tiles für das aktuelle zoomlevel berechnet
         int amountY = (m_screenSize.y() / 256 + 1) * pow(2, z);
         int amountX = (m_screenSize.x() / 256 + 1) * pow(2, z);
 
         Tile * tile;
-        for(int i = m_y * pow(2, z) - amountY/ 2; i <= m_y * pow(2, z) + amountY/ 2; i++ ){
-            for(int j = m_x * pow(2, z); j < m_x * pow(2, z) + amountX; j++){
-                tile = new Tile(j, i, m_zoomlevel + z, "osm", 1, this);
+        for(int i = y * pow(2, z) - amountY/ 2; i <= y * pow(2, z) + amountY/ 2; i++ ){
+            for(int j = x * pow(2, z); j < x * pow(2, z) + amountX; j++){
+                tile = new Tile(j, i, zLevel + z, "osm", 1, this);
                 if(!m_tom->copyChacheTileIfPossible(tile)){
                     createRequest(tile);
                     requestCounter++;
@@ -61,7 +62,7 @@ void TilesDownloader::downloadTiles(QVariant center, QString tileProvider, int z
     emit downloadFinished();
 }
 
-bool TilesDownloader::sendingRequests()
+void TilesDownloader::sendingRequests()
 {
     if(m_counter < m_requests.size()){
         QNetworkAccessManager * nm = NetworkAccessManagerSingleton::getInstance();
@@ -70,9 +71,7 @@ bool TilesDownloader::sendingRequests()
         //         qDebug() << "Tile: " << tile->x() << " " << tile->y();
         connect(nm, SIGNAL(finished(QNetworkReply*)), tileReply, SLOT(networkReplyFinished(QNetworkReply*)));
         connect(tileReply, SIGNAL(saveTile(Tile*)), this, SLOT(saveTile(Tile*)));
-        connect(tileReply, SIGNAL(saveTile(Tile*)), this, SLOT(downloadNextTile(Tile*)));
     }
-    return true;
 }
 
 void TilesDownloader::createRequest(Tile *tile)

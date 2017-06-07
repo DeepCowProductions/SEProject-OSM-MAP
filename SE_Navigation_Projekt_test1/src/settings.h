@@ -21,7 +21,7 @@ class Settings : public QObject
     Q_PROPERTY(int currentOfflineMapSize READ currentOfflineMapSize WRITE setCurrentOfflineMapSize NOTIFY currentOfflineMapSizeChanged)
     Q_PROPERTY(bool useNormalMapCache READ useNormalMapCache WRITE setUseNormalMapCache NOTIFY useNormalMapCacheChanged)
     Q_PROPERTY(int  maxNormalMapChacheSize READ maxNormalMapChacheSize WRITE setMaxNormalMapChacheSize NOTIFY maxNormalMapChacheSizeChanged)
-
+    Q_PROPERTY(QString offlineDirectory READ offlineDirectory WRITE setOfflineDirectory NOTIFY offlineDirectoryChanged)
 
 public:
     Settings();
@@ -33,6 +33,8 @@ public:
     int currentOfflineMapSize() const;
     int maxOfflineMapSize() const;
     bool useNormalMapCache() const;
+    QString offlineDirectory() const;
+
 
 signals:
 
@@ -42,6 +44,8 @@ signals:
     void currentOfflineMapSizeChanged(int currentOfflineMapSize);
     void maxOfflineMapSizeChanged(int maxOfflineMapSize);
     void useNormalMapCacheChanged(bool useNormalMapCache);
+
+    void offlineDirectoryChanged(QString offlineDirectory);
 
 public slots:
     void save();
@@ -53,6 +57,7 @@ public slots:
     void setCurrentOfflineMapSize(int currentOfflineMapSize);
     void setMaxOfflineMapSize(int maxOfflineMapSize);
     void setUseNormalMapCache(bool useNormalMapCache);
+    void setOfflineDirectory(QString offlineDirectory);
 
 protected:
     virtual void readSettings();
@@ -69,6 +74,7 @@ private:
     QString m_home;
     bool m_useOfflineMap;
     bool m_useNormalMapCache;
+    QString m_offlineDirectory;
 };
 
 #endif // SETTINGS_H

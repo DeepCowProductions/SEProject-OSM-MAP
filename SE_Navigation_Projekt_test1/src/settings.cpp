@@ -10,6 +10,7 @@ Settings::Settings()
     // read settings
     readSettings();
 
+
     qDebug() << "settings saved at: " << m_settings->fileName() << "  with organisation name: " << m_settings->organizationName();
 }
 
@@ -50,6 +51,11 @@ bool Settings::useNormalMapCache() const
     return m_useNormalMapCache;
 }
 
+QString Settings::offlineDirectory() const
+{
+    return m_offlineDirectory;
+}
+
 void Settings::save()
 {
     qDebug() << "invoke Settings:save";
@@ -75,7 +81,8 @@ void Settings::readSettings()
     setUseNormalMapCache(m_settings->value("useNormalMapCache").toBool());
     setMaxNormalMapChacheSize(m_settings->value("maxNormalMapChacheSize").toInt());
     setMaxOfflineMapSize(m_settings->value("maxOfflineMapSize").toInt());
-    setCurrentOfflineMapSize(m_settings->value("currentOfflineMapSize").toInt()); // #???#
+    setCurrentOfflineMapSize(m_settings->value("currentOfflineMapSize").toInt());
+    setOfflineDirectory(m_settings->value("offlineDirectory").toString());// #???#
 
 }
 
@@ -89,6 +96,7 @@ void Settings::writeSettings()
     m_settings->setValue("maxNormalMapChacheSize",m_maxNormalMapChacheSize);
     m_settings->setValue("maxOfflineMapSize",m_maxOfflineMapSize);
     m_settings->setValue("currentOfflineMapSize",m_currentOfflineMapSize);
+    m_settings->setValue("offlineDirectory", m_offlineDirectory);
 
     // force writing to storage by calling sync - not neccessary but makes things easier
     m_settings->sync();
@@ -148,4 +156,13 @@ void Settings::setUseNormalMapCache(bool useNormalMapCache)
     m_useNormalMapCache = useNormalMapCache;
     emit useNormalMapCacheChanged(useNormalMapCache);
     qDebug() << "useNormalMapCache: " << m_useNormalMapCache;
+}
+
+void Settings::setOfflineDirectory(QString offlineDirectory)
+{
+    if (m_offlineDirectory == offlineDirectory)
+        return;
+
+    m_offlineDirectory = offlineDirectory;
+    emit offlineDirectoryChanged(offlineDirectory);
 }
