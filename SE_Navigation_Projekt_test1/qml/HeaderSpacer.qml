@@ -1,4 +1,5 @@
-import QtQuick 2.0
+import QtQuick 2.7
+import QtQuick.Controls 2.0
 
 Rectangle {
     id: spacer
@@ -7,4 +8,5 @@ Rectangle {
     border.width: 2
     border.color: "white"
     color: "#AAAAFF"
+
 }

@@ -11,5 +11,6 @@
         <file>qml/HighlightButton.qml</file>
         <file>qml/RoundHighlightButton.qml</file>
         <file>qml/HighlightCheckBox.qml</file>
+        <file>qml/CustomProgressBar.qml</file>
     </qresource>
 </RCC>

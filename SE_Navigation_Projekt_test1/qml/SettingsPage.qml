@@ -8,6 +8,7 @@ import fhswf.se.nav.settings 1.0
 
 Item {
     property alias backButton: backButton
+    id: topParent
 
     signal configurationChanged ()
     onConfigurationChanged:  {
@@ -20,7 +21,10 @@ Item {
     }
 
     Column{
+        id:mainColumn
         anchors.fill: parent
+        //            width: topParent.width
+        //            height: topParent.height
         Row  {
             id: buttonRow
             width: parent.width
@@ -45,6 +49,10 @@ Item {
                 text: "Back"
                 width: parent.width * 0.5
                 height: parent.height
+                contentItem: Image {
+                    source: "qrc:/back"
+                    fillMode: Image.PreserveAspectFit
+                }
             }
 
         }
@@ -53,108 +61,204 @@ Item {
             id: headerSpacer
         }
 
-
-        Row {
+        Rectangle {
             width: parent.width
-            height: 50
-            Rectangle{
-                width: parent.width * 0.7
-                height: parent.height
-                Text{
-                    anchors.leftMargin: 10
-                    anchors.fill: parent
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignLeft
-                    text: "Use Offline Map"
-                    color: "navy"
-                    font.pointSize: 12
+            height: parent.height - headerSpacer.height - buttonRow.height
+            Flickable {
+                anchors.fill: parent
+                contentHeight: mainItemColumn.height
+                contentWidth: mainItemColumn.width
+                boundsBehavior: Flickable.StopAtBounds
+                clip: true
+                ScrollBar.vertical: ScrollBar { }
+                Column {
+                    id: mainItemColumn
+                    width: topParent.width
+                    Row {
+                        width: parent.width
+                        height: 50
+                        Rectangle{
+                            width: parent.width * 0.7
+                            height: parent.height
+                            Text{
+                                anchors.leftMargin: 10
+                                anchors.fill: parent
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                text: "Use Offline Map"
+                                color: "navy"
+                                font.pointSize: 12
+                            }
+                        }
+
+                        HighlightCheckBox {
+                            id: cb1
+                            onCheckedChanged: configurationChanged()
+                            checked: settings.useOfflineMap
+                        }
+                    }
+
+
+                    Row {
+                        width: parent.width
+                        height: 50
+                        Rectangle{
+                            width: parent.width * 0.7
+                            height: parent.height
+                            Text{
+                                anchors.leftMargin: 10
+                                anchors.fill: parent
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                text: "Use Map Cache"
+                                color: "navy"
+                                font.pointSize: 12
+                            }
+                        }
+
+                        HighlightCheckBox {
+                            id: cb2
+                            onCheckedChanged: configurationChanged()
+                            checked: settings.useNormalMapCache
+                        }
+                    }
+
+                    Row {
+                        width: parent.width
+                        height: 50
+                        Rectangle{
+                            width: parent.width * 0.7
+                            height: parent.height
+                            Text{
+                                anchors.leftMargin: 10
+                                anchors.fill: parent
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                text: "<Setting Item here>"
+                                color: "navy"
+                                font.pointSize: 12
+                            }
+                        }
+
+                        HighlightCheckBox {
+                            id: cb3
+                            onCheckedChanged: configurationChanged()
+                        }
+                    }
+                    Row {
+                        width: parent.width
+                        height: 50
+                        Rectangle{
+                            width: parent.width * 0.7
+                            height: parent.height
+                        }
+                    }
+
+                    Row {
+                        width: parent.width
+                        height: 50
+                        Rectangle{
+                            width: parent.width * 0.7
+                            height: parent.height
+                        }
+                    }
+                    Row {
+                        width: parent.width
+                        height: 50
+                        Rectangle{
+                            width: parent.width * 0.7
+                            height: parent.height
+                        }
+                    }
+                    Row {
+                        width: parent.width
+                        height: 50
+                        Rectangle{
+                            width: parent.width * 0.7
+                            height: parent.height
+                        }
+                    }
+                    Row {
+                        width: parent.width
+                        height: 50
+                        Rectangle{
+                            width: parent.width * 0.7
+                            height: parent.height
+                        }
+                    }
+                    Row {
+                        width: parent.width
+                        height: 50
+                        Rectangle{
+                            width: parent.width * 0.7
+                            height: parent.height
+                        }
+                    }
+                    Row {
+                        width: parent.width
+                        height: 50
+                        Rectangle{
+                            width: parent.width * 0.7
+                            height: parent.height
+                        }
+                    }
+                    Row {
+                        width: parent.width
+                        height: 50
+                        Rectangle{
+                            width: parent.width * 0.7
+                            height: parent.height
+                        }
+                    }
+                    Row {
+                        width: parent.width
+                        height: 50
+                        Rectangle{
+                            width: parent.width * 0.7
+                            height: parent.height
+                        }
+                    }
+                    Row {
+                        width: parent.width
+                        height: 50
+                        Rectangle{
+                            width: parent.width * 0.7
+                            height: parent.height
+                        }
+                    }
+                    Row {
+                        width: parent.width
+                        height: 50
+                        Rectangle{
+                            width: parent.width * 0.7
+                            height: parent.height
+                            Text{
+                                anchors.leftMargin: 10
+                                anchors.fill: parent
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                text: "Offline Directory"
+                                color: "navy"
+                                font.pointSize: 12
+                            }
+                        }
+
+                        TextEdit {
+                            id: offlineDirectory
+                            text: "<Path>"
+                        }
+                    }
+
+
+                }
+                Component.onCompleted: {
+                    Keys.backPressed.connect(backButton.clicked)
+                    Keys.escapePressed.connect(backButton.clicked)
+                    forceActiveFocus()
+
                 }
             }
 
-            HighlightCheckBox {
-                id: cb1
-                onCheckedChanged: configurationChanged()
-                checked: settings.useOfflineMap
-            }
         }
-
-
-        Row {
-            width: parent.width
-            height: 50
-            Rectangle{
-                width: parent.width * 0.7
-                height: parent.height
-                Text{
-                    anchors.leftMargin: 10
-                    anchors.fill: parent
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignLeft
-                    text: "Use Map Cache"
-                    color: "navy"
-                    font.pointSize: 12
-                }
-            }
-
-            HighlightCheckBox {
-                id: cb2
-                onCheckedChanged: configurationChanged()
-                checked: settings.useNormalMapCache
-            }
-        }
-
-        Row {
-            width: parent.width
-            height: 50
-            Rectangle{
-                width: parent.width * 0.7
-                height: parent.height
-                Text{
-                    anchors.leftMargin: 10
-                    anchors.fill: parent
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignLeft
-                    text: "<Setting Item here>"
-                    color: "navy"
-                    font.pointSize: 12
-                }
-            }
-
-            HighlightCheckBox {
-                id: cb3
-                onCheckedChanged: configurationChanged()
-            }
-        }
-
-        Row {
-            width: parent.width
-            height: 50
-            Rectangle{
-                width: parent.width * 0.7
-                height: parent.height
-                Text{
-                    anchors.leftMargin: 10
-                    anchors.fill: parent
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignLeft
-                    text: "Offline Directory"
-                    color: "navy"
-                    font.pointSize: 12
-                }
-            }
-
-            TextEdit {
-                id: offlineDirectory
-                text: "<Path>"
-            }
-        }
-
-
-    }
-    Component.onCompleted: {
-        Keys.backPressed.connect(backButton.clicked)
-        Keys.escapePressed.connect(backButton.clicked)
-        forceActiveFocus()
-
     }
 }
