@@ -120,6 +120,7 @@ Item {
             id: buttonRow
             width: parent.width
             height: 50
+            spacing: 4
             Rectangle{
                 width: parent.width * 0.5
                 height: parent.height
@@ -127,7 +128,7 @@ Item {
                     anchors.fill: parent
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
-                    text: "Locations"
+                    text: "My Places"
                     color: "darkblue"
                     font.family: "Helvetica"
                     font.pointSize: 24
@@ -138,156 +139,158 @@ Item {
                 text: "back"
                 width: parent.width * 0.5
                 height: parent.height
+                contentItem: Image {
+                    source: "qrc:/back"
+                    fillMode: Image.PreserveAspectFit
+                }
             }
         }
 
         HeaderSpacer {
-
+            id: headerSpacer
         }
-
         Rectangle {
-            id: title
             width: parent.width
-            height: 50
-            border.color: "lightgray"
-            border.width: 1
-
-            Text {
+            height: parent.height - headerSpacer.height - buttonRow.height
+            Flickable {
                 anchors.fill: parent
-                text: "My Places"
-                font.family: "Helvetica"
-                font.pointSize: 24
-                color: "darkblue"
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-        }
+                contentHeight: placesPage.height
+                contentWidth: placesPage.width
+                boundsBehavior: Flickable.StopAtBounds
+                clip: true
+                ScrollBar.vertical: ScrollBar { }
+                Column {
+                    id: mainItemColumn
+                    width: placesPage.width
 
-        Rectangle {
-            id: buttons
-            width: parent.width
-//            anchors.top: title.bottom
-            height: 50
-            //                border.color: "lightgray"
-            //                border.width: 1
-            Row {
-                anchors.fill: parent
-                padding: 1
-                spacing: 4
-                HighlightButton {
-                    id: newPlaceButton
-                    width: parent.width * 0.2
-                    height: parent.height
-                    text: "New"
-                }
-                HighlightButton {
-                    id: savePlaceButton
-                    width: parent.width * 0.4
-                    height: parent.height
-                    text: "Save current Place"
-                }
-                HighlightButton {
-                    id: backToLocationsButton
-                    width: parent.width * 0.4
-                    height: parent.height
-                    text: "Back to Locations"
-                }
-            }
-        }
-
-        Column{
-            id: listColumn
-//            anchors.top: buttons.bottom
-            Row{
-                id: headerRow
-                height: 30
-                Rectangle{
-                    width: pLacesListView.width * 0.4
-                    height: 30
-                    color: "white"
-                    border.width: 1
-                    border.color: "gray"
-                    Text{
-                        anchors.fill: parent
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
-                        text: "name"
-                        color: "black"
-                    }
-                }
-                Rectangle{
-                    width: pLacesListView.width * 0.2
-                    height: 30
-                    color: "white"
-                    border.width: 1
-                    border.color: "gray"
-                    Text{
-                        anchors.fill: parent
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
-                        text: "Latitude"
-                        color: "black"
+                    Rectangle {
+                        id: buttons
+                        width: parent.width
+                        //            anchors.top: title.bottom
+                        height: 50
+                        //                border.color: "lightgray"
+                        //                border.width: 1
+                        Row {
+                            anchors.fill: parent
+                            padding: 1
+                            spacing: 4
+                            HighlightButton {
+                                id: newPlaceButton
+                                width: parent.width * 0.2
+                                height: parent.height
+                                text: "New"
+                            }
+                            HighlightButton {
+                                id: savePlaceButton
+                                width: parent.width * 0.4
+                                height: parent.height
+                                text: "Save current Place"
+                            }
+                            HighlightButton {
+                                id: backToLocationsButton
+                                width: parent.width * 0.4
+                                height: parent.height
+                                text: "Back to Locations"
+                            }
+                        }
                     }
 
-                }
-                Rectangle{
-                    width: pLacesListView.width * 0.2
-                    height: 30
-                    color: "white"
-                    border.width: 1
-                    border.color: "gray"
-                    Text{
-                        anchors.fill: parent
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
-                        text: "Longitude"
-                        color: "black"
+                    Column{
+                        id: listColumn
+                        //            anchors.top: buttons.bottom
+                        Row{
+                            id: headerRow
+                            height: 30
+                            Rectangle{
+                                width: pLacesListView.width * 0.4
+                                height: 30
+                                color: "white"
+                                border.width: 1
+                                border.color: "gray"
+                                Text{
+                                    anchors.fill: parent
+                                    verticalAlignment: Text.AlignVCenter
+                                    horizontalAlignment: Text.AlignHCenter
+                                    text: "name"
+                                    color: "black"
+                                }
+                            }
+                            Rectangle{
+                                width: pLacesListView.width * 0.2
+                                height: 30
+                                color: "white"
+                                border.width: 1
+                                border.color: "gray"
+                                Text{
+                                    anchors.fill: parent
+                                    verticalAlignment: Text.AlignVCenter
+                                    horizontalAlignment: Text.AlignHCenter
+                                    text: "Latitude"
+                                    color: "black"
+                                }
+
+                            }
+                            Rectangle{
+                                width: pLacesListView.width * 0.2
+                                height: 30
+                                color: "white"
+                                border.width: 1
+                                border.color: "gray"
+                                Text{
+                                    anchors.fill: parent
+                                    verticalAlignment: Text.AlignVCenter
+                                    horizontalAlignment: Text.AlignHCenter
+                                    text: "Longitude"
+                                    color: "black"
+                                }
+                            }
+                            Rectangle{
+                                width: pLacesListView.width * 0.2
+                                height: 30
+                                color: "white"
+                                border.width: 1
+                                border.color: "gray"
+                                Text{
+                                    anchors.fill: parent
+                                    verticalAlignment: Text.AlignVCenter
+                                    horizontalAlignment: Text.AlignHCenter
+                                    text: "date"
+                                    color: "black"
+                                }
+                            }
+                        }
+                        Rectangle{
+                            id:listRect
+                            color: "white"
+                            width: listWidth
+                            height: listHeight
+
+                            ListView{
+                                id: pLacesListView
+                                anchors.fill: parent
+                                snapMode: ListView.SnapToItem
+                                clip: true
+
+                                highlight: highLightComp
+                                highlightFollowsCurrentItem: false
+
+                                delegate: itemDelegate
+                            }
+                        }
+                        Button {
+                            id: scrapIt
+                            text: "scrap it"
+                        }
+                        Button {
+                            id: saveIt
+                            text: "save it"
+                        }
+                        Button {
+                            id: readIt
+                            text: "read it"
+                        }
                     }
                 }
-                Rectangle{
-                    width: pLacesListView.width * 0.2
-                    height: 30
-                    color: "white"
-                    border.width: 1
-                    border.color: "gray"
-                    Text{
-                        anchors.fill: parent
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
-                        text: "date"
-                        color: "black"
-                    }
-                }
-            }
-            Rectangle{
-                id:listRect
-                color: "white"
-                width: listWidth
-                height: listHeight
-
-                ListView{
-                    id: pLacesListView
-                    anchors.fill: parent
-                    snapMode: ListView.SnapToItem
-                    clip: true
-
-                    highlight: highLightComp
-                    highlightFollowsCurrentItem: false
-
-                    delegate: itemDelegate
-                }
-            }
-            Button {
-                id: scrapIt
-                text: "scrap it"
-            }
-            Button {
-                id: saveIt
-                text: "save it"
-            }
-            Button {
-                id: readIt
-                text: "read it"
             }
         }
     }

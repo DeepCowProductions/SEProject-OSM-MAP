@@ -22,5 +22,7 @@
         <file>icons/003-infinite-symbol.png</file>
         <file>icons/002-infinite-mathematical-symbol.png</file>
         <file>icons/001-infinity.png</file>
+        <file alias="edit">icons/ic_mode_edit_black_48dp.png</file>
+        <file alias="back">icons/ic_keyboard_backspace_black_48dp.png</file>
     </qresource>
 </RCC>

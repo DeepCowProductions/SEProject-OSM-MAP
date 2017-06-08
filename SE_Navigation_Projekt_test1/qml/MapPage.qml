@@ -17,7 +17,7 @@ Item {
     property alias map: map
 
     property var currentPosition: positionSource.valid ? positionSource.position.coordinate : map.center
-    property var postest: QtPositioning.coordinate(0.1,0.3)
+    property var postest: QtPositioning.coordinate(1.0,-30.5)
 
     property bool followPerson
     onFollowPersonChanged: {
@@ -308,8 +308,6 @@ Item {
 
             }
 
-
-
             HighlightButton {
                 id: toggleRecordRouteButton
                 text: "toggleRecordRouteButton"
@@ -398,14 +396,14 @@ Item {
         }
         RoundHighlightButton{
             id: saveButton
-            enabled: saveButtonEnabled
+            enabled: saveButtonEnabled // && !headerSpacer.isActive
             text: "Save Data"
             //            onClicked: appWindow.saveTiles(map.center, map.zoomLevel)
             onClicked: saveTiles(map.center, "korona.geog.uni-heidelberg.de", map.zoomLevel)
             anchors.bottom: parent.bottom
             anchors.right: parent.right
-            width: (parent.width -16)  * 0.2
-            height: (parent.height - 8) * 0.1
+            width: (parent.width -16)  * 0.16
+            height: (parent.height - 8) * 0.08
 
             Component.onCompleted: {
                 console.log("Save Button erstellt")
@@ -415,6 +413,13 @@ Item {
                 fillMode: Image.PreserveAspectFit
             }
             radius: 9000
+        }
+        CustomProgressBar {
+            id: progressBar
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: parent.width * 0.6
+
         }
     }
 

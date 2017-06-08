@@ -26,7 +26,6 @@ int main(int argc, char *argv[])
     QObject::connect(&engine, SIGNAL(quit()), qApp, SLOT(quit()));
     QObject *item = engine.rootObjects().first();
     Q_ASSERT(item);
-
     for(int i = 0; i < app.screens().size(); i++){
         QScreen* screen = app.screens().at(i);
         qDebug() << screen->name();
@@ -39,7 +38,7 @@ int main(int argc, char *argv[])
 
     QObject::connect(item, SIGNAL(saveTiles(QVariant,QString, int)), downloader, SLOT(downloadTiles(QVariant,QString, int)));
     QMetaObject::invokeMethod(item, "initApp"
-//                             , Q_ARG(QVariant, QVariant::fromValue(1)));
+//                             , Q_ARG(QVariant, QVariant::fromValue(1))
                               );
     return app.exec();
 }
