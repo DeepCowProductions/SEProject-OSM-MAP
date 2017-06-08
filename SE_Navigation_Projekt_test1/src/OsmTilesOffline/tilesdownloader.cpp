@@ -5,7 +5,8 @@
 TilesDownloader::TilesDownloader(QObject* parent, QPoint screenSize)
     : QObject(parent)
 {
-    m_tom = new TileOfflineManager("jpg", this);
+    m_tom = new TileOfflineManager("jpg", parent);
+
     m_screenSize = screenSize;
     m_counter = 0;
 }
@@ -18,6 +19,8 @@ TilesDownloader::~TilesDownloader()
         delete m_requests.at(i);
     if(m_tom)
         delete m_tom;
+    if(m_startTile)
+        delete m_startTile;
 }
 
 
@@ -29,13 +32,14 @@ void TilesDownloader::downloadTiles(QVariant center, QString tileProvider, int z
     const double longi = coordinates.longitude();
     const double lati = coordinates.latitude();
     m_startTile = new Tile((double)longi, (double)lati, zoomLevel, "osm", 1, this);
+
     int requestCounter = 0;
     int tileCounter = 1; // 1 aufgrund des StartTiles
-
     int x = m_startTile->x();
     int y = m_startTile->y();
-    int zLevel = zoomLevel;
+    int zLevel = m_startTile->zoomlevel();
 
+    Tile* tile;
 
     //Äußere Schleife für zoomlevel
     for(int z = 0; z < 2; z++){
@@ -43,7 +47,6 @@ void TilesDownloader::downloadTiles(QVariant center, QString tileProvider, int z
         int amountY = (m_screenSize.y() / 256 + 1) * pow(2, z);
         int amountX = (m_screenSize.x() / 256 + 1) * pow(2, z);
 
-        Tile * tile;
         for(int i = y * pow(2, z) - amountY/ 2; i <= y * pow(2, z) + amountY/ 2; i++ ){
             for(int j = x * pow(2, z); j < x * pow(2, z) + amountX; j++){
                 tile = new Tile(j, i, zLevel + z, "osm", 1, this);
@@ -59,7 +62,6 @@ void TilesDownloader::downloadTiles(QVariant center, QString tileProvider, int z
     }
     sendingRequests();
     qDebug() << requestCounter << " Requests wurden verschickt";
-    emit downloadFinished();
 }
 
 void TilesDownloader::sendingRequests()
@@ -71,6 +73,8 @@ void TilesDownloader::sendingRequests()
         //         qDebug() << "Tile: " << tile->x() << " " << tile->y();
         connect(nm, SIGNAL(finished(QNetworkReply*)), tileReply, SLOT(networkReplyFinished(QNetworkReply*)));
         connect(tileReply, SIGNAL(saveTile(Tile*)), this, SLOT(saveTile(Tile*)));
+    }else{
+        emit downloadFinished();
     }
 }
 

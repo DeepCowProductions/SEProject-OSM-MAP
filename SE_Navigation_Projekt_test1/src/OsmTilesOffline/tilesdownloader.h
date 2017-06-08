@@ -3,8 +3,6 @@
 
 #include <QGeoCoordinate>
 #include <math.h>
-#include <QMutex>
-#include <QTcpSocket>
 #include <QDebug>
 #include <QFile>
 #include <QDir>
@@ -12,6 +10,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QThread>
 
 
 #include "tile.h"

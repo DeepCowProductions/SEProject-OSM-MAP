@@ -4,7 +4,7 @@ Settings::Settings()
 {
     qDebug() << "Settings Construtor";
 
-//    m_settings = new QSettings("FH-SWF",qApp->applicationName(), Q_NULLPTR);
+    //    m_settings = new QSettings("FH-SWF",qApp->applicationName(), Q_NULLPTR);
     m_settings = new QSettings();   // since we set app-name and company in main.cpp we can use dfault constructor
 
     // read settings
@@ -64,17 +64,17 @@ int Settings::usedOfflineDirectorySize() const
 void Settings::save()
 {
     qDebug() << "invoke Settings:save";
-//    m_settings->sync();
+    //    m_settings->sync();
     writeSettings();
-//    m_settings->sync();
+    //    m_settings->sync();
 }
 
 void Settings::load()
 {
     qDebug() << "invoke Settings::load";
-//    m_settings->sync();
+    //    m_settings->sync();
     readSettings();
-//    m_settings->sync();
+    //    m_settings->sync();
 }
 
 void Settings::readSettings()
@@ -88,6 +88,7 @@ void Settings::readSettings()
     setMaxOfflineMapSize(m_settings->value("maxOfflineMapSize").toInt());
     setCurrentOfflineMapSize(m_settings->value("currentOfflineMapSize").toInt());
     setOfflineDirectory(m_settings->value("offlineDirectory").toString());
+    setUsedOfflineDirectorySize(m_settings->value("usedOfflineDirectorySize").toInt());
     // #???#
 
 }
@@ -103,7 +104,6 @@ void Settings::writeSettings()
     m_settings->setValue("maxOfflineMapSize",m_maxOfflineMapSize);
     m_settings->setValue("currentOfflineMapSize",m_currentOfflineMapSize);
     m_settings->setValue("offlineDirectory", m_offlineDirectory);
-    m_settings->setValue("usedOfflineDirectorySize", m_usedOfflineDirectorySize);
 
     // force writing to storage by calling sync - not neccessary but makes things easier
     m_settings->sync();
@@ -180,5 +180,8 @@ void Settings::setUsedOfflineDirectorySize(int usedOfflineDirectorySize)
         return;
 
     m_usedOfflineDirectorySize = usedOfflineDirectorySize;
+    m_settings->setValue("usedOfflineDirectorySize", m_usedOfflineDirectorySize);
+    m_settings->sync();
+    readSettings();
     emit usedOfflineDirectorySizeChanged(usedOfflineDirectorySize);
 }
