@@ -56,6 +56,11 @@ QString Settings::offlineDirectory() const
     return m_offlineDirectory;
 }
 
+int Settings::usedOfflineDirectorySize() const
+{
+    return m_usedOfflineDirectorySize;
+}
+
 void Settings::save()
 {
     qDebug() << "invoke Settings:save";
@@ -82,7 +87,8 @@ void Settings::readSettings()
     setMaxNormalMapChacheSize(m_settings->value("maxNormalMapChacheSize").toInt());
     setMaxOfflineMapSize(m_settings->value("maxOfflineMapSize").toInt());
     setCurrentOfflineMapSize(m_settings->value("currentOfflineMapSize").toInt());
-    setOfflineDirectory(m_settings->value("offlineDirectory").toString());// #???#
+    setOfflineDirectory(m_settings->value("offlineDirectory").toString());
+    // #???#
 
 }
 
@@ -97,6 +103,7 @@ void Settings::writeSettings()
     m_settings->setValue("maxOfflineMapSize",m_maxOfflineMapSize);
     m_settings->setValue("currentOfflineMapSize",m_currentOfflineMapSize);
     m_settings->setValue("offlineDirectory", m_offlineDirectory);
+    m_settings->setValue("usedOfflineDirectorySize", m_usedOfflineDirectorySize);
 
     // force writing to storage by calling sync - not neccessary but makes things easier
     m_settings->sync();
@@ -165,4 +172,13 @@ void Settings::setOfflineDirectory(QString offlineDirectory)
 
     m_offlineDirectory = offlineDirectory;
     emit offlineDirectoryChanged(offlineDirectory);
+}
+
+void Settings::setUsedOfflineDirectorySize(int usedOfflineDirectorySize)
+{
+    if (m_usedOfflineDirectorySize == usedOfflineDirectorySize)
+        return;
+
+    m_usedOfflineDirectorySize = usedOfflineDirectorySize;
+    emit usedOfflineDirectorySizeChanged(usedOfflineDirectorySize);
 }

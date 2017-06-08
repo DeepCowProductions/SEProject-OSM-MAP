@@ -82,7 +82,7 @@ private:
     /**
      * @brief calculateUsedSpace ermittelt wie viel Speicher bereits verbraucht wurde
      */
-    void calculateUsedSpace();
+    int calculateUsedSpace();
 
     /**
      * @brief createFileName erstellt den Dateinamen unter dem das Tile gespeichert werden soll

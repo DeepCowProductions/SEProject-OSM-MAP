@@ -3,8 +3,8 @@
 TileOfflineManager::TileOfflineManager(QString format, QObject *parent) : QObject(parent)
 {
     m_format = format;
-    m_currentlyUsedSpace = 0;
-    calculateUsedSpace();
+    m_currentlyUsedSpace = calculateUsedSpace();
+    m_settings.setUsedOfflineDirectorySize(m_currentlyUsedSpace);
 }
 
 bool TileOfflineManager::saveToFile(Tile *tile)
@@ -18,8 +18,10 @@ bool TileOfflineManager::saveToFile(Tile *tile)
             return false;
         }
         QDir saveDirectory;
-        if(m_settings.offlineDirectory().isEmpty())
+        if(m_settings.offlineDirectory().isEmpty()){
             saveDirectory = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+            m_settings.setOfflineDirectory(saveDirectory.absolutePath());
+        }
         else
             saveDirectory = QDir(m_settings.offlineDirectory());
         QDir dir;
@@ -34,6 +36,7 @@ bool TileOfflineManager::saveToFile(Tile *tile)
     }else{
         emit notEnoughSpace();
     }
+    m_settings.setUsedOfflineDirectorySize(calculateUsedSpace());
     return ret;
 }
 
@@ -95,8 +98,10 @@ bool TileOfflineManager::copyChacheTileIfPossible(Tile * tile)
     //Tile im Cache Verzeichnis
     bool ret = false;
     QDir saveDirectory;
-    if(m_settings.offlineDirectory().isEmpty())
+    if(m_settings.offlineDirectory().isEmpty()){
         saveDirectory = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+        m_settings.setOfflineDirectory(saveDirectory.absolutePath());
+    }
     else
         saveDirectory = QDir(m_settings.offlineDirectory());
     QString tileName = createFileName(tile);
@@ -117,6 +122,7 @@ bool TileOfflineManager::copyChacheTileIfPossible(Tile * tile)
         cacheFile.remove();
         qDebug() << "Got tile from generic Cache";
     }
+    m_settings.setUsedOfflineDirectorySize(calculateUsedSpace());
     return ret;
 }
 
@@ -135,12 +141,15 @@ QString TileOfflineManager::searchSubdirectoriesForTile(Tile *tile, QString dire
     return tileDirectory;
 }
 
-void TileOfflineManager::calculateUsedSpace()
+int TileOfflineManager::calculateUsedSpace()
 {
-    foreach (QString fileName, QDir(m_settings.offlineDirectory()).entryList()) {
-        QFile file(fileName);
-        m_currentlyUsedSpace += file.size();
+    int size = 0;
+    QDir dir(m_settings.offlineDirectory());
+    foreach (QString fileName, dir.entryList()) {
+        QFile file(dir.absoluteFilePath(fileName));
+        size += file.size();
     }
+    return size;
 }
 
 QString TileOfflineManager::createFileName(Tile *tile)
