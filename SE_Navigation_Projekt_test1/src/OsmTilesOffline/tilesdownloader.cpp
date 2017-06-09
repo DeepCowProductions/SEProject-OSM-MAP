@@ -2,12 +2,10 @@
 #include <QStandardPaths>
 #include "src/Singleton/networkaccesmanagersingleton.hpp"
 
-TilesDownloader::TilesDownloader(QObject* parent, QPoint screenSize)
+TilesDownloader::TilesDownloader(QObject* parent)
     : QObject(parent)
 {
     m_tom = new TileOfflineManager("jpg", parent);
-
-    m_screenSize = screenSize;
     m_counter = 0;
 }
 
@@ -24,8 +22,9 @@ TilesDownloader::~TilesDownloader()
 }
 
 
-void TilesDownloader::downloadTiles(QVariant center, QString tileProvider, int zoomLevel)
+void TilesDownloader::downloadTiles(QVariant center, QString tileProvider, int zoomLevel,int depth, QPoint screenSize)
 {
+    m_screenSize = screenSize;
 
     QGeoCoordinate coordinates = center.value<QGeoCoordinate>();
     this->m_tileProvider = tileProvider;
@@ -42,12 +41,12 @@ void TilesDownloader::downloadTiles(QVariant center, QString tileProvider, int z
     Tile* tile;
 
     //Äußere Schleife für zoomlevel
-    for(int z = 0; z < 2; z++){
+    for(int z = 0; z < depth; z++){
         //Schleife die abhängig von der Bildschirmgröße die benötigte Anzahl an Tiles für das aktuelle zoomlevel berechnet
         int amountY = (m_screenSize.y() / 256 + 1) * pow(2, z);
         int amountX = (m_screenSize.x() / 256 + 1) * pow(2, z);
 
-        for(int i = y * pow(2, z) - amountY/ 2; i <= y * pow(2, z) + amountY/ 2; i++ ){
+        for(int i = y * pow(2, z) - amountY/ 2 ; i <= y * pow(2, z) + amountY/ 2; i++ ){
             for(int j = x * pow(2, z); j < x * pow(2, z) + amountX; j++){
                 tile = new Tile(j, i, zLevel + z, "osm", 1, this);
                 if(!m_tom->copyChacheTileIfPossible(tile)){
@@ -60,22 +59,21 @@ void TilesDownloader::downloadTiles(QVariant center, QString tileProvider, int z
             }
         }
     }
-    sendingRequests();
-    qDebug() << requestCounter << " Requests wurden verschickt";
+    if(!m_requests.isEmpty())
+        sendingRequests();
+    else
+        emit downloadFinished();
 }
 
 void TilesDownloader::sendingRequests()
 {
-    if(m_counter < m_requests.size()){
-        QNetworkAccessManager * nm = NetworkAccessManagerSingleton::getInstance();
 
-        TileReply * tileReply = new TileReply(nm->get(*m_requests.at(m_counter)), m_downloadTiles.at(m_counter), this);
-        //         qDebug() << "Tile: " << tile->x() << " " << tile->y();
-        connect(nm, SIGNAL(finished(QNetworkReply*)), tileReply, SLOT(networkReplyFinished(QNetworkReply*)));
-        connect(tileReply, SIGNAL(saveTile(Tile*)), this, SLOT(saveTile(Tile*)));
-    }else{
-        emit downloadFinished();
-    }
+    QNetworkAccessManager * nm = NetworkAccessManagerSingleton::getInstance();
+
+    TileReply * tileReply = new TileReply(nm->get(*m_requests.at(m_counter)), m_downloadTiles.at(m_counter), this);
+    //         qDebug() << "Tile: " << tile->x() << " " << tile->y();
+    connect(nm, SIGNAL(finished(QNetworkReply*)), tileReply, SLOT(networkReplyFinished(QNetworkReply*)));
+    connect(tileReply, SIGNAL(saveTile(Tile*)), this, SLOT(saveTile(Tile*)));
 }
 
 void TilesDownloader::createRequest(Tile *tile)
@@ -93,12 +91,15 @@ void TilesDownloader::createRequest(Tile *tile)
 
 void TilesDownloader::saveTile(Tile *tile)
 {
-
     m_tom->saveToFile(tile);
     qDebug() << "Counter" << m_counter;
     delete static_cast<TileReply *>(sender());
+    if(m_counter < m_requests.size()){
+        sendingRequests();
+    }else{
+        emit downloadFinished();
+    }
     m_counter++;
-    sendingRequests();
 }
 
 

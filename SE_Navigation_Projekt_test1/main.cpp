@@ -8,6 +8,8 @@
 #include <QScreen>
 #include "src/OsmTilesOffline/tilesdownloader.h"
 
+#include "src/OsmTilesOffline/downloadthread.h"
+
 int main(int argc, char *argv[])
 {
     QCoreApplication::setOrganizationName("FH-SWF");
@@ -30,15 +32,19 @@ int main(int argc, char *argv[])
         QScreen* screen = app.screens().at(i);
         qDebug() << screen->name();
     }
-    QPoint screenSize(item->property("width").toInt(), item->property("height").toInt());
-    qDebug() << screenSize.x() << " " << screenSize.y();
-    TilesDownloader * downloader = new TilesDownloader(item, screenSize);
 
-    QObject::connect(downloader, SIGNAL(downloadFinished()), item, SIGNAL(enableButton()));
+    DownloadThread * thread = new DownloadThread(item);
 
-    QObject::connect(item, SIGNAL(saveTiles(QVariant,QString, int)), downloader, SLOT(downloadTiles(QVariant,QString, int)));
-    QMetaObject::invokeMethod(item, "initApp"
-//                             , Q_ARG(QVariant, QVariant::fromValue(1))
-                              );
+    QObject::connect(item, SIGNAL(saveTiles(QVariant, QString, int, int, int, int)), thread, SLOT(startDownload(QVariant, QString, int, int, int, int)));
+
+    QObject::connect(thread, SIGNAL(downloadFinished()), item, SIGNAL(enableButton()));
+    //    TilesDownloader * downloader = new TilesDownloader(item, screenSize);
+
+            //    QObject::connect(downloader, SIGNAL(downloadFinished()), item, SIGNAL(enableButton()));
+
+            //    QObject::connect(item, SIGNAL(saveTiles(QVariant,QString, int)), downloader, SLOT(downloadTiles(QVariant,QString, int)));
+            QMetaObject::invokeMethod(item, "initApp"
+                                      //                             , Q_ARG(QVariant, QVariant::fromValue(1))
+                                      );
     return app.exec();
 }

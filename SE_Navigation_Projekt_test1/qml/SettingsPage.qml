@@ -17,7 +17,7 @@ Item {
         settings.useOfflineMap = cb1.checked
         settings.useNormalMapCache = cb2.checked
         settings.offlineDirectory = offlineDirectory.text
-        settings.maxOfflineMapSize = sizeOfOfflineDirectory.text * 1000
+        settings.maxOfflineMapSize = sizeOfOfflineDirectory.text * 1000000
         settings.save()
     }
 
@@ -144,7 +144,7 @@ Item {
                             id: sizeOfOfflineDirectory
                             width: parent.width * 0.25
                             inputMask: "9999"
-                            text: settings.maxOfflineMapSize / 1000
+                            text: settings.maxOfflineMapSize / 1000000
                             placeholderText: "Size in MB"
                             onEditingFinished: configurationChanged()
                         }

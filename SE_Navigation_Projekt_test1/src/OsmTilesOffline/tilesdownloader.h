@@ -34,7 +34,7 @@ public:
      * @param parent abgeleitetes Attribut von QObject.
      * @param screenSize die Größe der Anwendung um zu ermitteln wie viele Tiles runtergeladen werden müssen.
      */
-    TilesDownloader(QObject *parent = 0, QPoint screenSize = QPoint(0,0));
+    TilesDownloader(QObject *parent = 0);
 
     /**
      *  Destruktor der Klasse
@@ -49,7 +49,7 @@ public slots:
      * @param tileProvider Der Provider von dem die Bilddateien heruntergeladen werden.
      * @param zoomLevel das aktuell angezeigte Zoomlevel.
      */
-    void downloadTiles(QVariant center, QString tileProvider, int zoomLevel);
+    void downloadTiles(QVariant center, QString tileProvider, int zoomLevel, int depth, QPoint screenSize);
 
     /**
      * @brief saveTile Slot der genutzt wird um das fertig geladene Teil abzuspeichern. Desweiteren wird mit Hilfe des Slots

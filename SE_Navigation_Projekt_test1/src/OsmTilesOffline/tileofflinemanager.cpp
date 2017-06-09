@@ -11,7 +11,7 @@ bool TileOfflineManager::saveToFile(Tile *tile)
 {
     bool ret = false;
     QStorageInfo info(m_settings.offlineDirectory());
-    qDebug() << "Bytes available: " << info.bytesAvailable();
+    //    qDebug() << "Bytes available: " << info.bytesAvailable();
     if(m_currentlyUsedSpace < m_settings.maxOfflineMapSize() && info.bytesAvailable() - tile->imageData().size() > 0){
         if(tile->imageData().isEmpty()){
             qDebug() << "Datei ist leer";
@@ -92,6 +92,9 @@ bool TileOfflineManager::contains(Tile* tile, QStandardPaths::StandardLocation l
 bool TileOfflineManager::copyChacheTileIfPossible(Tile * tile)
 {
     //Tile schon im Verzeichnis
+    if(m_settings.offlineDirectory() != "" && QDir(m_settings.offlineDirectory()).entryList().contains(createFileName(tile))){
+        return true;
+    }
     if(contains(tile, QStandardPaths::DataLocation))
         return true;
 

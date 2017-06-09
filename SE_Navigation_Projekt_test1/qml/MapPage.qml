@@ -367,7 +367,7 @@ Item {
         Component{
             id: saveMsgWithTextDialog
             SimpleTextDialog {
-                title: "Do you want to save this route?"
+                title: "Do you want to savee this route?"
                 labelText: "Enter a name to save"
                 onAccepted: {
                     console.log("saveDialog accepted")
