@@ -297,7 +297,7 @@ Item {
                     //                geocodeModel.query = fromAddress
                     //                geocodeModel.update()
                     map.center = positionSource.position.coordinate
-                    upateLocationMarker(positionSource.position.coordinate)
+                    updateLocationMarker(positionSource.position.coordinate)
                     toggleSaveButton()
                     updateLocationMarker(positionSource.position.coordinate)
                 }
@@ -394,22 +394,93 @@ Item {
                 Component.onCompleted: visible = true
             }
         }
+        Component{
+            id: saveTilesDialog
+            SaveTilesDialog {
+                onAccepted: {
+                    visible = false
+                    map.forceActiveFocus()
+                }
+                onRejected: {
+                    visible = false
+                    map.forceActiveFocus()
+                }
+                Component.onCompleted: visible = true
+            }
+        }
         RoundHighlightButton{
             id: saveButton
             enabled: saveButtonEnabled // && !headerSpacer.isActive
             text: "Save Data"
             //            onClicked: appWindow.saveTiles(map.center, map.zoomLevel)
-            onClicked: saveTiles(map.center, "korona.geog.uni-heidelberg.de", map.zoomLevel)
+            onClicked: {
+                saveTilesDialog.createObject(map)
+            }
+//                saveTiles(map.center, "korona.geog.uni-heidelberg.de", map.zoomLevel)
             anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            width: (parent.width -16)  * 0.16
-            height: (parent.height - 8) * 0.08
+            anchors.left: parent.left
+//            width: (parent.width -16)  * 0.16
+//            height: (parent.height - 8) * 0.08
 
             Component.onCompleted: {
                 console.log("Save Button erstellt")
             }
             contentItem: Image {
                 source: "qrc:/file"
+                fillMode: Image.PreserveAspectFit
+            }
+            radius: 9000
+        }
+        RoundHighlightButton{
+            id: pinButton
+            text: "Save Data"
+            //            onClicked: appWindow.saveTiles(map.center, map.zoomLevel)
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+//            width: (parent.width -16)  * 0.16
+//            height: (parent.height - 8) * 0.08
+
+            Component.onCompleted: {
+                console.log("Save Button erstellt")
+            }
+            contentItem: Image {
+                source: "qrc:/pindrop"
+                fillMode: Image.PreserveAspectFit
+            }
+            radius: 9000
+        }
+        RoundHighlightButton{
+            id: locatepinButton
+            text: "Save Data"
+            //            onClicked: appWindow.saveTiles(map.center, map.zoomLevel)
+            anchors.bottom: pinButton.top
+            anchors.right: parent.right
+//            width: (parent.width -16)  * 0.16
+//            height: (parent.height - 8) * 0.08
+
+            Component.onCompleted: {
+                console.log("Save Button erstellt")
+            }
+            contentItem: Image {
+                source: "qrc:/search"
+                fillMode: Image.PreserveAspectFit
+            }
+            radius: 9000
+        }
+        RoundHighlightButton{
+            id: infoButton
+            text: "Save Data"
+            //            onClicked: appWindow.saveTiles(map.center, map.zoomLevel)
+            anchors.bottom: saveButton.top
+            anchors.left: parent.left
+//            width: (parent.width -16)  * 0.16
+//            height: (parent.height - 8) * 0.08
+
+            Component.onCompleted: {
+                console.log("Save Button erstellt")
+            }
+            contentItem: Image {
+                source: "qrc:/helpoutline"
                 fillMode: Image.PreserveAspectFit
             }
             radius: 9000

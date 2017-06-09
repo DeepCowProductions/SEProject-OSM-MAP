@@ -3,6 +3,7 @@
 #include "src/settings.h"
 #include "src/placesmodel.h"
 #include "src/roadsmodel.h"
+#include "src/locationpin.h"
 #include <QImage>
 #include <QGeoCoordinate>
 #include <QScreen>
@@ -19,6 +20,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<Settings>("fhswf.se.nav.settings", 1, 0, "Settings");
     qmlRegisterType<PlacesModel>("fhswf.se.nav.models", 1, 0, "PlacesModel");
     qmlRegisterType<RoadsModel>("fhswf.se.nav.models", 1, 0, "RoadsModel");
+    qmlRegisterType<LocationPin>("fhswf.se.nav.models", 1, 0, "LocationPin");
 
 
     QQmlApplicationEngine engine;

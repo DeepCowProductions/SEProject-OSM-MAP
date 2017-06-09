@@ -32,7 +32,7 @@ QVariant RoadsModel::data(const QModelIndex &index, int role) const
     switch (role) {
     case NameRole       : value = m_roads[row].name();         break;
         //    case CoordinatesRole: value = m_roads[row];                break;
-    case SavedAtDateRole: value = m_roads[row].savedAtDate();  break;
+    case SavedAtDateRole: value = m_roads[row].savedAtDate().toString("yyyy-MM-dd");  break;
     }
 
     return QVariant(value);

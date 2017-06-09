@@ -149,7 +149,8 @@ ApplicationWindow {
         RoadsView {
             id: roadsPage
             backButton.onClicked: {
-                mainStack.pop(mapInstance)
+                mainStack.pop()
+                locationsInstance.forceActiveFocus()
             }
             testButton1.onClicked: {
                 roadsModel.clearList()
@@ -159,9 +160,6 @@ ApplicationWindow {
             }
             testButton3.onClicked: {
                 roadsModel.readUserData()
-            }
-            backToLocationsButton.onClicked: {
-                mainStack.pop()
             }
             onMapRequest: {
                 console.log("coords:" + array)
@@ -179,24 +177,22 @@ ApplicationWindow {
         id: placesPageComp
         PlacesView {
             id: placesPage
-            backButton.onClicked: {
-                mainStack.pop(mapInstance)
-            }
-            testButton1.onClicked: {
-                placesModel.clearList()
-            }
-            testButton2.onClicked: {
-                placesModel.writeUserData()
-            }
-            testButton3.onClicked: {
-                placesModel.readUserData()
-            }
-            backToLocationsButton.onClicked: {
-                mainStack.pop()
-            }
-            savePlaceButton.onClicked: {
-                saveMsgWithTextDialog.createObject(mapInstance)
-            }
+//            backButton.onClicked: {
+//                mainStack.pop()
+//                locationsInstance.forceActiveFocus()
+//            }
+//            testButton1.onClicked: {
+//                placesModel.clearList()
+//            }
+//            testButton2.onClicked: {
+//                placesModel.writeUserData()
+//            }
+//            testButton3.onClicked: {
+//                placesModel.readUserData()
+//            }
+//            savePlaceButton.onClicked: {
+//                saveMsgWithTextDialog.createObject(mapInstance)
+//            }
 
             onMapRequest: {
                 console.log(longitude + ", " + latitude)
@@ -285,5 +281,8 @@ ApplicationWindow {
     }
     RoadsModel {
         id: roadsModel
+    }
+    LocationPin {
+        id: locationPin
     }
 }

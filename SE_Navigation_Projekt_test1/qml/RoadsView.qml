@@ -46,36 +46,38 @@ Item {
                 id: delegateRow
                 height: parent.height
                 Rectangle{
-                    width: roadsListView.width * 0.8
+                    width: roadsListView.width * 0.6
                     height: 30
-                    color: "transparent"
+                    color: mouseArea.itemColor
                     border.width: 1
                     border.color: "lightgray"
                     Text{
                         anchors.fill: parent
-                        verticalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
                         text: " " + name
                         color: "black"
+                        horizontalAlignment: Text.AlignLeft
                     }
 
                 }
 
                 Rectangle{
-                    width: roadsListView.width * 0.2
+                    width: roadsListView.width * 0.4
                     height: 30
-                    color: "transparent"
+                    color: mouseArea.itemColor
                     border.width: 1
                     border.color: "lightgray"
                     Text{
                         anchors.fill: parent
-                        verticalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
                         text: " " + savedAtDate
                         color: "black"
                     }
 
                 }
             }
-            MouseArea{
+            HighlightMouseArea{
+                id: mouseArea
                 anchors.fill: parent
                 onClicked: {
                     roadsListView.currentIndex = index
@@ -83,6 +85,7 @@ Item {
                 onDoubleClicked: {
                     mapRequest(roadsListView.model.getCoordsAtIndex(index))
                 }
+
             }
         }
     }
@@ -100,7 +103,7 @@ Item {
                     anchors.fill: parent
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
-                    text: "My Routs"
+                    text: "My Routes"
                     color: "darkblue"
                     font.family: "Helvetica"
                     font.pointSize: 24
@@ -124,13 +127,13 @@ Item {
         Rectangle {
             width: parent.width
             height: parent.height - headerSpacer.height - buttonRow.height
-            Flickable {
-                anchors.fill: parent
-                contentHeight: roadsPage.height
-                contentWidth: roadsPage.width
-                boundsBehavior: Flickable.StopAtBounds
-                clip: true
-                ScrollBar.vertical: ScrollBar { }
+//            Flickable {
+//                anchors.fill: parent
+//                contentHeight: roadsPage.height
+//                contentWidth: roadsPage.width
+//                boundsBehavior: Flickable.StopAtBounds
+//                clip: true
+//                ScrollBar.vertical: ScrollBar { }
                 Column {
                     id: mainItemColumn
                     width: roadsPage.width
@@ -169,7 +172,7 @@ Item {
                             id: headerRow
                             height: 30
                             Rectangle{
-                                width: roadsListView.width * 0.8
+                                width: roadsListView.width * 0.6
                                 height: 30
                                 color: "white"
                                 border.width: 1
@@ -178,12 +181,12 @@ Item {
                                     anchors.fill: parent
                                     verticalAlignment: Text.AlignVCenter
                                     horizontalAlignment: Text.AlignHCenter
-                                    text: "name"
-                                    color: "black"
+                                    text: "Name"
+                                    color: "navy"
                                 }
                             }
                             Rectangle{
-                                width: roadsListView.width * 0.2
+                                width: roadsListView.width * 0.4
                                 height: 30
                                 color: "white"
                                 border.width: 1
@@ -192,8 +195,8 @@ Item {
                                     anchors.fill: parent
                                     verticalAlignment: Text.AlignVCenter
                                     horizontalAlignment: Text.AlignHCenter
-                                    text: "date"
-                                    color: "black"
+                                    text: "Date"
+                                    color: "navy"
                                 }
                             }
                         }
@@ -233,5 +236,9 @@ Item {
 
             }
         }
+    Component.onCompleted: {
+        Keys.backPressed.connect(backButton.clicked)
+        Keys.escapePressed.connect(backButton.clicked)
+        forceActiveFocus()
     }
 }

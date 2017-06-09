@@ -15,6 +15,8 @@ SOURCES += main.cpp \
     src/OsmTilesOffline/tilereply.cpp \
     src/OsmTilesOffline/tile.cpp \
     src/OsmTilesOffline/tileofflinemanager.cpp \
+    src/locationpin.cpp \
+    src/teteteettetet.cpp
 
 RESOURCES += qml.qrc \
     res.qrc \
@@ -39,7 +41,9 @@ HEADERS += \
     src/OsmTilesOffline/tilereply.h \
     src/OsmTilesOffline/tile.h \
     src/OsmTilesOffline/tileofflinemanager.h \
-    src/Singleton/networkaccesmanagersingleton.hpp
+    src/Singleton/networkaccesmanagersingleton.hpp \
+    src/locationpin.h \
+    src/teteteettetet.h
 
 DISTFILES += \
     dump

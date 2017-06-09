@@ -38,7 +38,7 @@ QVariant PlacesModel::data(const QModelIndex &index, int role) const
 //    case CoordinateRole : value = m_places[row].coordinate();   break;
     case LatitudeRole : value = m_places[row].coordinate().latitude();     break;
     case LongitudeRole : value = m_places[row].coordinate().longitude();   break;
-    case SavedAtDateRole: value = m_places[row].savedAtDate();  break;
+    case SavedAtDateRole: value = m_places[row].savedAtDate().toString("yyyy-MM-dd");  break;
 //    case AddressRole    : value = m_places[row].address();      break;
 //    case BoundingBoxRole: value = m_places[row].boundingBox();  break;
     }
@@ -46,7 +46,6 @@ QVariant PlacesModel::data(const QModelIndex &index, int role) const
     return QVariant(value);
 }
 
-// TODO
 bool PlacesModel::readUserDataFromJson(QJsonObject &object)
 {
     QJsonArray pa;
@@ -138,10 +137,18 @@ bool PlacesModel::addItem(QString name, QGeoCoordinate coord)
     Place p;
     p.setName(name);
     p.setCoordinate(coord);
+    p.setSavedAtDate(QDate::currentDate());
     m_places.append(p);
     endInsertRows();
     writeUserData();
     return true;
+}
+
+bool PlacesModel::removeItem(const QModelIndex &parent)
+{
+//    beginRemoveRows(parent, row, row + count - 1);
+    // FIXME: Implement me!
+//    endRemoveRows();
 }
 
 bool PlacesModel::clearList()

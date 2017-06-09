@@ -12,17 +12,35 @@
         <file alias="searchView">icons/ic_pageview_black_24dp_2x.png</file>
         <file alias="list">icons/ic_list_black_24dp_2x.png</file>
         <file alias="info">icons/ic_info_black_24dp_2x.png</file>
-        <file alias="question">icons/ic_help_black_24dp_2x.png</file>
+        <file alias="help">icons/ic_help_black_24dp_2x.png</file>
         <file alias="explore">icons/ic_explore_black_24dp_2x.png</file>
         <file alias="directions">icons/ic_directions_black_18dp.png</file>
         <file alias="file">icons/ic_description_black_24dp_2x.png</file>
         <file alias="delete">icons/ic_delete_forever_black_24dp_2x.png</file>
-        <file>icons/005-question.png</file>
+        <file alias="question">icons/005-question.png</file>
         <file>icons/004-placeholder.png</file>
         <file>icons/003-infinite-symbol.png</file>
         <file>icons/002-infinite-mathematical-symbol.png</file>
         <file>icons/001-infinity.png</file>
         <file alias="edit">icons/ic_mode_edit_black_48dp.png</file>
         <file alias="back">icons/ic_keyboard_backspace_black_48dp.png</file>
+        <file>icons/ic_room_black_24dp.png</file>
+        <file>icons/ic_info_outline_black_24dp.png</file>
+        <file alias="infoblack">icons/ic_info_black_24dp.png</file>
+        <file>icons/ic_hourglass_empty_black_24dp.png</file>
+        <file>icons/ic_home_black_24dp.png</file>
+        <file>icons/ic_highlight_off_black_24dp.png</file>
+        <file alias="helpoutline">icons/ic_help_outline_black_24dp.png</file>
+        <file>icons/ic_place_black_24dp.png</file>
+        <file alias="pindrop">icons/ic_pin_drop_black_24dp.png</file>
+        <file>icons/ic_person_pin_circle_black_24dp.png</file>
+        <file>icons/ic_near_me_black_24dp.png</file>
+        <file>icons/ic_navigation_black_24dp.png</file>
+        <file>icons/ic_edit_location_black_24dp.png</file>
+        <file alias="addLocation">icons/ic_add_location_black_24dp.png</file>
+        <file alias="add">icons/ic_add_black_24dp.png</file>
+        <file alias="map">icons/ic_map_black_24dp.png</file>
+        <file alias="x">icons/ic_clear_black_24dp.png</file>
+        <file alias="ok">icons/ic_done_black_24dp.png</file>
     </qresource>
 </RCC>

@@ -17,6 +17,8 @@ RoundButton {
         implicitHeight: button.height
         color: button.hovered ? hoverColor : button.bColor
         radius: button.radius
+        border.color: "#AAAAFF"
+        border.width: 1
     }
     property var bColor:  activeCondition ? activeColor : backgroundColor
 }

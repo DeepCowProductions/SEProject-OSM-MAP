@@ -12,5 +12,7 @@
         <file>qml/RoundHighlightButton.qml</file>
         <file>qml/HighlightCheckBox.qml</file>
         <file>qml/CustomProgressBar.qml</file>
+        <file>qml/HighlightMouseArea.qml</file>
+        <file>qml/SaveTilesDialog.qml</file>
     </qresource>
 </RCC>

@@ -23,7 +23,7 @@ Item {
             height: 50
             spacing: 4
             Rectangle{
-                width: parent.width * 0.5
+                width: parent.width * 0.6
                 height: parent.height
                 Text{
                     anchors.fill: parent
@@ -38,7 +38,7 @@ Item {
             HighlightButton {
                 id: backButton
                 text: "Back"
-                width: parent.width * 0.5
+                width: parent.width * 0.4
                 height: parent.height
                 contentItem: Image {
                     source: "qrc:/back"
@@ -56,7 +56,7 @@ Item {
             height: parent.height - headerSpacer.height - buttonRow.height
             Flickable {
                 anchors.fill: parent
-//                contentHeight: locationPage.height - headerSpacer.height - buttonRow.height
+                //                contentHeight: locationPage.height - headerSpacer.height - buttonRow.height
                 contentWidth: locationPage.width
                 boundsBehavior: Flickable.StopAtBounds
                 clip: true
@@ -179,31 +179,27 @@ Item {
                                 width: parent.width
                                 height: parent.height
                                 text: "save this Location"
-//                                contentItem: Image {
-//                                    source: "qrc:/file"
-//                                    fillMode: Image.PreserveAspectFit
-//                                }
                                 contentItem : Item {
-                                        id: button
-                                        width: parent.width
-                                        height: parent.height
-                                        Image {
-                                            id: visualImage
-                                            anchors.top: parent.top
-                                            anchors.left: parent.left
-                                            anchors.right: parent.right
-                                            anchors.bottom: buttontext.top
-                                            source: "qrc:/file"
-                                            fillMode: Image.PreserveAspectFit
-                                        }
-                                        Text {
-                                            id: buttontext
-                                            anchors.left: parent.left
-                                            anchors.right: parent.right
-                                            anchors.bottom: parent.bottom
-                                            text: "save this Location"
-                                        }
+                                    width: parent.width
+                                    height: parent.height
+                                    Image {
+                                        anchors.top: parent.top
+                                        anchors.left: parent.left
+                                        anchors.bottom: parent.bottom
+                                        source: "qrc:/file"
+                                        width: parent.width * 0.2
+                                        fillMode: Image.PreserveAspectFit
                                     }
+                                    Text {
+                                        anchors.right: parent.right
+                                        anchors.bottom: parent.bottom
+                                        anchors.top: parent.top
+                                        width: parent.width * 0.8
+                                        text: "Save this Location"
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                    }
+                                }
                             }
                         }
                     }
@@ -222,6 +218,27 @@ Item {
                                 width: parent.width
                                 height: parent.height
                                 text: "View my Saved Places"
+                                contentItem : Item {
+                                    width: parent.width
+                                    height: parent.height
+                                    Image {
+                                        anchors.top: parent.top
+                                        anchors.left: parent.left
+                                        anchors.bottom: parent.bottom
+                                        source: "qrc:/list"
+                                        width: parent.width * 0.2
+                                        fillMode: Image.PreserveAspectFit
+                                    }
+                                    Text {
+                                        anchors.right: parent.right
+                                        anchors.bottom: parent.bottom
+                                        anchors.top: parent.top
+                                        width: parent.width * 0.8
+                                        text: "View my Saved Places"
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                    }
+                                }
                             }
 
                         }
@@ -339,10 +356,71 @@ Item {
                             padding: 1
                             spacing: 4
                             HighlightButton {
+                                id: saveThisRouteButton
+                                width: parent.width
+                                height: parent.height
+                                text: "save this route"
+                                contentItem : Item {
+                                    width: parent.width
+                                    height: parent.height
+                                    Image {
+                                        anchors.top: parent.top
+                                        anchors.left: parent.left
+                                        anchors.bottom: parent.bottom
+                                        source: "qrc:/file"
+                                        width: parent.width * 0.2
+                                        fillMode: Image.PreserveAspectFit
+                                    }
+                                    Text {
+                                        anchors.right: parent.right
+                                        anchors.bottom: parent.bottom
+                                        anchors.top: parent.top
+                                        width: parent.width * 0.8
+                                        text: "Save this Route"
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+
+                    Rectangle {
+                        width: parent.width
+                        height: 50
+                        //            border.color: "lightgray"
+                        //            border.width: 1
+                        Row {
+                            anchors.fill: parent
+                            padding: 1
+                            spacing: 4
+                            HighlightButton {
                                 id: viewRoadsButton
                                 width: parent.width
                                 height: parent.height
                                 text: "View my Saved Roads"
+                                contentItem : Item {
+                                    width: parent.width
+                                    height: parent.height
+                                    Image {
+                                        anchors.top: parent.top
+                                        anchors.left: parent.left
+                                        anchors.bottom: parent.bottom
+                                        source: "qrc:/list"
+                                        width: parent.width * 0.2
+                                        fillMode: Image.PreserveAspectFit
+                                    }
+                                    Text {
+                                        anchors.right: parent.right
+                                        anchors.bottom: parent.bottom
+                                        anchors.top: parent.top
+                                        width: parent.width * 0.8
+                                        text: "View my Saved Roads"
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                    }
+                                }
                             }
                         }
                     }
@@ -351,15 +429,12 @@ Item {
 
                 }
                 // end main Column
-
-                Component.onCompleted: {
-                    Keys.backPressed.connect(backButton.clicked)
-                    Keys.escapePressed.connect(backButton.clicked)
-                    forceActiveFocus()
-                }
-
             }
         }
-
+    }
+    Component.onCompleted: {
+        Keys.backPressed.connect(backButton.clicked)
+        Keys.escapePressed.connect(backButton.clicked)
+        forceActiveFocus()
     }
 }

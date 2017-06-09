@@ -22,7 +22,7 @@ public:
 
     enum PlaceRoles {
         NameRole = Qt::UserRole + 1,
-        //        CoordinateRole,
+//        CoordinateRole,
         LatitudeRole,
         LongitudeRole,
         SavedAtDateRole,
@@ -37,7 +37,6 @@ public:
     int columnCount(const QModelIndex &parent= QModelIndex()) const Q_DECL_OVERRIDE;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
 
-
 signals:
 
 public slots:
@@ -46,6 +45,7 @@ public slots:
     Q_INVOKABLE bool readUserData();
     Q_INVOKABLE bool writeUserData();
     Q_INVOKABLE bool addItem(QString name, QGeoCoordinate coord);
+    Q_INVOKABLE bool removeItem(const QModelIndex &parent = QModelIndex());
 
 protected:
 
