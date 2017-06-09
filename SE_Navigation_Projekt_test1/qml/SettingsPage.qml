@@ -16,7 +16,8 @@ Item {
         // instert new options here:
         settings.useOfflineMap = cb1.checked
         settings.useNormalMapCache = cb2.checked
-
+        settings.offlineDirectory = offlineDirectory.text
+        settings.maxOfflineMapSize = sizeOfOfflineDirectory.text * 1000000
         settings.save()
     }
 
@@ -134,96 +135,18 @@ Item {
                                 anchors.fill: parent
                                 verticalAlignment: Text.AlignVCenter
                                 horizontalAlignment: Text.AlignLeft
-                                text: "<Setting Item here>"
+                                text: "Max Storage Size(in MB)"
                                 color: "navy"
                                 font.pointSize: 12
                             }
                         }
-
-                        HighlightCheckBox {
-                            id: cb3
-                            onCheckedChanged: configurationChanged()
-                        }
-                    }
-                    Row {
-                        width: parent.width
-                        height: 50
-                        Rectangle{
-                            width: parent.width * 0.7
-                            height: parent.height
-                        }
-                    }
-
-                    Row {
-                        width: parent.width
-                        height: 50
-                        Rectangle{
-                            width: parent.width * 0.7
-                            height: parent.height
-                        }
-                    }
-                    Row {
-                        width: parent.width
-                        height: 50
-                        Rectangle{
-                            width: parent.width * 0.7
-                            height: parent.height
-                        }
-                    }
-                    Row {
-                        width: parent.width
-                        height: 50
-                        Rectangle{
-                            width: parent.width * 0.7
-                            height: parent.height
-                        }
-                    }
-                    Row {
-                        width: parent.width
-                        height: 50
-                        Rectangle{
-                            width: parent.width * 0.7
-                            height: parent.height
-                        }
-                    }
-                    Row {
-                        width: parent.width
-                        height: 50
-                        Rectangle{
-                            width: parent.width * 0.7
-                            height: parent.height
-                        }
-                    }
-                    Row {
-                        width: parent.width
-                        height: 50
-                        Rectangle{
-                            width: parent.width * 0.7
-                            height: parent.height
-                        }
-                    }
-                    Row {
-                        width: parent.width
-                        height: 50
-                        Rectangle{
-                            width: parent.width * 0.7
-                            height: parent.height
-                        }
-                    }
-                    Row {
-                        width: parent.width
-                        height: 50
-                        Rectangle{
-                            width: parent.width * 0.7
-                            height: parent.height
-                        }
-                    }
-                    Row {
-                        width: parent.width
-                        height: 50
-                        Rectangle{
-                            width: parent.width * 0.7
-                            height: parent.height
+                        TextField {
+                            id: sizeOfOfflineDirectory
+                            width: parent.width * 0.25
+                            inputMask: "9999"
+                            text: settings.maxOfflineMapSize / 1000000
+                            placeholderText: "Size in MB"
+                            onEditingFinished: configurationChanged()
                         }
                     }
                     Row {
@@ -242,13 +165,53 @@ Item {
                                 font.pointSize: 12
                             }
                         }
-
-                        TextEdit {
+                        TextField {
                             id: offlineDirectory
-                            text: "<Path>"
+                            width: parent.width * 0.25
+                            text: settings.offlineDirectory
+                            placeholderText: "Path"
+                            onEditingFinished: configurationChanged()
                         }
                     }
 
+                    Row {
+                        width: parent.width
+                        height: 50
+                        Rectangle{
+                            width: parent.width * 0.7
+                            height: parent.height
+                            Text{
+                                anchors.leftMargin: 10
+                                anchors.fill: parent
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                text: "Current offline size(in MB)"
+                                color: "navy"
+                                font.pointSize: 12
+                            }
+                        }
+                        TextField {
+                            id: currentlyUsedSize
+                            width: parent.width * 0.25
+                            text: Math.round(((settings.usedOfflineDirectorySize / 1024) /1024) * 100) / 100
+                            placeholderText: ""
+                        }
+                    }
+                    Row {
+                        width: parent.width
+                        height: 50
+                        Rectangle{
+                            width: parent.width * 0.7
+                            height: parent.height
+                        }
+                    }
+
+
+                }
+                Component.onCompleted: {
+                    Keys.backPressed.connect(backButton.clicked)
+                    Keys.escapePressed.connect(backButton.clicked)
+                    forceActiveFocus()
                 }
             }
 

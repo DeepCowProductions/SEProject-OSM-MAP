@@ -1,13 +1,16 @@
 #ifndef TILEOFFLINEMANAGER_H
 #define TILEOFFLINEMANAGER_H
 
-#include <QObject>
 #include "tile.h"
+#include "src/settings.h"
+
+#include <QObject>
 #include <QString>
 #include <QStandardPaths>
 #include <QDir>
 #include <QDebug>
 #include <QDirIterator>
+#include <QStorageInfo>
 
 class TileOfflineManager : public QObject
 {
@@ -63,14 +66,29 @@ public:
      */
     QString searchSubdirectoriesForTile(Tile * tile, QString directory);
 
+
+
 signals:
+
+    void notEnoughSpace();
 
 public slots:
 
 private:
+    Settings m_settings;
 
-    QString m_offlineDirectory;
+    int m_currentlyUsedSpace;
 
+    /**
+     * @brief calculateUsedSpace ermittelt wie viel Speicher bereits verbraucht wurde
+     */
+    int calculateUsedSpace();
+
+    /**
+     * @brief createFileName erstellt den Dateinamen unter dem das Tile gespeichert werden soll
+     * @param tile wofür der Dateiname erstellt werden soll
+     * @return der Dateiname für das Tile.
+     */
     QString createFileName(Tile *tile);
 
     QString m_format;

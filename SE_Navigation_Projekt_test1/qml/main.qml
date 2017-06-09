@@ -18,7 +18,7 @@ ApplicationWindow {
     property variant placesInstance
     property variant settingsInstance
 
-    signal saveTiles(variant coordinates, string tilesProvider, int zoomlevel);
+    signal saveTiles(variant coordinates, string tilesProvider, int zoomlevel, int depth, int width, int height);
     property alias settings : settingsObject
 
     signal enableButton();
@@ -211,7 +211,7 @@ ApplicationWindow {
             onSaveTiles: {
                  console.log("before, efore" + mapInstance.saveButtonEnabled)
                 mapInstance.saveButtonEnabled = false;
-                appWindow.saveTiles(center, fileProvider, zoomlevel);
+                appWindow.saveTiles(center, fileProvider, zoomlevel, 2, appWindow.width, appWindow.height);
                 console.log("before" + mapInstance.saveButtonEnabled)
 
                 console.log("after<" + mapInstance.saveButtonEnabled)
