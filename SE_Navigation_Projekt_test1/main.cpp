@@ -8,7 +8,6 @@
 #include <QGeoCoordinate>
 #include <QScreen>
 #include "src/OsmTilesOffline/tilesdownloader.h"
-
 #include "src/OsmTilesOffline/downloadthread.h"
 
 int main(int argc, char *argv[])

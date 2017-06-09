@@ -291,7 +291,7 @@ Item {
                 height: parent.height
                 function toggleSaveButton () {
                     saveButton.enabled = !saveButton.enabled
-                   }
+                }
                 onClicked: {
                     console.log ("default hanlder for centerOnMeButton")
                     //                geocodeModel.query = fromAddress
@@ -395,11 +395,17 @@ Item {
             }
         }
         Component{
-            id: saveTilesDialog
+            id: saveTilesDialogComp
             SaveTilesDialog {
+                minZoom: map.zoomLevel
+                screenWidth: appWindow.width
+                screenHeight: appWindow.height
+
                 onAccepted: {
                     visible = false
                     map.forceActiveFocus()
+//                    saveTiles(map.center, "korona.geog.uni-heidelberg.de", map.zoomLevel,( zoomleveldepth-minZoom))
+                    console.log(map.center+", " + "korona.geog.uni-heidelberg.de"+", " + map.zoomLevel +", "+ ( zoomleveldepth-minZoom))
                 }
                 onRejected: {
                     visible = false
@@ -414,13 +420,12 @@ Item {
             text: "Save Data"
             //            onClicked: appWindow.saveTiles(map.center, map.zoomLevel)
             onClicked: {
-                saveTilesDialog.createObject(map)
+                saveTilesDialogComp.createObject(map)
             }
-//                saveTiles(map.center, "korona.geog.uni-heidelberg.de", map.zoomLevel)
             anchors.bottom: parent.bottom
             anchors.left: parent.left
-//            width: (parent.width -16)  * 0.16
-//            height: (parent.height - 8) * 0.08
+            //            width: (parent.width -16)  * 0.16
+            //            height: (parent.height - 8) * 0.08
 
             Component.onCompleted: {
                 console.log("Save Button erstellt")
@@ -437,8 +442,8 @@ Item {
             //            onClicked: appWindow.saveTiles(map.center, map.zoomLevel)
             anchors.bottom: parent.bottom
             anchors.right: parent.right
-//            width: (parent.width -16)  * 0.16
-//            height: (parent.height - 8) * 0.08
+            //            width: (parent.width -16)  * 0.16
+            //            height: (parent.height - 8) * 0.08
 
             Component.onCompleted: {
                 console.log("Save Button erstellt")
@@ -455,8 +460,8 @@ Item {
             //            onClicked: appWindow.saveTiles(map.center, map.zoomLevel)
             anchors.bottom: pinButton.top
             anchors.right: parent.right
-//            width: (parent.width -16)  * 0.16
-//            height: (parent.height - 8) * 0.08
+            //            width: (parent.width -16)  * 0.16
+            //            height: (parent.height - 8) * 0.08
 
             Component.onCompleted: {
                 console.log("Save Button erstellt")
@@ -473,8 +478,8 @@ Item {
             //            onClicked: appWindow.saveTiles(map.center, map.zoomLevel)
             anchors.bottom: saveButton.top
             anchors.left: parent.left
-//            width: (parent.width -16)  * 0.16
-//            height: (parent.height - 8) * 0.08
+            //            width: (parent.width -16)  * 0.16
+            //            height: (parent.height - 8) * 0.08
 
             Component.onCompleted: {
                 console.log("Save Button erstellt")
