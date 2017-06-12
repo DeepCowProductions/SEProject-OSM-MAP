@@ -5,18 +5,20 @@ import QtQuick.Layouts 1.1
 import QtQuick.Window 2.0
 
 Dialog {
-    property int zoomleveldepth
-    property int tileCount: 123
-    property int totalSize: 321
-    property int maxZoom: 10
+    property alias zoomleveldepth: slider.value
+    property int tileCount
+    property int totalSize: tileCount * 0.060
+    property int maxZoom: (minZoom + 5) >= 18 ?  18: ( minZoom + 5)
     property int minZoom: 1
-    property int defaultZoom
+    property int defaultZoom: 2
+    property int screenWidth
+    property int screenHeight
     id: saveTilesDialog
     standardButtons: "NoButton"
     //    onButtonClicked: ( buttonClicked === StandardButton.Ok ) ? accepted() : rejected()
 
     modality: Qt.WindowModal
-    title: "Enter a name pls"
+    title: "Confirm Download"
     Rectangle {
         color: "#EEEEFF"
         anchors.fill: parent
@@ -30,7 +32,7 @@ Dialog {
             Label {
                 id:label
                 //                anchors.top: parent.top
-                text: "Save currently visible Map"
+                text: "Download currently visible Map"
                 color: "navy"
             }
             Row {
@@ -55,12 +57,22 @@ Dialog {
                     stepSize: 1
                     snapMode: Slider.SnapAlways
                     onValueChanged: {
-
+                        var count =  Math.floor((screenHeight / 256) +1)
+                        console.log(screenHeight +", "+ count)
+                        count = count * Math.floor((screenWidth / 256)+1 )
+                        console.log(screenWidth +", " + Math.floor((screenWidth / 256)+1 )+ ", "+ count)
+                        var range = zoomleveldepth - minZoom +1
+                        var res = 0
+                        for (var i = 0 ; i<range; i++ ){
+                            res = res + Math.pow(4,i)
+                        }
+                        tileCount = count * res
                     }
                     onPositionChanged: {
                        var range = to - from
-                       zoomlevelDisplay.text = Math.round(( range * position )) + 1
+                       zoomlevelDisplay.text = minZoom + "+" + Math.round(( range * position ))
                     }
+                    Component.onCompleted: slider.value = defaultZoom
                 }
 
                 Text {
@@ -97,32 +109,46 @@ Dialog {
                     width: parent.width *0.8
                     height: parent.height
                     //                    horizontalAlignment: TextInput.AlignHCenter
-                    text: "Required Memory:"
+                    text: "aprox req. Memory: "
                 }
                 Text {
                     width: parent.width *0.2
                     height: parent.height
                     //                    horizontalAlignment: TextInput.AlignHCenter
-                    text: totalSize
+                    text: totalSize + " MB"
                 }
             }
             Row {
+                width: 200
+                height: 40
                 spacing: 10
                 //                anchors.top : textRect.bottom
-                Button {
+                HighlightButton {
                     id: acceptButton
+                    width: parent.width * 0.5
+                    height: parent.height
                     text: "Ok"
                     onClicked: {
                         accepted()
                         close()
                     }
+                    contentItem: Image {
+                        source: "qrc:/ok"
+                        fillMode: Image.PreserveAspectFit
+                    }
                 }
-                Button {
+                HighlightButton {
                     id: rejectButton
+                    width: parent.width * 0.5
+                    height: parent.height
                     text: "Cancel"
                     onClicked: {
                         rejected()
                         close()
+                    }
+                    contentItem: Image {
+                        source: "qrc:/x"
+                        fillMode: Image.PreserveAspectFit
                     }
                 }
             }
