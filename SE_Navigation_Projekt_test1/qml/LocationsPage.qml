@@ -18,7 +18,6 @@ Item {
     property alias clearMapItemsButton: clearMapItem
     property alias showPinButton: showPin
 
-
     Column {
         id: locationsMainColumn
         anchors.fill : parent
@@ -330,7 +329,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignLeft
-                                        text: "Length:"
+                                        text: "Km:"
                                         color: "navy"
                                         font.pointSize: 7
                                     }
@@ -343,7 +342,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignLeft
-                                        text: mapInstance.path.length + " km"
+                                        text: pathLength(mapInstance.path)
                                         color: "black"
                                         font.pointSize: 7
                                     }

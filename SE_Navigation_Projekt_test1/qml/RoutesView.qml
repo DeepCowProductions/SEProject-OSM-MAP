@@ -77,10 +77,11 @@ Item {
                 onClicked: {
                     roadsListView.currentIndex = index
                     infoPanelName.info = name
-                    //                    infoPanelLati.info = latitude + "°"
-                    //                    infoPanelLongi.info = longitude +"°"
+                    infoPanelLength.info = pathLength(roadsListView.model.getCoordsAtIndex(index))
+                    infoPanelNumber.info = roadsListView.model.getCoordsAtIndex(index).length
                     infoPanelDate.info = savedAtDate
                     //                    infoPanelPos.info = ""
+
                 }
                 onDoubleClicked: {
                     mapRequest(roadsListView.model.getCoordsAtIndex(index))
@@ -181,19 +182,8 @@ Item {
                             anchors.fill: parent
                             snapMode: ListView.SnapToItem
                             clip: true
-
-                            //                                highlight: highLightComp
                             highlightFollowsCurrentItem: false
-
                             delegate: itemDelegate
-//                            highlight: Rectangle {
-//                                color: 'grey'
-//                                Text {
-//                                    anchors.centerIn: parent
-//                                    text: 'Hello ' + model.get(list.currentIndex).name
-//                                    color: 'white'
-//                                }
-//                            }
                             focus: true
                             onCurrentItemChanged: console.log(model.get(roadsListView.currentIndex).name + ' selected')
                         }
@@ -292,40 +282,6 @@ Item {
                         height: 50
                         Column {
                             anchors.fill: parent
-                            //                            Row {
-                            //                                width: parent.width
-                            //                                height: parent.height * 0.5
-                            //                                padding: 1
-                            //                                spacing: 4
-                            //                                Rectangle{
-                            //                                    width: parent.width * 0.4
-                            //                                    height: parent.height
-                            //                                    Text{
-                            //                                        anchors.leftMargin: 10
-                            //                                        anchors.fill: parent
-                            //                                        verticalAlignment: Text.AlignVCenter
-                            //                                        horizontalAlignment: Text.AlignVCenter
-                            //                                        text: "Position: "
-                            //                                        color: "navy"
-                            //                                        font.pointSize: 7
-                            //                                    }
-                            //                                }
-                            //                                Rectangle{
-                            //                                    width: parent.width * 0.6
-                            //                                    height: parent.height
-                            //                                    Text{
-                            //                                        property string info
-                            //                                        id: infoPanelPos
-                            //                                        anchors.leftMargin: 10
-                            //                                        anchors.fill: parent
-                            //                                        verticalAlignment: Text.AlignVCenter
-                            //                                        horizontalAlignment: Text.AlignVCenter
-                            //                                        text: info + " "
-                            //                                        color: "black"
-                            //                                        font.pointSize: 7
-                            //                                    }
-                            //                                }
-                            //                            }
                             Row{
                                 width: parent.width
                                 height: parent.height
@@ -339,7 +295,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignLeft
-                                        text: "Lati:"
+                                        text: "# Points:"
                                         color: "navy"
                                         font.pointSize: 12
                                     }
@@ -349,9 +305,9 @@ Item {
                                     width: parent.width *  0.3
                                     height: parent.height
                                     TextEdit{
-                                        readOnly: !inEditMode
+                                        readOnly: true
                                         property string info
-                                        id: infoPanelLati
+                                        id: infoPanelNumber
                                         anchors.leftMargin: 10
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
@@ -370,7 +326,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignLeft
-                                        text: "Longi:"
+                                        text: "Km:"
                                         color: "navy"
                                         font.pointSize: 12
                                     }
@@ -379,9 +335,9 @@ Item {
                                     width: parent.width *  0.3
                                     height: parent.height
                                     TextEdit{
-                                        readOnly: !inEditMode
+                                        readOnly: true
                                         property string info
-                                        id: infoPanelLongi
+                                        id: infoPanelLength
                                         anchors.leftMargin: 10
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
@@ -443,6 +399,10 @@ Item {
                             contentItem: Image {
                                 source: "qrc:/target"
                                 fillMode: Image.PreserveAspectFit
+                            }
+                            onClicked: {
+                                //TODO
+//                                mapRequest(listView.currentIndex.getCoords())
                             }
                         }
                     }

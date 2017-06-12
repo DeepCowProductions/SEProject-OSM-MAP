@@ -12,6 +12,7 @@ Item {
     property alias centerOnMeButton: centerOnMeButton
     property alias settingsPageButton: settingsPageButton
     property alias locationPageButton: locationPageButton
+    property alias helpPageButton: infoButton
     property alias path: polylineItem.path
     property alias polyline: polylineItem
     property alias map: map
@@ -287,8 +288,6 @@ Item {
                     //                geocodeModel.update()
                     map.center = positionSource.position.coordinate
                     updateLocationMarker(positionSource.position.coordinate)
-                    toggleSaveButton()
-                    updateLocationMarker(positionSource.position.coordinate)
                 }
                 contentItem: Image {
                     source: "qrc:/target"
@@ -439,11 +438,14 @@ Item {
                 fillMode: Image.PreserveAspectFit
             }
             radius: 9000
+            onClicked: {
+                locationPin.setCoordinateEx(map.center)
+                updateLocationMarker(locationPin.coordinateEx())
+            }
         }
         RoundHighlightButton{
             id: locatepinButton
             text: "Save Data"
-            //            onClicked: appWindow.saveTiles(map.center, map.zoomLevel)
             anchors.bottom: pinButton.top
             anchors.right: parent.right
             //            width: (parent.width -16)  * 0.16
@@ -457,6 +459,9 @@ Item {
                 fillMode: Image.PreserveAspectFit
             }
             radius: 9000
+            onClicked: {
+                updateLocationMarker(locationPin.coordinateEx())
+            }
         }
         RoundHighlightButton{
             id: infoButton

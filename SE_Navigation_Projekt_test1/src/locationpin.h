@@ -27,6 +27,8 @@ public:
 signals:
 
 public slots:
+    Q_INVOKABLE QGeoCoordinate coordinateEx();
+    Q_INVOKABLE void setCoordinateEx(const QGeoCoordinate &coordinate);
     Q_INVOKABLE bool readUserData();
     Q_INVOKABLE bool writeUserData();
 

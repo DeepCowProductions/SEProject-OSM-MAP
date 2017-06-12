@@ -131,6 +131,16 @@ QJsonObject LocationPin::writeToJason()
     return object;
 }
 
+QGeoCoordinate LocationPin::coordinateEx()
+{
+    return coordinate();
+}
+
+void LocationPin::setCoordinateEx(const QGeoCoordinate &coordinate)
+{
+    setCoordinate(coordinate);
+}
+
 bool LocationPin::readUserData()
 {
     QFile saveFile;

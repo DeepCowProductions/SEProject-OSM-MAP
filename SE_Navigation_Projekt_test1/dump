@@ -1,0 +1,36 @@
+//                            Row {
+//                                width: parent.width
+//                                height: parent.height * 0.5
+//                                padding: 1
+//                                spacing: 4
+//                                Rectangle{
+//                                    width: parent.width * 0.4
+//                                    height: parent.height
+//                                    Text{
+//                                        anchors.leftMargin: 10
+//                                        anchors.fill: parent
+//                                        verticalAlignment: Text.AlignVCenter
+//                                        horizontalAlignment: Text.AlignVCenter
+//                                        text: "Position: "
+//                                        color: "navy"
+//                                        font.pointSize: 7
+//                                    }
+//                                }
+//                                Rectangle{
+//                                    width: parent.width * 0.6
+//                                    height: parent.height
+//                                    Text{
+//                                        property string info
+//                                        id: infoPanelPos
+//                                        anchors.leftMargin: 10
+//                                        anchors.fill: parent
+//                                        verticalAlignment: Text.AlignVCenter
+//                                        horizontalAlignment: Text.AlignVCenter
+//                                        text: info + " "
+//                                        color: "black"
+//                                        font.pointSize: 7
+//                                    }
+//                                }
+//                            }
+
+elemente nach eventuellem QGeoLocation fix
