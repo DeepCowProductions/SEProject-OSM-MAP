@@ -35,7 +35,7 @@ Item {
                     anchors.fill: parent
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
-                    text: "Locations"
+                    text: "Position"
                     color: "darkblue"
                     font.family: "Helvetica"
                     font.pointSize: 24

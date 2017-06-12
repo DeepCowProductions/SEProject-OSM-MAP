@@ -421,6 +421,21 @@ Item {
                         padding: 1
                         spacing: 4
                         HighlightButton {
+                            id: deleteLocation
+                            width: parent.width * 0.333
+                            height: parent.height
+                            text: "delete"
+                            contentItem: Image {
+                                source: inEditMode ? "qrc:/x" : "qrc:/delete"
+                                fillMode: Image.PreserveAspectFit
+                            }
+                            onClicked: {
+                                if (inEditMode) {
+                                    inEditMode = false
+                                }
+                            }
+                        }
+                        HighlightButton {
                             id: editLocation
                             width: parent.width * 0.333
                             height: parent.height
@@ -435,21 +450,6 @@ Item {
                                 }
                                 else {
                                     inEditMode = true
-                                }
-                            }
-                        }
-                        HighlightButton {
-                            id: deleteLocation
-                            width: parent.width * 0.333
-                            height: parent.height
-                            text: "delete"
-                            contentItem: Image {
-                                source: inEditMode ? "qrc:/x" : "qrc:/delete"
-                                fillMode: Image.PreserveAspectFit
-                            }
-                            onClicked: {
-                                if (inEditMode) {
-                                    inEditMode = false
                                 }
                             }
                         }

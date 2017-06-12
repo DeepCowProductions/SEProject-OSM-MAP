@@ -463,7 +463,7 @@ Item {
             text: "Save Data"
             //            onClicked: appWindow.saveTiles(map.center, map.zoomLevel)
             anchors.bottom: saveButton.top
-            anchors.left: parent.left
+            anchors.left: parent.lefre
             //            width: (parent.width -16)  * 0.16
             //            height: (parent.height - 8) * 0.08
 
@@ -481,7 +481,8 @@ Item {
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width * 0.6
-
+            isActive: true
+            value: 50
         }
     }
 

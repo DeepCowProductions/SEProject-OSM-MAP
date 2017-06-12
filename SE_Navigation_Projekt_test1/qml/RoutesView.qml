@@ -403,6 +403,21 @@ Item {
                         padding: 1
                         spacing: 4
                         HighlightButton {
+                            id: deleteRoute
+                            width: parent.width * 0.333
+                            height: parent.height
+                            text: "delete"
+                            contentItem: Image {
+                                source: inEditMode ? "qrc:/x" : "qrc:/delete"
+                                fillMode: Image.PreserveAspectFit
+                            }
+                            onClicked: {
+                                if (inEditMode) {
+                                    inEditMode = false
+                                }
+                            }
+                        }
+                        HighlightButton {
                             id: editRoute
                             width: parent.width * 0.333
                             height: parent.height
@@ -421,21 +436,6 @@ Item {
                             }
                         }
                         HighlightButton {
-                            id: deleteRoute
-                            width: parent.width * 0.333
-                            height: parent.height
-                            text: "delete"
-                            contentItem: Image {
-                                source: inEditMode ? "qrc:/x" : "qrc:/delete"
-                                fillMode: Image.PreserveAspectFit
-                            }
-                            onClicked: {
-                                if (inEditMode) {
-                                    inEditMode = false
-                                }
-                            }
-                        }
-                        HighlightButton {
                             id: displayOnMap
                             width: parent.width * 0.333
                             height: parent.height
@@ -445,7 +445,6 @@ Item {
                                 fillMode: Image.PreserveAspectFit
                             }
                         }
-
                     }
                     HeaderSpacer {
                         height: 1

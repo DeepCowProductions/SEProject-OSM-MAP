@@ -6,13 +6,13 @@ Rectangle {
     width: parent.width
     height: 10
     color: "transparent"
-
+    property alias progressBar: progressBar
+    property alias isActive: progressBar.barActive
+    property alias progress: progressBar.value
+    property alias maxValue: progressBar.to
+    property alias minnValue: progressBar.from
+    property alias value: progressBar.value
     ProgressBar {
-        property alias progressBar: progressBar
-        property alias isActive: progressBar.barActive
-        property alias progress: progressBar.value
-        property alias maxValue: progressBar.to
-        property alias minnValue: progressBar.from
         property bool barActive: false
         id: progressBar
         anchors.fill: parent
