@@ -107,13 +107,21 @@ ApplicationWindow {
 
     Component {
         id: locationsPageComp
-        LocationsPage {
+        LocationsPage{
             id: locationsPage
             backButton.onClicked: {
                 mainStack.pop(mapInstance)
                 mapInstance.forceActiveFocus()
             }
-            viewPlacesButtonAlias.onClicked: {
+            saveThisLocationButton.onClicked: {
+                saveLocationDialog.createObject(mapInstance)
+            }
+            saveThisRouteButton.onClicked: {
+                if (mapInstance.recordRoute)
+                    saveRouteDialog.createObject(mapInstance)
+            }
+
+            viewPlacesButton.onClicked: {
                 if (!placesInstance) {
                     console.log("creating new instance of item")
                     placesInstance = placesPageComp.createObject(mainStack);
@@ -127,11 +135,11 @@ ApplicationWindow {
                 placesInstance.forceActiveFocus()
 
             }
-            viewRoadsButtonAlias.onClicked: {
+            viewRoadsButton.onClicked: {
                 if (!roadsInstance) {
                     console.log("creating new instance of item")
                     roadsInstance = roadsPageComp.createObject(mainStack);
-                    roadsInstance.model = roadsModel
+                    roadsInstance.model = routesModel
                 }
                 else{
                     console.log("item instance already here...")
@@ -147,20 +155,14 @@ ApplicationWindow {
 
     Component {
         id: roadsPageComp
-        RoadsView {
+        RoutesView {
             id: roadsPage
             backButton.onClicked: {
                 mainStack.pop()
                 locationsInstance.forceActiveFocus()
             }
-            testButton1.onClicked: {
-                roadsModel.clearList()
-            }
-            testButton2.onClicked: {
-                roadsModel.writeUserData()
-            }
-            testButton3.onClicked: {
-                roadsModel.readUserData()
+            displayOnMapButton.onClicked: {
+
             }
             onMapRequest: {
                 console.log("coords:" + array)
@@ -178,22 +180,14 @@ ApplicationWindow {
         id: placesPageComp
         PlacesView {
             id: placesPage
-//            backButton.onClicked: {
-//                mainStack.pop()
-//                locationsInstance.forceActiveFocus()
-//            }
-//            testButton1.onClicked: {
-//                placesModel.clearList()
-//            }
-//            testButton2.onClicked: {
-//                placesModel.writeUserData()
-//            }
-//            testButton3.onClicked: {
-//                placesModel.readUserData()
-//            }
-//            savePlaceButton.onClicked: {
-//                saveMsgWithTextDialog.createObject(mapInstance)
-//            }
+
+            backButton.onClicked: {
+                mainStack.pop()
+                locationsInstance.forceActiveFocus()
+            }
+            displayOnMapButton.onClicked: {
+
+            }
 
             onMapRequest: {
                 console.log(longitude + ", " + latitude)
@@ -264,9 +258,9 @@ ApplicationWindow {
     }
 
     Component{
-        id: saveMsgWithTextDialog
+        id: saveLocationDialog
         SimpleTextDialog {
-            title: "Do you want to save this Location?"
+            title: "Save this Location"
             labelText: "Enter a name to save"
             onAccepted: {
 //                placesModel.addItem(input,mapInstance.currentPosition)
@@ -281,12 +275,40 @@ ApplicationWindow {
             Component.onCompleted: visible = true
         }
     }
+    Component{
+        id: saveRouteDialog
+        SimpleTextDialog {
+            title: "Save recorded Route"
+            labelText: "Enter a name to save"
+            onAccepted: {
+//                placesModel.addItem(input,mapInstance.currentPosition)
+                console.log("saveDialog accepted")
+                console.log("input is: " + input)
+                console.log("path to save s : " + path)
+                console.log("qml: call roadsModel.addItem(...)")
+                routesModel.addItem(input,path)
+                // TODO: option to keep path displayed???
+                // here we want the recording to stay active
+//                clearPath()
+                visible = false
+                mainStack.forceActiveFocus()
+            }
+            onRejected: {
+                console.log("Rejected")
+                console.log("This path will be gone: " + polyline.path)
+                visible = false
+//                clearPath()
+                mainStack.forceActiveFocus()
+            }
+            Component.onCompleted: visible = true
+        }
+    }
 
     PlacesModel {
         id: placesModel
     }
-    RoadsModel {
-        id: roadsModel
+    RoutesModel {
+        id: routesModel
     }
     LocationPin {
         id: locationPin

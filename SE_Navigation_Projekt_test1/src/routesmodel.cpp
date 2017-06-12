@@ -1,12 +1,12 @@
-#include "roadsmodel.h"
+#include "routesmodel.h"
 
-RoadsModel::RoadsModel(QObject *parent) : QAbstractListModel(parent)
+RoutesModel::RoutesModel(QObject *parent) : QAbstractListModel(parent)
 {
 //    writeTestData();
     readUserData();
 }
 
-QHash<int, QByteArray> RoadsModel::roleNames() const
+QHash<int, QByteArray> RoutesModel::roleNames() const
 {
     QHash<int, QByteArray> roles = QAbstractListModel::roleNames();
     roles[NameRole] = "name";
@@ -15,17 +15,17 @@ QHash<int, QByteArray> RoadsModel::roleNames() const
     return roles;
 }
 
-int RoadsModel::rowCount(const QModelIndex &parent) const
+int RoutesModel::rowCount(const QModelIndex &parent) const
 {
     return m_roads.size();
 }
 
-int RoadsModel::columnCount(const QModelIndex &parent) const
+int RoutesModel::columnCount(const QModelIndex &parent) const
 {
     return 2;
 }
 
-QVariant RoadsModel::data(const QModelIndex &index, int role) const
+QVariant RoutesModel::data(const QModelIndex &index, int role) const
 {
     QVariant value;
     int row = index.row();
@@ -39,7 +39,7 @@ QVariant RoadsModel::data(const QModelIndex &index, int role) const
 }
 
 // TODO
-bool RoadsModel::readUserDataFromJson(QJsonObject &object)
+bool RoutesModel::readUserDataFromJson(QJsonObject &object)
 {
     QJsonArray ra;
     if (object["roads"].isUndefined())
@@ -47,7 +47,7 @@ bool RoadsModel::readUserDataFromJson(QJsonObject &object)
     ra = object["roads"].toArray();
     beginInsertRows(QModelIndex(),m_roads.size(),m_roads.size() + ra.size() - 1 ); // for updating the listView inside qml (required)
     for(int i=0; i < ra.size(); i++) {
-        Road r;
+        Route r;
         QJsonObject roadJsonObject = ra[i].toObject();
         r.readFromJason(roadJsonObject);
         m_roads.append(r);
@@ -56,7 +56,7 @@ bool RoadsModel::readUserDataFromJson(QJsonObject &object)
     return true;
 }
 
-bool RoadsModel::writeUserDataToJson(QJsonObject &object)
+bool RoutesModel::writeUserDataToJson(QJsonObject &object)
 {
     QJsonArray ra;
     for (int i=0; i<m_roads.size(); i++) {
@@ -67,7 +67,7 @@ bool RoadsModel::writeUserDataToJson(QJsonObject &object)
 }
 
 // TODO: needs work
-bool RoadsModel::readUserData()
+bool RoutesModel::readUserData()
 {
     clearList();
     QFile saveFile;
@@ -98,7 +98,7 @@ bool RoadsModel::readUserData()
 }
 
 // TODO: more error handling
-bool RoadsModel::writeUserData()
+bool RoutesModel::writeUserData()
 {
     QFile saveFile;
     saveFile.setFileName(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/" + saveFileNameRoads );
@@ -123,7 +123,7 @@ bool RoadsModel::writeUserData()
 }
 
 /* @see http://code.qt.io/cgit/qt/qtlocation.git/tree/src/imports/location/locationvaluetypehelper.cpp#n40 */
-QGeoCoordinate RoadsModel::parseCoordinate(const QJSValue &value, bool *ok)
+QGeoCoordinate RoutesModel::parseCoordinate(const QJSValue &value, bool *ok)
 {
     QGeoCoordinate c;
     if (value.isObject()) {
@@ -140,7 +140,7 @@ QGeoCoordinate RoadsModel::parseCoordinate(const QJSValue &value, bool *ok)
 }
 
 
-bool RoadsModel::addItem( QString name, QJSValue value )
+bool RoutesModel::addItem( QString name, QJSValue value )
 {
     if (!value.isArray())
         return false;
@@ -160,7 +160,7 @@ bool RoadsModel::addItem( QString name, QJSValue value )
 
     qDebug() << name << pathList;
     beginInsertRows(QModelIndex(),m_roads.size(),m_roads.size() ); // for updating the listView inside qml (required)
-    Road r;
+    Route r;
     r.setName(name);
     r.setSavedAtDate(QDate::currentDate());
     r.setCoordinates(pathList);
@@ -182,7 +182,7 @@ bool RoadsModel::addItem( QString name, QJSValue value )
 //    endInsertRows();
 //}
 
-QList<QVariant> RoadsModel::getCoordsAtIndex(int index)
+QList<QVariant> RoutesModel::getCoordsAtIndex(int index)
 {
     //    return m_roads[index].coordinates();
     QVariantList tmp;
@@ -195,7 +195,7 @@ QList<QVariant> RoadsModel::getCoordsAtIndex(int index)
     return tmp;
 }
 
-bool RoadsModel::clearList()
+bool RoutesModel::clearList()
 {
     qDebug() << "clearListcalled";
     beginRemoveRows(QModelIndex() , 0 , m_roads.size()-1);
@@ -204,22 +204,22 @@ bool RoadsModel::clearList()
     return true;
 }
 
-bool RoadsModel::writeTestData()
+bool RoutesModel::writeTestData()
 {
-    Road p1;
+    Route p1;
     p1.addCoordinate(QGeoCoordinate(50.0,50.0));
     p1.addCoordinate(QGeoCoordinate(51.0,52.0));
     p1.setName("test1");
     p1.setSavedAtDate(QDate::currentDate());
     m_roads.append(p1);
-    Road p2;
+    Route p2;
     p2.addCoordinate(QGeoCoordinate(10.0,42.0));
     p2.addCoordinate(QGeoCoordinate(8.0,20.0));
     p2.addCoordinate(QGeoCoordinate(6.0,40.0));
     p2.setName("test2");
     p2.setSavedAtDate(QDate::currentDate());
     m_roads.append(p2);
-    Road p3;
+    Route p3;
     p3.addCoordinate(QGeoCoordinate(60.0,60.0));
     p3.setName("test3");
     p3.setSavedAtDate(QDate::currentDate());

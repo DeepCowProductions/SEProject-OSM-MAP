@@ -8,6 +8,7 @@ RoundButton {
     property color backgroundColor: "#E0E0E0"
     property color hoverColor: "lightblue"
     property bool activeCondition: false
+    property color pressedColor: "#A2A2EE"
 
     id: button
     text: "HighlightButton"
@@ -15,10 +16,11 @@ RoundButton {
     background: Rectangle {
         implicitWidth: button.width
         implicitHeight: button.height
-        color: button.hovered ? hoverColor : button.bColor
         radius: button.radius
         border.color: "#AAAAFF"
         border.width: 1
+        color: pressed ? pressedColor : aColor
     }
-    property var bColor:  activeCondition ? activeColor : backgroundColor
+    property color bColor:  activeCondition ? activeColor : backgroundColor
+    property color aColor:  hovered ? hoverColor : bColor
 }

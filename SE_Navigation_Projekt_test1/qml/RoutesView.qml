@@ -7,25 +7,25 @@ import fhswf.se.nav.settings 1.0
 import fhswf.se.nav.models 1.0
 
 Item {
-    id: placesPage
-    property alias model: pLacesListView.model
-    property alias listView: pLacesListView
+    id: roadsPage
+    property alias model: roadsListView.model
+    property alias listView: roadsListView
 
     property alias backButton: backButton
-    property alias deleteLocationButton: deleteLocation
-    property alias editLocationButton: editLocation
+    property alias deleteRouteButton: deleteRoute
+    property alias editRouteButton: editRoute
     property alias displayOnMapButton: displayOnMap
 
     property bool inEditMode: false
 
-    signal mapRequest(double latitude, double longitude)
+    signal mapRequest(variant array)
 
     Component{
         id: highLightComp
         Rectangle{
-            y: pLacesListView.currentItem.y
+            y: roadsListView.currentItem.y
             height: 30
-            width: pLacesListView.width
+            width: roadsListView.width
             border.color: "black"
             border.width: 3
             color: "gray"
@@ -42,7 +42,7 @@ Item {
                 id: delegateRow
                 height: parent.height
                 Rectangle{
-                    width: pLacesListView.width * 0.6
+                    width: roadsListView.width * 0.6
                     height: 30
                     color: mouseArea.itemColor
                     border.width: 1
@@ -57,7 +57,7 @@ Item {
                 }
 
                 Rectangle{
-                    width: pLacesListView.width * 0.4
+                    width: roadsListView.width * 0.4
                     height: 30
                     color: mouseArea.itemColor
                     border.width: 1
@@ -72,18 +72,18 @@ Item {
                 }
             }
             HighlightMouseArea{
-                id:mouseArea
+                id: mouseArea
                 anchors.fill: parent
                 onClicked: {
-                    pLacesListView.currentIndex = index
+                    roadsListView.currentIndex = index
                     infoPanelName.info = name
-                    infoPanelLati.info = latitude + "°"
-                    infoPanelLongi.info = longitude +"°"
+                    //                    infoPanelLati.info = latitude + "°"
+                    //                    infoPanelLongi.info = longitude +"°"
                     infoPanelDate.info = savedAtDate
                     //                    infoPanelPos.info = ""
                 }
                 onDoubleClicked: {
-                    mapRequest(longitude, latitude)
+                    mapRequest(roadsListView.model.getCoordsAtIndex(index))
                 }
             }
         }
@@ -103,7 +103,7 @@ Item {
                     anchors.fill: parent
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
-                    text: "My Places"
+                    text: "My Routes"
                     color: "darkblue"
                     font.family: "Helvetica"
                     font.pointSize: 24
@@ -129,7 +129,7 @@ Item {
             height: parent.height - headerSpacer.height - buttonRow.height
             Column {
                 id: mainItemColumn
-                width: placesPage.width
+                width: roadsPage.width
                 height: parent.height
                 Column{
                     id: listColumn
@@ -141,7 +141,7 @@ Item {
                         height: 30
                         width: parent.width
                         Rectangle{
-                            width: pLacesListView.width * 0.6
+                            width: roadsListView.width * 0.6
                             height: 30
                             color: "white"
                             border.width: 1
@@ -156,7 +156,7 @@ Item {
                         }
 
                         Rectangle{
-                            width: pLacesListView.width * 0.4
+                            width: roadsListView.width * 0.4
                             height: 30
                             color: "white"
                             border.width: 1
@@ -177,13 +177,13 @@ Item {
                         width: parent.width - 0.1
 
                         ListView{
-                            id: pLacesListView
+                            id: roadsListView
                             anchors.fill: parent
                             snapMode: ListView.SnapToItem
                             clip: true
 
-                            //                            highlight: highLightComp
-                            highlightFollowsCurrentItem: true
+                            //                                highlight: highLightComp
+                            highlightFollowsCurrentItem: false
 
                             delegate: itemDelegate
 //                            highlight: Rectangle {
@@ -195,25 +195,7 @@ Item {
 //                                }
 //                            }
                             focus: true
-                            onCurrentItemChanged: console.log(model.get(pLacesListView.currentIndex).name + ' selected')
-                        }
-
-                        RoundHighlightButton{
-                            id: newLocationButton
-                            text: "+"
-                            //            onClicked: appWindow.saveTiles(map.center, map.zoomLevel)
-                            anchors.bottom: listRect.bottom
-                            anchors.right: listRect.right
-                            width: implicitWidth * 0.7
-                            height: implicitHeight * 0.7
-                            Component.onCompleted: {
-                                console.log("Save Button erstellt")
-                            }
-                            contentItem: Image {
-                                source: "qrc:/add"
-                                fillMode: Image.PreserveAspectFit
-                            }
-                            radius: 9000
+                            onCurrentItemChanged: console.log(model.get(roadsListView.currentIndex).name + ' selected')
                         }
                     }
                 }
@@ -421,7 +403,7 @@ Item {
                         padding: 1
                         spacing: 4
                         HighlightButton {
-                            id: deleteLocation
+                            id: deleteRoute
                             width: parent.width * 0.333
                             height: parent.height
                             text: "delete"
@@ -436,7 +418,7 @@ Item {
                             }
                         }
                         HighlightButton {
-                            id: editLocation
+                            id: editRoute
                             width: parent.width * 0.333
                             height: parent.height
                             text: "edit"
@@ -463,7 +445,6 @@ Item {
                                 fillMode: Image.PreserveAspectFit
                             }
                         }
-
                     }
                     HeaderSpacer {
                         height: 1
@@ -478,4 +459,3 @@ Item {
         forceActiveFocus()
     }
 }
-

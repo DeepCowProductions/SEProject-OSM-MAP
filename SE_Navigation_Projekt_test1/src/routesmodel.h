@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QAbstractListModel>
 #include <QFile>
-#include "road.h"
+#include "route.h"
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -16,13 +16,13 @@
 #define saveFileNameRoads "roads.json"
 
 
-class RoadsModel : public QAbstractListModel
+class RoutesModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    explicit RoadsModel(QObject *parent = 0);
+    explicit RoutesModel(QObject *parent = 0);
 
-    enum PlaceRoles {
+    enum RouteRoles {
         NameRole = Qt::UserRole + 1,
 //        CoordinatesRole,
         SavedAtDateRole,
@@ -61,7 +61,7 @@ protected:
 
 private:
 
-    QVector<Road> m_roads;
+    QVector<Route> m_roads;
 
 };
 

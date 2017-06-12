@@ -19,22 +19,21 @@ class LocationPin : public QObject, public QGeoLocation
     Q_OBJECT
 public:
     explicit LocationPin(QObject *parent = 0);
+    ~LocationPin();
 
     void readFromJason(QJsonObject &object);
     QJsonObject writeToJason();
 
-    QString name() const;
-    QDate savedAtDate() const;
-
-    void setSavedAtDate(QDate savedAtDate);
-
-    Q_INVOKABLE bool readUserData();
-    Q_INVOKABLE bool writeUserData();
-
 signals:
 
 public slots:
+    Q_INVOKABLE bool readUserData();
+    Q_INVOKABLE bool writeUserData();
 
+    Q_INVOKABLE QString name() const;
+    Q_INVOKABLE QDate savedAtDate() const;
+
+    Q_INVOKABLE void setSavedAtDate(QDate savedAtDate);
 private:
     QString m_name = "Pinned Location";
     QDate m_savedAtDate;

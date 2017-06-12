@@ -2,7 +2,7 @@
 #include <QQmlApplicationEngine>
 #include "src/settings.h"
 #include "src/placesmodel.h"
-#include "src/roadsmodel.h"
+#include "src/routesmodel.h"
 #include "src/locationpin.h"
 #include <QImage>
 #include <QGeoCoordinate>
@@ -10,6 +10,8 @@
 #include "src/OsmTilesOffline/tilesdownloader.h"
 #include "src/OsmTilesOffline/downloadthread.h"
 #include "src/OsmTilesOffline/tileofflinemanager.h"
+#include <stdexcept>
+#include <QFile>
 
 int main(int argc, char *argv[])
 {
@@ -21,7 +23,7 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<Settings>("fhswf.se.nav.settings", 1, 0, "Settings");
     qmlRegisterType<PlacesModel>("fhswf.se.nav.models", 1, 0, "PlacesModel");
-    qmlRegisterType<RoadsModel>("fhswf.se.nav.models", 1, 0, "RoadsModel");
+    qmlRegisterType<RoutesModel>("fhswf.se.nav.models", 1, 0, "RoutesModel");
     qmlRegisterType<LocationPin>("fhswf.se.nav.models", 1, 0, "LocationPin");
 
 
@@ -50,6 +52,13 @@ int main(int argc, char *argv[])
     QMetaObject::invokeMethod(item, "initApp"
                               //                             , Q_ARG(QVariant, QVariant::fromValue(1))
                               );
+    QFile f;
+    f.setFileName(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/errorlog.txt");
+    f.open(QIODevice::WriteOnly);
+//    try {
+        return app.exec();
+//    } catch (const std::exception& ex) {
+//        f.write( ex.what());
+//    }
 
-    return app.exec();
 }

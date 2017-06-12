@@ -7,11 +7,11 @@
 #include <QJsonObject>
 #include <QtPositioning>
 
-class Road
+class Route
 {
 
 public:
-    Road();
+    Route();
 
     QList<QGeoCoordinate> coordinates() const;
     void setCoordinates(const QList<QGeoCoordinate> &coordinates);
