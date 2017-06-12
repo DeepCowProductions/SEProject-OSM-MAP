@@ -112,9 +112,14 @@ ApplicationWindow {
                 mainStack.pop(mapInstance)
                 mapInstance.forceActiveFocus()
             }
-            //            savePlaceButton.onClicked: {
-            //                saveMsgWithTextDialog.createObject(mapInstance)
-            //            }
+            saveThisLocationButton.onClicked: {
+                saveLocationDialog.createObject(mapInstance)
+            }
+            saveThisRouteButton.onClicked: {
+                if (mapInstance.recordRoute)
+                    saveRouteDialog.createObject(mapInstance)
+            }
+
             viewPlacesButton.onClicked: {
                 if (!placesInstance) {
                     console.log("creating new instance of item")
@@ -133,7 +138,7 @@ ApplicationWindow {
                 if (!roadsInstance) {
                     console.log("creating new instance of item")
                     roadsInstance = roadsPageComp.createObject(mainStack);
-                    roadsInstance.model = roadsModel
+                    roadsInstance.model = routesModel
                 }
                 else{
                     console.log("item instance already here...")
@@ -247,9 +252,9 @@ ApplicationWindow {
     }
 
     Component{
-        id: saveMsgWithTextDialog
+        id: saveLocationDialog
         SimpleTextDialog {
-            title: "Do you want to save this Location?"
+            title: "Save this Location"
             labelText: "Enter a name to save"
             onAccepted: {
 //                placesModel.addItem(input,mapInstance.currentPosition)
@@ -264,12 +269,40 @@ ApplicationWindow {
             Component.onCompleted: visible = true
         }
     }
+    Component{
+        id: saveRouteDialog
+        SimpleTextDialog {
+            title: "Save recorded Route"
+            labelText: "Enter a name to save"
+            onAccepted: {
+//                placesModel.addItem(input,mapInstance.currentPosition)
+                console.log("saveDialog accepted")
+                console.log("input is: " + input)
+                console.log("path to save s : " + path)
+                console.log("qml: call roadsModel.addItem(...)")
+                routesModel.addItem(input,path)
+                // TODO: option to keep path displayed???
+                // here we want the recording to stay active
+//                clearPath()
+                visible = false
+                mainStack.forceActiveFocus()
+            }
+            onRejected: {
+                console.log("Rejected")
+                console.log("This path will be gone: " + polyline.path)
+                visible = false
+//                clearPath()
+                mainStack.forceActiveFocus()
+            }
+            Component.onCompleted: visible = true
+        }
+    }
 
     PlacesModel {
         id: placesModel
     }
     RoutesModel {
-        id: roadsModel
+        id: routesModel
     }
     LocationPin {
         id: locationPin

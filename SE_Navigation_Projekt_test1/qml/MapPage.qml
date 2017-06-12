@@ -33,7 +33,7 @@ Item {
         console.log("racordroute changed, new value is: " + recordRoute)
         if(!recordRoute) {
             console.log("opening save dialog...")
-            saveMsgWithTextDialog.createObject(map)
+            saveMsgOnRecordToggle.createObject(map)
         }
     }
 
@@ -351,7 +351,7 @@ Item {
             }
         }
         Component{
-            id: saveMsgWithTextDialog
+            id: saveMsgOnRecordToggle
             SimpleTextDialog {
                 title: "Do you want to savee this route?"
                 labelText: "Enter a name to save"
@@ -360,7 +360,7 @@ Item {
                     console.log("input is: " + input)
                     console.log("path to save s : " + path)
                     console.log("qml: call roadsModel.addItem(...)")
-                    roadsModel.addItem(input,path)
+                    routesModel.addItem(input,path)
                     // TODO: option to keep path displayed???
                     clearPath()
                     visible = false
