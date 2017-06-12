@@ -1,5 +1,5 @@
 import QtQuick 2.7
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.0
 import QtPositioning 5.6
 import QtLocation 5.6
@@ -10,12 +10,11 @@ Item {
     property alias backButton: backButton
     id: topParent
 
+    signal deleteDirectory();
     signal configurationChanged ()
     onConfigurationChanged:  {
         console.log("saving settings from qml")
         // instert new options here:
-        settings.useOfflineMap = cb1.checked
-        settings.useNormalMapCache = cb2.checked
         settings.offlineDirectory = offlineDirectory.text
         settings.maxOfflineMapSize = sizeOfOfflineDirectory.text * 1000000
         settings.save()
@@ -78,28 +77,24 @@ Item {
                     Row {
                         width: parent.width
                         height: 50
+
                         Rectangle{
-                            width: parent.width * 0.7
+                            width: parent.width
                             height: parent.height
                             Text{
                                 anchors.leftMargin: 10
                                 anchors.fill: parent
                                 verticalAlignment: Text.AlignVCenter
                                 horizontalAlignment: Text.AlignLeft
-                                text: "Use Offline Map"
+                                text: qsTr("Offline directory")
                                 color: "navy"
-                                font.pointSize: 12
+                                font.pointSize: 18
                             }
                         }
-
-                        HighlightCheckBox {
-                            id: cb1
-                            onCheckedChanged: configurationChanged()
-                            checked: settings.useOfflineMap
-                        }
                     }
-
-
+                    HeaderSpacer{
+                        height: 1
+                    }
                     Row {
                         width: parent.width
                         height: 50
@@ -111,31 +106,7 @@ Item {
                                 anchors.fill: parent
                                 verticalAlignment: Text.AlignVCenter
                                 horizontalAlignment: Text.AlignLeft
-                                text: "Use Map Cache"
-                                color: "navy"
-                                font.pointSize: 12
-                            }
-                        }
-
-                        HighlightCheckBox {
-                            id: cb2
-                            onCheckedChanged: configurationChanged()
-                            checked: settings.useNormalMapCache
-                        }
-                    }
-
-                    Row {
-                        width: parent.width
-                        height: 50
-                        Rectangle{
-                            width: parent.width * 0.7
-                            height: parent.height
-                            Text{
-                                anchors.leftMargin: 10
-                                anchors.fill: parent
-                                verticalAlignment: Text.AlignVCenter
-                                horizontalAlignment: Text.AlignLeft
-                                text: "Max Storage Size(in MB)"
+                                text: qsTr("Max storage size(in MB)")
                                 color: "navy"
                                 font.pointSize: 12
                             }
@@ -145,34 +116,11 @@ Item {
                             width: parent.width * 0.25
                             inputMask: "9999"
                             text: settings.maxOfflineMapSize / 1000000
-                            placeholderText: "Size in MB"
+                            placeholderText: qsTr("Size in MB")
                             onEditingFinished: configurationChanged()
                         }
                     }
-                    Row {
-                        width: parent.width
-                        height: 50
-                        Rectangle{
-                            width: parent.width * 0.7
-                            height: parent.height
-                            Text{
-                                anchors.leftMargin: 10
-                                anchors.fill: parent
-                                verticalAlignment: Text.AlignVCenter
-                                horizontalAlignment: Text.AlignLeft
-                                text: "Offline Directory"
-                                color: "navy"
-                                font.pointSize: 12
-                            }
-                        }
-                        TextField {
-                            id: offlineDirectory
-                            width: parent.width * 0.25
-                            text: settings.offlineDirectory
-                            placeholderText: "Path"
-                            onEditingFinished: configurationChanged()
-                        }
-                    }
+
 
                     Row {
                         width: parent.width
@@ -185,7 +133,7 @@ Item {
                                 anchors.fill: parent
                                 verticalAlignment: Text.AlignVCenter
                                 horizontalAlignment: Text.AlignLeft
-                                text: "Current offline size(in MB)"
+                                text: qsTr("Current offline size(in MB)")
                                 color: "navy"
                                 font.pointSize: 12
                             }
@@ -197,24 +145,153 @@ Item {
                             placeholderText: ""
                         }
                     }
+                    ButtonGroup{
+                        id: storageGroup
+                    }
+
                     Row {
                         width: parent.width
                         height: 50
                         Rectangle{
                             width: parent.width * 0.7
                             height: parent.height
+                            Text{
+                                anchors.leftMargin: 10
+                                anchors.fill: parent
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                text: qsTr("SD-Card")
+                                color: "navy"
+                                font.pointSize: 12
+                            }
+                        }
+                        RadioButton{
+                            id: sdCard
+                            ButtonGroup.group: storageGroup
+                            //                                checked: settings.
+                        }
+                    }
+                    Row {
+                        width: parent.width
+                        height: 50
+                        Rectangle{
+                            width: parent.width * 0.7
+                            height: parent.height
+                            Text{
+                                anchors.leftMargin: 10
+                                anchors.fill: parent
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                text: qsTr("Device storage")
+                                color: "navy"
+                                font.pointSize: 12
+                            }
+                        }
+                        RadioButton{
+                            id: deviceStorage
+                            ButtonGroup.group: storageGroup
+                            checked: true
+                            //                                checked: settings.
+                        }
+                    }
+                    Row{
+                        width: parent.width
+                        height: 50
+                        Rectangle{
+                            width: parent.width
+                            height:  parent.height
+                            Button{
+                                id: clearOfflineDirectory
+                                anchors.leftMargin: 10
+                                anchors.rightMargin: 10
+                                anchors.topMargin: 5
+                                anchors.bottomMargin: 5
+
+                                width: parent.width
+                                anchors.fill: parent
+                                text: qsTr("Clear offline directory")
+                                onClicked: deleteDirectory()
+                            }
                         }
                     }
 
+                    HeaderSpacer{
+                        height: 1
+                    }
+                    Row {
+                        width: parent.width
+                        height: 50
 
+                        Rectangle{
+                            width: parent.width
+                            height: parent.height
+                            Text{
+                                anchors.leftMargin: 10
+                                anchors.fill: parent
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                text: qsTr("Cache directory")
+                                color: "navy"
+                                font.pointSize: 18
+                            }
+                        }
+                    }
+                    HeaderSpacer{
+                        height: 1
+                    }
+
+
+                    Row {
+                        width: parent.width
+                        height: 50
+                        Rectangle{
+                            width: parent.width * 0.7
+                            height: parent.height
+                            Text{
+                                anchors.leftMargin: 10
+                                anchors.fill: parent
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                text: qsTr("Current cache size(in MB)")
+                                color: "navy"
+                                font.pointSize: 12
+                            }
+                        }
+                        TextField {
+                            id: currentlyCacheUsedSize
+                            width: parent.width * 0.25
+                            text: Math.round(((settings.usedOfflineDirectorySize / 1024) /1024) * 100) / 100
+                            placeholderText: ""
+                        }
+                    }
+                    Row{
+                        width: parent.width
+                        height: 50
+                        Rectangle{
+                            width: parent.width
+                            height:  parent.height
+                            Button{
+                                id: clearCacheDirectory
+                                anchors.leftMargin: 10
+                                anchors.rightMargin: 10
+                                anchors.topMargin: 5
+                                anchors.bottomMargin: 5
+
+                                width: parent.width
+                                anchors.fill: parent
+                                text: qsTr("Clear Cache directory")
+                                onClicked: deleteDirectory()
+                            }
+                        }
+                    }
                 }
                 Component.onCompleted: {
                     Keys.backPressed.connect(backButton.clicked)
                     Keys.escapePressed.connect(backButton.clicked)
                     forceActiveFocus()
                 }
-            }
 
+            }
         }
     }
     Component.onCompleted: {
