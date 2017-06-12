@@ -288,8 +288,6 @@ Item {
                     //                geocodeModel.update()
                     map.center = positionSource.position.coordinate
                     updateLocationMarker(positionSource.position.coordinate)
-                    toggleSaveButton()
-                    updateLocationMarker(positionSource.position.coordinate)
                 }
                 contentItem: Image {
                     source: "qrc:/target"
@@ -441,14 +439,13 @@ Item {
             }
             radius: 9000
             onClicked: {
-                //TODO
-//                locationPin.position = map.center
+                locationPin.setCoordinateEx(map.center)
+                updateLocationMarker(locationPin.coordinateEx())
             }
         }
         RoundHighlightButton{
             id: locatepinButton
             text: "Save Data"
-            //            onClicked: appWindow.saveTiles(map.center, map.zoomLevel)
             anchors.bottom: pinButton.top
             anchors.right: parent.right
             //            width: (parent.width -16)  * 0.16
@@ -463,8 +460,7 @@ Item {
             }
             radius: 9000
             onClicked: {
-                //TODO
-//                updateLocationMarker(locationPin.position)
+                updateLocationMarker(locationPin.coordinateEx())
             }
         }
         RoundHighlightButton{

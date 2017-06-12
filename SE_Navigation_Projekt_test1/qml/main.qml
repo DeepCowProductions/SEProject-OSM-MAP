@@ -146,6 +146,14 @@ ApplicationWindow {
                 if (mapInstance.recordRoute)
                     saveRouteDialog.createObject(mapInstance)
             }
+            showPinButton.onClicked: {
+                updateLocationMarker(locationPin.coordinateEx())
+            }
+            clearMapItemsButton.onClicked: {
+                mapInstance.map.clearMapItems()
+                mainStack.pop(mapInstance)
+                mapInstance.forceActiveFocus()
+            }
 
             viewPlacesButton.onClicked: {
                 if (!placesInstance) {
