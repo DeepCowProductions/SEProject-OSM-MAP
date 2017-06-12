@@ -71,6 +71,8 @@ signals:
      */
     void nextTileDownloadStarted(int counter);
 
+    void nextTileDownloadStarted(int counter, int amount);
+
 private:
 
     /**

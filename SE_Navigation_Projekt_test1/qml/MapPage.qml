@@ -17,6 +17,10 @@ Item {
     property alias polyline: polylineItem
     property alias map: map
 
+    property int currentValue: 0
+    property int amount: 100
+    property bool showProgressBar: false
+
     property var currentPosition: positionSource.valid ? positionSource.position.coordinate : map.center
     property var postest: QtPositioning.coordinate(1.0,-30.5)
 
@@ -486,11 +490,12 @@ Item {
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width * 0.6
-            isActive: true
-            value: 50
+            minnValue: 0
+            value: currentValue
+            maxValue: amount
+            isActive: showProgressBar
         }
     }
-
     // Only Temporary
     Component.onCompleted: {
         map.addMapItem(polyline)

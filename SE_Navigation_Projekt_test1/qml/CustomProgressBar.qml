@@ -44,7 +44,7 @@ Rectangle {
                 Text {
                     anchors.fill: parent
                     wrapMode: Text.NoWrap
-                    text: "Downloading Tile: " + progressBar.from + " of " + progressBar.to
+                    text: "Downloading Tile: " + progressBar.value + " of " + progressBar.to
                     font.pointSize: (spacer.height ) * 0.5
                     leftPadding: 2
 

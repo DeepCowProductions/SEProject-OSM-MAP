@@ -44,6 +44,7 @@ int main(int argc, char *argv[])
     QObject::connect(thread, SIGNAL(downloadFinished()), item, SIGNAL(enableButton()));
 
     QObject::connect(item, SIGNAL(clearDirectory(QString)), offlineManager, SLOT(deleteAll(QString)));
+    QObject::connect(thread, SIGNAL(updateProgressBar(int,int)), item, SIGNAL(updateProgressBar(int, int )));
     //    TilesDownloader * downloader = new TilesDownloader(item, screenSize);
 
     //    QObject::connect(downloader, SIGNAL(downloadFinished()), item, SIGNAL(enableButton()));

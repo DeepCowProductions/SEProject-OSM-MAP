@@ -23,12 +23,18 @@ ApplicationWindow {
     property alias settings : settingsObject
 
     signal enableButton();
+    signal updateProgressBar(int currentValue, int amount);
     signal clearDirectory(string directory);
 
     onEnableButton: {
         console.log("Tiles saved in Offline directory!");
         mapInstance.saveButtonEnabled = true;
         console.log(mapInstance.saveButtonEnabled);
+    }
+    onUpdateProgressBar: {
+        mapInstance.currentValue = currentValue
+        mapInstance.amount = amount
+        currentValue === amount ? mapInstance.showProgressBar = false : mapInstance.showProgressBar = true
     }
     function test () {
         console.log("test2")

@@ -94,9 +94,10 @@ void TilesDownloader::saveTile(Tile *tile)
     qDebug() << "Counter" << m_counter;
     delete static_cast<TileReply *>(sender());
     if(m_counter < m_requests.size()){
-//        emit nextTileDownloadStarted(int counter);
+        emit nextTileDownloadStarted(m_counter, m_requests.size());
         sendingRequests();
     }else{
+        emit nextTileDownloadStarted(m_counter, m_requests.size());
         emit downloadFinished();
     }
     m_counter++;

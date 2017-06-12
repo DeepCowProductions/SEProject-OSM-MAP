@@ -8,15 +8,17 @@ DownloadThread::DownloadThread(QObject* parent) : QThread(parent)
 void DownloadThread::run()
 {
     TilesDownloader downloader;
-
+    m_mutex.lock();
     QVariant center = m_center;
     QString provider = m_provider;
     QPoint windowSize = m_windowSize;
     int zoomLevel = m_zoomLevel;
     int depth = m_depth;
-    QEventLoop loop;
+    connect(&downloader, SIGNAL(nextTileDownloadStarted(int,int)), this, SIGNAL(updateProgressBar(int,int)));
     connect(&downloader, SIGNAL(downloadFinished()), this, SIGNAL(downloadFinished()));
+    QEventLoop loop;
     connect(&downloader, SIGNAL(downloadFinished()), &loop, SLOT(quit()));
+    m_mutex.unlock();
     downloader.downloadTiles(center, provider, zoomLevel, depth, windowSize);
     loop.exec();
 
