@@ -8,6 +8,7 @@ RoutesModel::RoutesModel(QObject *parent) : QAbstractListModel(parent)
 
 QHash<int, QByteArray> RoutesModel::roleNames() const
 {
+
     QHash<int, QByteArray> roles = QAbstractListModel::roleNames();
     roles[NameRole] = "name";
     //    roles[CoordinatesRole] = "coordinates";

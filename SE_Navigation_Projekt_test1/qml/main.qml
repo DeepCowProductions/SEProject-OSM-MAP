@@ -17,6 +17,7 @@ ApplicationWindow {
     property variant roadsInstance
     property variant placesInstance
     property variant settingsInstance
+    property variant helpInstance
 
     signal saveTiles(variant coordinates, string tilesProvider, int zoomlevel, int depth, int width, int height);
     property alias settings : settingsObject
@@ -30,6 +31,32 @@ ApplicationWindow {
     }
     function test () {
         console.log("test2")
+    }
+
+    function pathLength(cords) {
+        if (cords.length <2)
+            return 0;
+        var c = 0
+        for (var i=0;i<cords.length-1; i++) {
+            c = c + distanceTo(cords[i].latitude,cords[i].longitude,cords[i+1].latitude,cords[i+1].longitude,"K")
+        }
+        return c
+    }
+
+    function distanceTo(lat1, lon1, lat2, lon2, unit) {
+          var rlat1 = Math.PI * lat1/180
+          var rlat2 = Math.PI * lat2/180
+          var rlon1 = Math.PI * lon1/180
+          var rlon2 = Math.PI * lon2/180
+          var theta = lon1-lon2
+          var rtheta = Math.PI * theta/180
+          var dist = Math.sin(rlat1) * Math.sin(rlat2) + Math.cos(rlat1) * Math.cos(rlat2) * Math.cos(rtheta);
+          dist = Math.acos(dist)
+          dist = dist * 180/Math.PI
+          dist = dist * 60 * 1.1515
+          if (unit=="K") { dist = dist * 1.609344 }
+          if (unit=="N") { dist = dist * 0.8684 }
+          return dist
     }
 
     id: appWindow
@@ -160,9 +187,6 @@ ApplicationWindow {
                 mainStack.pop()
                 locationsInstance.forceActiveFocus()
             }
-            displayOnMapButton.onClicked: {
-
-            }
             onMapRequest: {
                 console.log("coords:" + array)
                 mapInstance.mapRequestRoute(array)
@@ -184,10 +208,6 @@ ApplicationWindow {
                 mainStack.pop()
                 locationsInstance.forceActiveFocus()
             }
-            displayOnMapButton.onClicked: {
-
-            }
-
             onMapRequest: {
                 console.log(longitude + ", " + latitude)
                 mapInstance.mapRequestPosition(QtPositioning.coordinate(longitude, latitude))
@@ -234,9 +254,21 @@ ApplicationWindow {
                 mainStack.push(locationsInstance)
                 locationsInstance.forceActiveFocus()
             }
+            helpPageButton.onClicked: {
+                if (!helpInstance) {
+                    console.log("creating new instance of item")
+                    helpInstance = helpPageComp.createObject(mainStack);
+                }
+                else{
+                    console.log("item instance already here...")
+                }
+                console.log("adding instance of item to mainStack")
+                mainStack.push(helpInstance)
+                helpInstance.forceActiveFocus()
+            }
+
             Component.onCompleted: console.log("mapPage complete")
         }
-
     }
 
     Component {
@@ -248,6 +280,17 @@ ApplicationWindow {
                 mapInstance.forceActiveFocus()
             }
             Component.onCompleted: console.log("settingsPage complete")
+        }
+    }
+    Component {
+        id: helpPageComp
+        HelpPage {
+            id: helpPage
+            backButton.onClicked: {
+                mainStack.pop(mapInstance)
+                mapInstance.forceActiveFocus()
+            }
+            Component.onCompleted: console.log("helpPage complete")
         }
     }
 

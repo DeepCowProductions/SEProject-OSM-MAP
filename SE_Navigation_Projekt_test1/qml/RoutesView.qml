@@ -77,10 +77,11 @@ Item {
                 onClicked: {
                     roadsListView.currentIndex = index
                     infoPanelName.info = name
-                    //                    infoPanelLati.info = latitude + "°"
-                    //                    infoPanelLongi.info = longitude +"°"
+                    infoPanelLength.info = pathLength(roadsListView.model.getCoordsAtIndex(index))
+                    infoPanelNumber.info = roadsListView.model.getCoordsAtIndex(index).length
                     infoPanelDate.info = savedAtDate
                     //                    infoPanelPos.info = ""
+
                 }
                 onDoubleClicked: {
                     mapRequest(roadsListView.model.getCoordsAtIndex(index))
@@ -339,7 +340,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignLeft
-                                        text: "Lati:"
+                                        text: "# Points:"
                                         color: "navy"
                                         font.pointSize: 12
                                     }
@@ -351,7 +352,7 @@ Item {
                                     TextEdit{
                                         readOnly: !inEditMode
                                         property string info
-                                        id: infoPanelLati
+                                        id: infoPanelNumber
                                         anchors.leftMargin: 10
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
@@ -370,7 +371,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignLeft
-                                        text: "Longi:"
+                                        text: "Length:"
                                         color: "navy"
                                         font.pointSize: 12
                                     }
@@ -381,7 +382,7 @@ Item {
                                     TextEdit{
                                         readOnly: !inEditMode
                                         property string info
-                                        id: infoPanelLongi
+                                        id: infoPanelLength
                                         anchors.leftMargin: 10
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
@@ -443,6 +444,10 @@ Item {
                             contentItem: Image {
                                 source: "qrc:/target"
                                 fillMode: Image.PreserveAspectFit
+                            }
+                            onClicked: {
+                                //TODO
+//                                mapRequest(listView.currentIndex.getCoords())
                             }
                         }
                     }

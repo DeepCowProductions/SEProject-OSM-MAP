@@ -12,6 +12,7 @@ Item {
     property alias centerOnMeButton: centerOnMeButton
     property alias settingsPageButton: settingsPageButton
     property alias locationPageButton: locationPageButton
+    property alias helpPageButton: infoButton
     property alias path: polylineItem.path
     property alias polyline: polylineItem
     property alias map: map
@@ -439,6 +440,10 @@ Item {
                 fillMode: Image.PreserveAspectFit
             }
             radius: 9000
+            onClicked: {
+                //TODO
+//                locationPin.position = map.center
+            }
         }
         RoundHighlightButton{
             id: locatepinButton
@@ -457,6 +462,10 @@ Item {
                 fillMode: Image.PreserveAspectFit
             }
             radius: 9000
+            onClicked: {
+                //TODO
+//                updateLocationMarker(locationPin.position)
+            }
         }
         RoundHighlightButton{
             id: infoButton

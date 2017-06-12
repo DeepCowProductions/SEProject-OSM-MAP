@@ -462,6 +462,10 @@ Item {
                                 source: "qrc:/target"
                                 fillMode: Image.PreserveAspectFit
                             }
+                            onClicked: {
+                                //TODO
+//                                mapRequest(listView.currentIndex.latitude,listView.currentIndex.longitute)
+                            }
                         }
 
                     }
