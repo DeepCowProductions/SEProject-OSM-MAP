@@ -7,7 +7,7 @@
 #include <QJsonObject>
 #include <QtPositioning>
 #include "place.h"
-#include "road.h"
+#include "route.h"
 
 class UserData : public QObject
 {
@@ -18,11 +18,11 @@ public:
     QList<Place> places() const;
     void setPlaces(const QList<Place> &places);
 
-    QList<Road> roads() const;
-    void setRoads(const QList<Road> &roads);
+    QList<Route> roads() const;
+    void setRoads(const QList<Route> &roads);
 
     void addPlace(const Place &place);
-    void addRoad(const Road &road);
+    void addRoad(const Route &road);
 
 signals:
 
@@ -30,7 +30,7 @@ public slots:
 
 private:
     QList<Place> m_places;
-    QList<Road> m_roads;
+    QList<Route> m_roads;
 
 };
 

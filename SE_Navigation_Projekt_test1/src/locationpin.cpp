@@ -2,7 +2,12 @@
 
 LocationPin::LocationPin(QObject *parent) : QObject(parent)
 {
+    readUserData();
+}
 
+LocationPin::~LocationPin()
+{
+    writeUserData();
 }
 
 

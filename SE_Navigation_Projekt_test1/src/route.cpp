@@ -1,56 +1,56 @@
-#include "road.h"
+#include "route.h"
 
-Road::Road()
+Route::Route()
 {
 
 }
 
-QList<QGeoCoordinate> Road::coordinates() const
+QList<QGeoCoordinate> Route::coordinates() const
 {
     return m_coordinates;
 }
 
-void Road::setCoordinates(const QList<QGeoCoordinate> &coordinates)
+void Route::setCoordinates(const QList<QGeoCoordinate> &coordinates)
 {
     m_coordinates = coordinates;
 }
 
-void Road::addCoordinate(const QGeoCoordinate coord)
+void Route::addCoordinate(const QGeoCoordinate coord)
 {
     m_coordinates.append((coord));
 }
 
-void Road::clearCoordinateList()
+void Route::clearCoordinateList()
 {
     m_coordinates.clear();
 }
 
-void Road::removeCoordinate(QGeoCoordinate coord)
+void Route::removeCoordinate(QGeoCoordinate coord)
 {
     m_coordinates.removeOne(coord);
 }
 
-QString Road::name() const
+QString Route::name() const
 {
     return m_name;
 }
 
-void Road::setName(const QString &name)
+void Route::setName(const QString &name)
 {
     m_name = name;
 }
 
-QDate Road::savedAtDate() const
+QDate Route::savedAtDate() const
 {
     return m_savedAtDate;
 }
 
-void Road::setSavedAtDate(const QDate &savedAtDate)
+void Route::setSavedAtDate(const QDate &savedAtDate)
 {
     m_savedAtDate = savedAtDate;
 }
 
-void Road::readFromJason(QJsonObject &object)
+void Route::readFromJason(QJsonObject &object)
 {
     if (!object["name"].isUndefined())
         m_name = object["name"].toString();
@@ -81,7 +81,7 @@ void Road::readFromJason(QJsonObject &object)
     }
 }
 
-QJsonObject Road::writeToJason()
+QJsonObject Route::writeToJason()
 {
     QJsonObject object;
 

@@ -146,7 +146,7 @@ ApplicationWindow {
 
     Component {
         id: roadsPageComp
-        RoadsView {
+        RoutesView {
             id: roadsPage
             backButton.onClicked: {
                 mainStack.pop()
@@ -279,7 +279,7 @@ ApplicationWindow {
     PlacesModel {
         id: placesModel
     }
-    RoadsModel {
+    RoutesModel {
         id: roadsModel
     }
     LocationPin {

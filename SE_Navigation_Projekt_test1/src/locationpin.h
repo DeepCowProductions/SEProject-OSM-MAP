@@ -19,6 +19,7 @@ class LocationPin : public QObject, public QGeoLocation
     Q_OBJECT
 public:
     explicit LocationPin(QObject *parent = 0);
+    ~LocationPin();
 
     void readFromJason(QJsonObject &object);
     QJsonObject writeToJason();

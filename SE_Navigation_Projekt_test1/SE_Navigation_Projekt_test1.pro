@@ -8,16 +8,16 @@ SOURCES += main.cpp \
     src/settings.cpp \
     src/userdata.cpp \
     src/place.cpp \
-    src/road.cpp \
     src/placesmodel.cpp \
-    src/roadsmodel.cpp \
     src/OsmTilesOffline/tilesdownloader.cpp \
     src/OsmTilesOffline/tilereply.cpp \
     src/OsmTilesOffline/tile.cpp \
     src/OsmTilesOffline/tileofflinemanager.cpp \
     src/locationpin.cpp \
     src/teteteettetet.cpp \
-    src/OsmTilesOffline/downloadthread.cpp
+    src/OsmTilesOffline/downloadthread.cpp \
+    src/routesmodel.cpp \
+    src/route.cpp
 
 RESOURCES += qml.qrc \
     res.qrc \
@@ -35,9 +35,7 @@ HEADERS += \
     src/settings.h \
     src/userdata.h \
     src/place.h \
-    src/road.h \
     src/placesmodel.h \
-    src/roadsmodel.h \
     src/OsmTilesOffline/tilesdownloader.h \
     src/OsmTilesOffline/tilereply.h \
     src/OsmTilesOffline/tile.h \
@@ -45,7 +43,9 @@ HEADERS += \
     src/Singleton/networkaccesmanagersingleton.hpp \
     src/locationpin.h \
     src/teteteettetet.h \
-    src/OsmTilesOffline/downloadthread.h
+    src/OsmTilesOffline/downloadthread.h \
+    src/routesmodel.h \
+    src/route.h
 
 DISTFILES += \
     dump
