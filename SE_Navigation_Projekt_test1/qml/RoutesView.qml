@@ -350,7 +350,7 @@ Item {
                                     width: parent.width *  0.3
                                     height: parent.height
                                     TextEdit{
-                                        readOnly: !inEditMode
+                                        readOnly: true
                                         property string info
                                         id: infoPanelNumber
                                         anchors.leftMargin: 10
@@ -371,7 +371,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignLeft
-                                        text: "Length:"
+                                        text: "Km:"
                                         color: "navy"
                                         font.pointSize: 12
                                     }
@@ -380,7 +380,7 @@ Item {
                                     width: parent.width *  0.3
                                     height: parent.height
                                     TextEdit{
-                                        readOnly: !inEditMode
+                                        readOnly: true
                                         property string info
                                         id: infoPanelLength
                                         anchors.leftMargin: 10
