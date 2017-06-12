@@ -9,9 +9,15 @@ import fhswf.se.nav.models 1.0
 Item {
     id: locationPage
     property alias backButton: backButton
-    property alias viewPlacesButtonAlias: viewPlacesButton
-    property alias viewRoadsButtonAlias: viewRoadsButton
+    property alias viewPlacesButton: viewPlacesButton
+    property alias saveThisRouteButton: saveThisRouteButton
+    property alias viewRoadsButton: viewRoadsButton
+    property alias saveThisLocationButton: saveThisLocationButton
     //    signal mapRequest(double latitude, double longitude)
+
+    property alias clearMapItemsButton: clearMapItem
+    property alias showPinButton: showPin
+
 
     Column {
         id: locationsMainColumn
@@ -425,6 +431,187 @@ Item {
                         }
                     }
 
+                    Rectangle {
+                        width: parent.width
+                        height: 50
+                        //            border.color: "lightgray"
+                        //            border.width: 1
+                        Column {
+                            anchors.fill: parent
+                            Row {
+                                padding: 1
+                                spacing: 4
+                                width: parent.width
+                                height: parent.height * 0.5
+                                Rectangle{
+                                    width: parent.width * 0.7
+                                    height: parent.height
+                                    Text{
+                                        anchors.leftMargin: 10
+                                        anchors.fill: parent
+                                        verticalAlignment: Text.AlignVCenter
+                                        horizontalAlignment: Text.AlignVCenter
+                                        text: "Currently pinned Location: "
+                                        color: "navy"
+                                        font.pointSize: 12
+                                    }
+                                }
+                                Rectangle{
+                                    width: parent.width * 0.3
+                                    height: parent.height
+                                    Text{
+                                        anchors.leftMargin: 10
+                                        anchors.fill: parent
+                                        verticalAlignment: Text.AlignVCenter
+                                        horizontalAlignment: Text.AlignVCenter
+                                        text: locationPin.position
+                                        color: "black"
+                                        font.pointSize: 12
+                                    }
+                                }
+                            }
+
+                            Row{
+                                width: parent.width
+                                height: parent.height * 0.5
+                                padding: 1
+                                spacing: 4
+                                Rectangle{
+                                    width: parent.width *  0.3
+                                    height: parent.height
+                                    Text{
+                                        anchors.leftMargin: 10
+                                        anchors.fill: parent
+                                        verticalAlignment: Text.AlignVCenter
+                                        horizontalAlignment: Text.AlignLeft
+                                        text: "Latitude:"
+                                        color: "navy"
+                                        font.pointSize: 7
+                                    }
+                                }
+
+                                Rectangle{
+                                    width: parent.width *  0.2
+                                    height: parent.height
+                                    Text{
+                                        anchors.leftMargin: 10
+                                        anchors.fill: parent
+                                        verticalAlignment: Text.AlignVCenter
+                                        horizontalAlignment: Text.AlignLeft
+                                        text: locationPin.latitude
+                                        color: "black"
+                                        font.pointSize: 7
+                                    }
+                                }
+
+                                Rectangle{
+                                    width: parent.width *  0.3
+                                    height: parent.height
+                                    Text{
+                                        anchors.leftMargin: 10
+                                        anchors.fill: parent
+                                        verticalAlignment: Text.AlignVCenter
+                                        horizontalAlignment: Text.AlignLeft
+                                        text: "Longitude:"
+                                        color: "navy"
+                                        font.pointSize: 7
+                                    }
+                                }
+                                Rectangle{
+                                    width: parent.width *  0.2
+                                    height: parent.height
+                                    Text{
+                                        anchors.leftMargin: 10
+                                        anchors.fill: parent
+                                        verticalAlignment: Text.AlignVCenter
+                                        horizontalAlignment: Text.AlignLeft
+                                        text: locationPin.longitude
+                                        color: "black"
+                                        font.pointSize: 7
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+
+                    Rectangle {
+                        width: parent.width
+                        height: 50
+                        //            border.color: "lightgray"
+                        //            border.width: 1
+                        Row {
+                            anchors.fill: parent
+                            padding: 1
+                            spacing: 4
+                            HighlightButton {
+                                id: showPin
+                                width: parent.width
+                                height: parent.height
+                                text: "Show On Map"
+                                contentItem : Item {
+                                    width: parent.width
+                                    height: parent.height
+                                    Image {
+                                        anchors.top: parent.top
+                                        anchors.left: parent.left
+                                        anchors.bottom: parent.bottom
+                                        source: "qrc:/search"
+                                        width: parent.width * 0.2
+                                        fillMode: Image.PreserveAspectFit
+                                    }
+                                    Text {
+                                        anchors.right: parent.right
+                                        anchors.bottom: parent.bottom
+                                        anchors.top: parent.top
+                                        width: parent.width * 0.8
+                                        text: "Show On Map"
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        width: parent.width
+                        height: 50
+                        //            border.color: "lightgray"
+                        //            border.width: 1
+                        Row {
+                            anchors.fill: parent
+                            padding: 1
+                            spacing: 4
+                            HighlightButton {
+                                id: clearMapItem
+                                width: parent.width
+                                height: parent.height
+                                text: "Clear Map Items"
+                                contentItem : Item {
+                                    width: parent.width
+                                    height: parent.height
+                                    Image {
+                                        anchors.top: parent.top
+                                        anchors.left: parent.left
+                                        anchors.bottom: parent.bottom
+                                        source: "qrc:/x"
+                                        width: parent.width * 0.2
+                                        fillMode: Image.PreserveAspectFit
+                                    }
+                                    Text {
+                                        anchors.right: parent.right
+                                        anchors.bottom: parent.bottom
+                                        anchors.top: parent.top
+                                        width: parent.width * 0.8
+                                        text: "Clear Map Items"
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                    }
+                                }
+                            }
+                        }
+                    }
 
 
                 }

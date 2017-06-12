@@ -113,6 +113,7 @@ Item {
             console.log("Position source loaded")
         }
         onPositionChanged: {
+            console.log("PositionChanged: recordroute is " + recordRoute + ", followPerson is " + followPerson)
             if (Qt.platform.os == "android") {
                 var coord = position.coordinate;
                 console.log("Coordinate from positionSource:", coord.longitude, coord.latitude,coord.altitude);
@@ -134,10 +135,8 @@ Item {
         id: timer
         interval: 1000
         repeat: true
-        Component.onCompleted: {
-            console.log("Timer loaded")
-        }
         onTriggered: {
+            console.log("timer Timeout: recordroute is " + recordRoute + ", followPerson is " + followPerson)
             if (recordRoute) {
                 polyline.addCoordinate(map.center)
                 updatePath()
@@ -164,9 +163,6 @@ Item {
     Image {
         id:image
         source: "../res/marker.png"
-        Component.onCompleted: {
-            console.log("Image loaded")
-        }
     }
     Image {
         id:image2
@@ -247,13 +243,6 @@ Item {
                 text: "settingsPageButton"
                 width: (parent.width-16) * 0.2
                 height: parent.height
-                Component.onCompleted: {
-                    console.log("Settingsbutton loaded")
-                }
-
-                onClicked: {
-                    console.log ("default hanlder for settingsPageButton ")
-                }
                 contentItem: Image {
                     source: "qrc:/settings"
                     fillMode: Image.PreserveAspectFit
@@ -338,11 +327,8 @@ Item {
                 text: "locationPageButton"
                 width: (parent.width-16) * 0.2
                 height: parent.height
-                onClicked: {
-                    console.log ("default hanlder for locationPageButton ")
-                }
                 contentItem: Image {
-                    source: "qrc:/directions"
+                    source: "qrc:/explore"
                     fillMode: Image.PreserveAspectFit
                 }
             }

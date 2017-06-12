@@ -112,7 +112,10 @@ ApplicationWindow {
                 mainStack.pop(mapInstance)
                 mapInstance.forceActiveFocus()
             }
-            viewPlacesButtonAlias.onClicked: {
+            //            savePlaceButton.onClicked: {
+            //                saveMsgWithTextDialog.createObject(mapInstance)
+            //            }
+            viewPlacesButton.onClicked: {
                 if (!placesInstance) {
                     console.log("creating new instance of item")
                     placesInstance = placesPageComp.createObject(mainStack);
@@ -126,7 +129,7 @@ ApplicationWindow {
                 placesInstance.forceActiveFocus()
 
             }
-            viewRoadsButtonAlias.onClicked: {
+            viewRoadsButton.onClicked: {
                 if (!roadsInstance) {
                     console.log("creating new instance of item")
                     roadsInstance = roadsPageComp.createObject(mainStack);
@@ -152,14 +155,8 @@ ApplicationWindow {
                 mainStack.pop()
                 locationsInstance.forceActiveFocus()
             }
-            testButton1.onClicked: {
-                roadsModel.clearList()
-            }
-            testButton2.onClicked: {
-                roadsModel.writeUserData()
-            }
-            testButton3.onClicked: {
-                roadsModel.readUserData()
+            displayOnMapButton.onClicked: {
+
             }
             onMapRequest: {
                 console.log("coords:" + array)
@@ -177,22 +174,14 @@ ApplicationWindow {
         id: placesPageComp
         PlacesView {
             id: placesPage
-//            backButton.onClicked: {
-//                mainStack.pop()
-//                locationsInstance.forceActiveFocus()
-//            }
-//            testButton1.onClicked: {
-//                placesModel.clearList()
-//            }
-//            testButton2.onClicked: {
-//                placesModel.writeUserData()
-//            }
-//            testButton3.onClicked: {
-//                placesModel.readUserData()
-//            }
-//            savePlaceButton.onClicked: {
-//                saveMsgWithTextDialog.createObject(mapInstance)
-//            }
+
+            backButton.onClicked: {
+                mainStack.pop()
+                locationsInstance.forceActiveFocus()
+            }
+            displayOnMapButton.onClicked: {
+
+            }
 
             onMapRequest: {
                 console.log(longitude + ", " + latitude)

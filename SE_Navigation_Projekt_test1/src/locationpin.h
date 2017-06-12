@@ -24,17 +24,16 @@ public:
     void readFromJason(QJsonObject &object);
     QJsonObject writeToJason();
 
-    QString name() const;
-    QDate savedAtDate() const;
-
-    void setSavedAtDate(QDate savedAtDate);
-
 signals:
 
 public slots:
     Q_INVOKABLE bool readUserData();
     Q_INVOKABLE bool writeUserData();
 
+    Q_INVOKABLE QString name() const;
+    Q_INVOKABLE QDate savedAtDate() const;
+
+    Q_INVOKABLE void setSavedAtDate(QDate savedAtDate);
 private:
     QString m_name = "Pinned Location";
     QDate m_savedAtDate;

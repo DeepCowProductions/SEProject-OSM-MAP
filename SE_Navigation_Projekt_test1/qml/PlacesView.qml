@@ -52,6 +52,7 @@ Item {
                         verticalAlignment: Text.AlignVCenter
                         text: " " + name
                         color: "black"
+                        horizontalAlignment: Text.AlignLeft
                     }
                 }
 
@@ -79,7 +80,7 @@ Item {
                     infoPanelLati.info = latitude + "°"
                     infoPanelLongi.info = longitude +"°"
                     infoPanelDate.info = savedAtDate
-//                    infoPanelPos.info = ""
+                    //                    infoPanelPos.info = ""
                 }
                 onDoubleClicked: {
                     mapRequest(longitude, latitude)
@@ -181,20 +182,20 @@ Item {
                             snapMode: ListView.SnapToItem
                             clip: true
 
-//                            highlight: highLightComp
+                            //                            highlight: highLightComp
                             highlightFollowsCurrentItem: true
 
                             delegate: itemDelegate
-                            highlight: Rectangle {
-                                       color: 'grey'
-                                       Text {
-                                           anchors.centerIn: parent
-                                           text: 'Hello ' + model.get(list.currentIndex).name
-                                           color: 'white'
-                                       }
-                                   }
-                                   focus: true
-                                   onCurrentItemChanged: console.log(model.get(pLacesListView.currentIndex).name + ' selected')
+//                            highlight: Rectangle {
+//                                color: 'grey'
+//                                Text {
+//                                    anchors.centerIn: parent
+//                                    text: 'Hello ' + model.get(list.currentIndex).name
+//                                    color: 'white'
+//                                }
+//                            }
+                            focus: true
+                            onCurrentItemChanged: console.log(model.get(pLacesListView.currentIndex).name + ' selected')
                         }
 
                         RoundHighlightButton{
@@ -309,40 +310,40 @@ Item {
                         height: 50
                         Column {
                             anchors.fill: parent
-//                            Row {
-//                                width: parent.width
-//                                height: parent.height * 0.5
-//                                padding: 1
-//                                spacing: 4
-//                                Rectangle{
-//                                    width: parent.width * 0.4
-//                                    height: parent.height
-//                                    Text{
-//                                        anchors.leftMargin: 10
-//                                        anchors.fill: parent
-//                                        verticalAlignment: Text.AlignVCenter
-//                                        horizontalAlignment: Text.AlignVCenter
-//                                        text: "Position: "
-//                                        color: "navy"
-//                                        font.pointSize: 7
-//                                    }
-//                                }
-//                                Rectangle{
-//                                    width: parent.width * 0.6
-//                                    height: parent.height
-//                                    Text{
-//                                        property string info
-//                                        id: infoPanelPos
-//                                        anchors.leftMargin: 10
-//                                        anchors.fill: parent
-//                                        verticalAlignment: Text.AlignVCenter
-//                                        horizontalAlignment: Text.AlignVCenter
-//                                        text: info + " "
-//                                        color: "black"
-//                                        font.pointSize: 7
-//                                    }
-//                                }
-//                            }
+                            //                            Row {
+                            //                                width: parent.width
+                            //                                height: parent.height * 0.5
+                            //                                padding: 1
+                            //                                spacing: 4
+                            //                                Rectangle{
+                            //                                    width: parent.width * 0.4
+                            //                                    height: parent.height
+                            //                                    Text{
+                            //                                        anchors.leftMargin: 10
+                            //                                        anchors.fill: parent
+                            //                                        verticalAlignment: Text.AlignVCenter
+                            //                                        horizontalAlignment: Text.AlignVCenter
+                            //                                        text: "Position: "
+                            //                                        color: "navy"
+                            //                                        font.pointSize: 7
+                            //                                    }
+                            //                                }
+                            //                                Rectangle{
+                            //                                    width: parent.width * 0.6
+                            //                                    height: parent.height
+                            //                                    Text{
+                            //                                        property string info
+                            //                                        id: infoPanelPos
+                            //                                        anchors.leftMargin: 10
+                            //                                        anchors.fill: parent
+                            //                                        verticalAlignment: Text.AlignVCenter
+                            //                                        horizontalAlignment: Text.AlignVCenter
+                            //                                        text: info + " "
+                            //                                        color: "black"
+                            //                                        font.pointSize: 7
+                            //                                    }
+                            //                                }
+                            //                            }
                             Row{
                                 width: parent.width
                                 height: parent.height

@@ -5,9 +5,11 @@ MouseArea {
     property color backgroundColor: "white"
     property color hoverColor: "lightblue"
     property bool activeCondition: false
-    property color itemColor :  mouseInArea ? hoverColor : bColor
+    property color itemColor :  pressed ? pressedColor : aColor
     property var bColor:  activeCondition ? activeColor : backgroundColor
     property bool mouseInArea : false
+    property color pressedColor: "#A2A2EE"
+    property color aColor:  mouseInArea ? hoverColor : bColor
 
     id: mArea
     hoverEnabled: true

@@ -31,7 +31,7 @@ Item {
             height: 50
             spacing: 4
             Rectangle{
-                width: parent.width * 0.5
+                width: parent.width * 0.6
                 height: parent.height
                 Text{
                     anchors.fill: parent
@@ -47,7 +47,7 @@ Item {
             HighlightButton {
                 id: backButton
                 text: "Back"
-                width: parent.width * 0.5
+                width: parent.width * 0.4
                 height: parent.height
                 contentItem: Image {
                     source: "qrc:/back"

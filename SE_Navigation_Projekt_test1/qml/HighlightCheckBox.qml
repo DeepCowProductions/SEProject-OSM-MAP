@@ -7,10 +7,13 @@ CheckBox {
 
     property color backgroundColor: "white"
     property color hoverColor: "lightblue"
+    property color pressedColor: "#A2A2EE"
+    property color aColor:  hovered ? hoverColor : backgroundColor
 
     id:checkBox
 
     background: Rectangle {
-        color: checkBox.hovered ? hoverColor : backgroundColor
+        color: pressed ? pressedColor : aColor
     }
+
 }
