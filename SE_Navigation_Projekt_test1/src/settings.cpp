@@ -26,10 +26,6 @@ QString Settings::home() const
     return m_home;
 }
 
-bool Settings::useOfflineMap() const
-{
-    return m_useOfflineMap;
-}
 
 int Settings::maxNormalMapChacheSize() const
 {
@@ -44,11 +40,6 @@ int Settings::currentOfflineMapSize() const
 int Settings::maxOfflineMapSize() const
 {
     return m_maxOfflineMapSize;
-}
-
-bool Settings::useNormalMapCache() const
-{
-    return m_useNormalMapCache;
 }
 
 QString Settings::offlineDirectory() const
@@ -82,8 +73,6 @@ void Settings::readSettings()
     qDebug() << "Settings::readSettings: reading settings from file " << m_settings->fileName();
     // get properties from settings
     setHome(m_settings->value("home").toString());
-    setUseOfflineMap(m_settings->value("useOfflineMap").toBool());
-    setUseNormalMapCache(m_settings->value("useNormalMapCache").toBool());
     setMaxNormalMapChacheSize(m_settings->value("maxNormalMapChacheSize").toInt());
     setMaxOfflineMapSize(m_settings->value("maxOfflineMapSize").toInt());
     setCurrentOfflineMapSize(m_settings->value("currentOfflineMapSize").toInt());
@@ -98,8 +87,6 @@ void Settings::writeSettings()
     qDebug() << "Settings::writeSettings: writing settings to file " << m_settings->fileName();
     // write properties to settings
     m_settings->setValue("home",m_home);
-    m_settings->setValue("useOfflineMap",m_useOfflineMap);
-    m_settings->setValue("useNormalMapCache",m_useNormalMapCache);
     m_settings->setValue("maxNormalMapChacheSize",m_maxNormalMapChacheSize);
     m_settings->setValue("maxOfflineMapSize",m_maxOfflineMapSize);
     m_settings->setValue("currentOfflineMapSize",m_currentOfflineMapSize);
@@ -116,16 +103,6 @@ void Settings::setHome(QString home)
 
     m_home = home;
     emit homeChanged(home);
-}
-
-void Settings::setUseOfflineMap(bool useOfflineMap)
-{
-    if (m_useOfflineMap == useOfflineMap)
-        return;
-
-    m_useOfflineMap = useOfflineMap;
-    emit useOfflineMapChanged(useOfflineMap);
-    qDebug() << "useOfflineMap: " << m_useOfflineMap;
 }
 
 void Settings::setMaxNormalMapChacheSize(int maxNormalMapChacheSize)
@@ -153,16 +130,6 @@ void Settings::setMaxOfflineMapSize(int maxOfflineMapSize)
 
     m_maxOfflineMapSize = maxOfflineMapSize;
     emit maxOfflineMapSizeChanged(maxOfflineMapSize);
-}
-
-void Settings::setUseNormalMapCache(bool useNormalMapCache)
-{
-    if (m_useNormalMapCache == useNormalMapCache)
-        return;
-
-    m_useNormalMapCache = useNormalMapCache;
-    emit useNormalMapCacheChanged(useNormalMapCache);
-    qDebug() << "useNormalMapCache: " << m_useNormalMapCache;
 }
 
 void Settings::setOfflineDirectory(QString offlineDirectory)
