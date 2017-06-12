@@ -1,4 +1,5 @@
 #include "settings.h"
+#include <QStandardPaths>
 
 Settings::Settings()
 {
@@ -9,6 +10,8 @@ Settings::Settings()
 
     // read settings
     readSettings();
+    if(m_offlineDirectory.isEmpty())
+        setOfflineDirectory(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
 
 
     qDebug() << "settings saved at: " << m_settings->fileName() << "  with organisation name: " << m_settings->organizationName();

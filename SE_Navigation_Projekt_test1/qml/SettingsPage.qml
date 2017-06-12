@@ -10,8 +10,9 @@ Item {
     property alias backButton: backButton
     id: topParent
 
-    signal deleteDirectory();
+    signal deleteDirectory(string directory);
     signal configurationChanged ()
+
     onConfigurationChanged:  {
         console.log("saving settings from qml")
         // instert new options here:
@@ -94,6 +95,29 @@ Item {
                     }
                     HeaderSpacer{
                         height: 1
+                    }
+                    Row {
+                        width: parent.width
+                        height: 50
+                        Rectangle{
+                            width: parent.width * 0.7
+                            height: parent.height
+                            Text{
+                                anchors.leftMargin: 10
+                                anchors.fill: parent
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                text: qsTr("Path to OfflineDirectory")
+                                color: "navy"
+                                font.pointSize: 12
+                            }
+                        }
+                        TextField {
+                            id: pathToOfflineDirecory
+                            width: parent.width * 0.25
+                            text: settings.offlineDirectory
+                            //                            enabled: false
+                        }
                     }
                     Row {
                         width: parent.width
@@ -210,7 +234,7 @@ Item {
                                 width: parent.width
                                 anchors.fill: parent
                                 text: qsTr("Clear offline directory")
-                                onClicked: deleteDirectory()
+                                onClicked: deleteDirectory("offline")
                             }
                         }
                     }
@@ -280,7 +304,11 @@ Item {
                                 width: parent.width
                                 anchors.fill: parent
                                 text: qsTr("Clear Cache directory")
-                                onClicked: deleteDirectory()
+                                onClicked: {
+                                    deleteDirectory("cache")
+                                    deleteDirectory("genericcache")
+                                }
+
                             }
                         }
                     }

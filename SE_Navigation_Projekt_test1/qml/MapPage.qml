@@ -103,7 +103,7 @@ Item {
         clearPath()
         updatePath(coords)
     }
-    signal saveTiles(variant center,string fileProvider, int zoomlevel);
+    signal saveTiles(variant center,string fileProvider, int zoomlevel, int depth);
 
     PositionSource {
         id: positionSource
@@ -226,7 +226,7 @@ Item {
 
         PluginParameter {
             name: "osm.mapping.offline.directory"
-            value: "/home/maik/Schreibtisch/OSM-Data"
+            value: settings.offlineDirectory
         }
         Component.onCompleted: {
             console.log("OsmPlugin loaded")
@@ -404,7 +404,7 @@ Item {
                 onAccepted: {
                     visible = false
                     map.forceActiveFocus()
-//                    saveTiles(map.center, "korona.geog.uni-heidelberg.de", map.zoomLevel,( zoomleveldepth-minZoom))
+                    saveTiles(map.center, "korona.geog.uni-heidelberg.de", map.zoomLevel,( zoomleveldepth-minZoom))
                     console.log(map.center+", " + "korona.geog.uni-heidelberg.de"+", " + map.zoomLevel +", "+ ( zoomleveldepth-minZoom))
                 }
                 onRejected: {

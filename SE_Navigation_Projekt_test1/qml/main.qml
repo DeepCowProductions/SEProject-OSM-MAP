@@ -22,6 +22,7 @@ ApplicationWindow {
     property alias settings : settingsObject
 
     signal enableButton();
+    signal clearDirectory(string directory);
 
     onEnableButton: {
         console.log("Tiles saved in Offline directory!");
@@ -211,7 +212,7 @@ ApplicationWindow {
             onSaveTiles: {
                  console.log("before, efore" + mapInstance.saveButtonEnabled)
                 mapInstance.saveButtonEnabled = false;
-                appWindow.saveTiles(center, fileProvider, zoomlevel, 2, appWindow.width, appWindow.height);
+                appWindow.saveTiles(center, fileProvider, zoomlevel, depth, appWindow.width, appWindow.height);
                 console.log("before" + mapInstance.saveButtonEnabled)
 
                 console.log("after<" + mapInstance.saveButtonEnabled)
@@ -253,6 +254,11 @@ ApplicationWindow {
                 mainStack.pop(mapInstance)
                 mapInstance.forceActiveFocus()
             }
+            onDeleteDirectory: {
+                console.log("Clear directory " + directory)
+                clearDirectory(directory)
+            }
+
             Component.onCompleted: console.log("settingsPage complete")
         }
     }

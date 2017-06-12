@@ -15,8 +15,9 @@ void DownloadThread::run()
     int zoomLevel = m_zoomLevel;
     int depth = m_depth;
     QEventLoop loop;
-    downloader.downloadTiles(center, provider, zoomLevel, depth, windowSize);
+    connect(&downloader, SIGNAL(downloadFinished()), this, SIGNAL(downloadFinished()));
     connect(&downloader, SIGNAL(downloadFinished()), &loop, SLOT(quit()));
+    downloader.downloadTiles(center, provider, zoomLevel, depth, windowSize);
     loop.exec();
 
 }

@@ -41,7 +41,7 @@ void TilesDownloader::downloadTiles(QVariant center, QString tileProvider, int z
     Tile* tile;
 
     //Äußere Schleife für zoomlevel
-    for(int z = 0; z < depth; z++){
+    for(int z = 0; z < depth+1; z++){
         //Schleife die abhängig von der Bildschirmgröße die benötigte Anzahl an Tiles für das aktuelle zoomlevel berechnet
         int amountY = (m_screenSize.y() / 256 + 1) * pow(2, z);
         int amountX = (m_screenSize.x() / 256 + 1) * pow(2, z);
@@ -68,10 +68,9 @@ void TilesDownloader::downloadTiles(QVariant center, QString tileProvider, int z
 void TilesDownloader::sendingRequests()
 {
 
-    QNetworkAccessManager * nm = NetworkAccessManagerSingleton::getInstance();
+    QNetworkAccessManager * nm = TilesOfflineManagerSingleton::getInstance();
 
     TileReply * tileReply = new TileReply(nm->get(*m_requests.at(m_counter)), m_downloadTiles.at(m_counter), this);
-    //         qDebug() << "Tile: " << tile->x() << " " << tile->y();
     connect(nm, SIGNAL(finished(QNetworkReply*)), tileReply, SLOT(networkReplyFinished(QNetworkReply*)));
     connect(tileReply, SIGNAL(saveTile(Tile*)), this, SLOT(saveTile(Tile*)));
 }
@@ -95,6 +94,7 @@ void TilesDownloader::saveTile(Tile *tile)
     qDebug() << "Counter" << m_counter;
     delete static_cast<TileReply *>(sender());
     if(m_counter < m_requests.size()){
+//        emit nextTileDownloadStarted(int counter);
         sendingRequests();
     }else{
         emit downloadFinished();

@@ -40,22 +40,36 @@ bool TileOfflineManager::saveToFile(Tile *tile)
     return ret;
 }
 
-bool TileOfflineManager::deleteAll()
+bool TileOfflineManager::deleteAll(QString directory)
 {
     QDir saveDirectory;
-    if(m_settings.offlineDirectory().isEmpty())
-        saveDirectory = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-    else
-        saveDirectory = QDir(m_settings.offlineDirectory());
-    int entries = saveDirectory.AllEntries;
-    int counter = 0;
-    foreach (QString file, saveDirectory.entryList()) {
-        if(QFile::remove(saveDirectory.filePath(file))){
-            counter++;
+
+    if(directory == "offline"){
+        if(m_settings.offlineDirectory().isEmpty()){
+            saveDirectory = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+        }
+        else{
+            saveDirectory = QDir(m_settings.offlineDirectory());
         }
     }
-    qDebug() << QString::number(counter) + "/" +  QString::number(entries) <<  " were deleted!";
-    return counter == entries;
+    else if(directory == "cache")
+        saveDirectory = QDir(QStandardPaths::writableLocation(QStandardPaths::CacheLocation));
+    else if(directory == "genericcache")
+        saveDirectory = QDir(QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation) + "/QtLocation/5.8/tiles/osm/");
+    else
+        return false;
+QStringList filters;
+filters << "*.jpg" << "*.png";
+int entries = saveDirectory.entryList(filters).size();
+int counter = 0;
+
+foreach (QString file, saveDirectory.entryList(filters)) {
+    if(QFile::remove(saveDirectory.filePath(file))){
+        counter++;
+    }
+}
+qDebug() << QString::number(counter) + "/" +  QString::number(entries) <<  " were deleted!";
+return counter == entries;
 }
 
 bool TileOfflineManager::deleteTile(Tile * tile)
