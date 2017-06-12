@@ -9,6 +9,8 @@
 #include <QScreen>
 #include "src/OsmTilesOffline/tilesdownloader.h"
 #include "src/OsmTilesOffline/downloadthread.h"
+#include <stdexcept>
+#include <QFile>
 
 int main(int argc, char *argv[])
 {
@@ -41,11 +43,20 @@ int main(int argc, char *argv[])
     QObject::connect(thread, SIGNAL(downloadFinished()), item, SIGNAL(enableButton()));
     //    TilesDownloader * downloader = new TilesDownloader(item, screenSize);
 
-            //    QObject::connect(downloader, SIGNAL(downloadFinished()), item, SIGNAL(enableButton()));
+    //    QObject::connect(downloader, SIGNAL(downloadFinished()), item, SIGNAL(enableButton()));
 
-            //    QObject::connect(item, SIGNAL(saveTiles(QVariant,QString, int)), downloader, SLOT(downloadTiles(QVariant,QString, int)));
-            QMetaObject::invokeMethod(item, "initApp"
-                                      //                             , Q_ARG(QVariant, QVariant::fromValue(1))
-                                      );
-    return app.exec();
+    //    QObject::connect(item, SIGNAL(saveTiles(QVariant,QString, int)), downloader, SLOT(downloadTiles(QVariant,QString, int)));
+    QMetaObject::invokeMethod(item, "initApp"
+                              //                             , Q_ARG(QVariant, QVariant::fromValue(1))
+                              );
+
+    QFile f;
+    f.setFileName(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/errorlog.txt");
+    f.open(QIODevice::WriteOnly);
+//    try {
+        return app.exec();
+//    } catch (const std::exception& ex) {
+//        f.write( ex.what());
+//    }
+
 }

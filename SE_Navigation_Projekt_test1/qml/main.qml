@@ -106,7 +106,7 @@ ApplicationWindow {
 
     Component {
         id: locationsPageComp
-        LocationsPage {
+        LocationsPage{
             id: locationsPage
             backButton.onClicked: {
                 mainStack.pop(mapInstance)

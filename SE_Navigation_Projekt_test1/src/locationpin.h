@@ -28,12 +28,11 @@ public:
 
     void setSavedAtDate(QDate savedAtDate);
 
-    Q_INVOKABLE bool readUserData();
-    Q_INVOKABLE bool writeUserData();
-
 signals:
 
 public slots:
+    Q_INVOKABLE bool readUserData();
+    Q_INVOKABLE bool writeUserData();
 
 private:
     QString m_name = "Pinned Location";

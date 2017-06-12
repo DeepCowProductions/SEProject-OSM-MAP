@@ -1,7 +1,6 @@
 #ifndef PLACE_H
 #define PLACE_H
 
-
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>

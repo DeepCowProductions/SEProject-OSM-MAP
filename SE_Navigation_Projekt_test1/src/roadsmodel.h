@@ -22,7 +22,7 @@ class RoadsModel : public QAbstractListModel
 public:
     explicit RoadsModel(QObject *parent = 0);
 
-    enum PlaceRoles {
+    enum RouteRoles {
         NameRole = Qt::UserRole + 1,
 //        CoordinatesRole,
         SavedAtDateRole,
