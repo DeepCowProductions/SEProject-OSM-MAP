@@ -7,9 +7,6 @@ import fhswf.se.nav.settings 1.0
 import fhswf.se.nav.models 1.0
 
 ApplicationWindow {
-    //    property alias mapAlias: map
-    //    property alias loactionsAlias: locations
-    //    property alias settingsAlias: settings
     property alias mainStack: mainStack
 
     property variant mapInstance
