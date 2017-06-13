@@ -21,7 +21,6 @@ void DownloadThread::run()
     m_mutex.unlock();
     downloader.downloadTiles(center, provider, zoomLevel, depth, windowSize);
     loop.exec();
-
 }
 
 void DownloadThread::startDownload(QVariant center, QString provider, int zoomLevel, int depth, int width, int height)

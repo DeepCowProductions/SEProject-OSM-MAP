@@ -19,7 +19,6 @@ Item {
     onConfigurationChanged:  {
         console.log("saving settings from qml")
         // instert new options here:
-//        settings.offlineDirectory = offlineDirectory.text
         settings.maxOfflineMapSize = sizeOfOfflineDirectory.text * 1000000
         settings.save()
     }

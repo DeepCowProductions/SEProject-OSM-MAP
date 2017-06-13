@@ -263,6 +263,8 @@ Item {
 //            value: StandardPaths.writableLocation(StandardPaths.standardLocations(1))
 //        }
         Component.onCompleted: {
+            console.log(settings.offlineDirectory)
+            console.log()
             console.log("OsmPlugin loaded")
             //             console.log(osmPlugin.OfflineMappingFeature.)
         }
