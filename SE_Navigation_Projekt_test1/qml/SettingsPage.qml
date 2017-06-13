@@ -4,10 +4,13 @@ import QtQuick.Layouts 1.0
 import QtPositioning 5.6
 import QtLocation 5.6
 import fhswf.se.nav.settings 1.0
+import Qt.labs.folderlistmodel 2.1
 
 
 Item {
     property alias backButton: backButton
+    property var offlineSize: getSizeOffline()
+//    property var cacheSize: getSizeCache()
     id: topParent
 
     signal deleteDirectory(string directory);
@@ -19,6 +22,32 @@ Item {
         settings.maxOfflineMapSize = sizeOfOfflineDirectory.text * 1000000
         settings.save()
     }
+
+    FolderListModel {
+        id: folderOffline
+        folder: "file://"+mapInstance.plugin.parameters[0].value
+    }
+//    FolderListModel {
+//        id: folderCache
+////        folder: "file://"+mapInstance.plugin.parameters[1].value
+//    }
+
+    function getSizeOffline() {
+        console.log("call offline size calc")
+        var c = 0
+        for (var i = 0; i <folderOffline.count; i++  ){
+            c = c + folderOffline.get (i ,"fileSize")
+        }
+        return  Math.round(((c / 1024) /1024) * 100) / 100
+    }
+//    function getSizeCache() {
+//        console.log("call cache size calc")
+//        var c = 0
+//        for (var i = 0; i <folderCache.count; i++  ){
+//            c = c + folderCache.get (i ,"fileSize")
+//        }
+//        return  Math.round(((c / 1024) /1024) * 100) / 100
+//    }
 
     Column{
         id:mainColumn
@@ -164,7 +193,8 @@ Item {
                         TextField {
                             id: currentlyUsedSize
                             width: parent.width * 0.25
-                            text: Math.round(((settings.usedOfflineDirectorySize / 1024) /1024) * 100) / 100
+//                            text: Math.round(((settings.usedOfflineDirectorySize / 1024) /1024) * 100) / 100
+                            text: getSizeOffline()
                             placeholderText: ""
                         }
                     }

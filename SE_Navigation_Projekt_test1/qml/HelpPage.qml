@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.0
+import Qt.labs.folderlistmodel 2.1
 
 Item {
     property alias backButton: backButton
@@ -72,7 +73,7 @@ Item {
                                 anchors.fill: parent
                                 verticalAlignment: Text.AlignVCenter
                                 horizontalAlignment: Text.AlignLeft
-                                text: qsTr("test Entry")
+                                text: qsTr("Plugin Info")
                                 color: "navy"
                                 font.pointSize: 18
                             }
@@ -88,13 +89,126 @@ Item {
                             width: parent.width * 0.7
                             height: parent.height
                             Text{
+                                wrapMode: TextField.Wrap
                                 anchors.leftMargin: 10
                                 anchors.fill: parent
                                 verticalAlignment: Text.AlignVCenter
                                 horizontalAlignment: Text.AlignLeft
-                                text: qsTr("explain herer")
+                                text: mapInstance.plugin.parameters[0].name
                                 color: "navy"
                                 font.pointSize: 12
+                            }
+                        }
+                    }
+                    Row {
+                        width: parent.width
+                        height: 100
+                        Rectangle{
+                            width: parent.width * 0.7
+                            height: parent.height
+                            TextField{
+                                wrapMode: TextField.Wrap
+                                anchors.leftMargin: 10
+                                anchors.fill: parent
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                text: mapInstance.plugin.parameters[0].value
+                                color: "navy"
+                                font.pointSize: 12
+                            }
+                        }
+                    }
+                    Row {
+                        width: parent.width
+                        height: 150
+                        Rectangle{
+                            width: parent.width * 0.7
+                            height: parent.height
+                            ListView {
+                                width: parent.width
+                                height: parent.height
+                                id: folderListView
+
+                                FolderListModel {
+                                    id: folderModel
+                                    folder: mapInstance.plugin.parameters[0].value
+                                }
+
+                                Component {
+                                    id: fileDelegate
+                                    Rectangle {
+                                        width: 500
+                                        height: 20
+                                    Text { text: fileName }
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: {
+                                            folderListView.currentIndex = index
+                                            testImage.source = mapInstance.plugin.parameters[0].value + "/" +
+                                                    folderModel.get(folderListView.currentIndex, "fileName")
+                                        }
+                                    }
+                                    }
+                                }
+
+                                model: folderModel
+                                delegate: fileDelegate
+                            }
+                        }
+                    }
+
+                    HeaderSpacer{
+                        height: 1
+                    }
+//                    Row {
+//                        width: parent.width
+//                        height: 50
+//                        Rectangle{
+//                            width: parent.width * 0.7
+//                            height: parent.height
+//                            Text{
+//                                wrapMode: TextField.Wrap
+//                                anchors.leftMargin: 10
+//                                anchors.fill: parent
+//                                verticalAlignment: Text.AlignVCenter
+//                                horizontalAlignment: Text.AlignLeft
+//                                text: mapInstance.plugin.parameters[1].name
+//                                color: "navy"
+//                                font.pointSize: 12
+//                            }
+//                        }
+//                    }
+//                    Row {
+//                        width: parent.width
+//                        height: 100
+//                        Rectangle{
+//                            width: parent.width * 0.7
+//                            height: parent.height
+//                            TextField{
+//                                wrapMode: TextField.Wrap
+//                                anchors.leftMargin: 10
+//                                anchors.fill: parent
+//                                verticalAlignment: Text.AlignVCenter
+//                                horizontalAlignment: Text.AlignLeft
+//                                text: mapInstance.plugin.parameters[1].value
+//                                color: "navy"
+//                                font.pointSize: 12
+//                            }
+//                        }
+//                    }
+                    Row {
+                        width: 100
+                        height: 100
+                        Rectangle{
+                            width: parent.width
+                            height: parent.height
+                            Image{
+                                id: testImage
+                                anchors.leftMargin: 10
+                                anchors.fill: parent
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                source: ""
                             }
                         }
                     }

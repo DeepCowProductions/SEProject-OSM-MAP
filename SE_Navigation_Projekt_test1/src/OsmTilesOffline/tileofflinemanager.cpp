@@ -4,14 +4,17 @@ TileOfflineManager::TileOfflineManager(QString format, QObject *parent) : QObjec
 {
     m_format = format;
     m_currentlyUsedSpace = calculateUsedSpace();
-    m_settings.setUsedOfflineDirectorySize(m_currentlyUsedSpace);
+//    m_settings.setUsedOfflineDirectorySize(m_currentlyUsedSpace);
 }
 
 bool TileOfflineManager::saveToFile(Tile *tile)
 {
     bool ret = false;
     QStorageInfo info(m_settings.offlineDirectory());
-    qDebug() << info.displayName() << " BytesAvailable: " << info.bytesAvailable() <<" " << m_settings.offlineDirectory();
+    qDebug() << "Bytes available: " << info.bytesAvailable();
+    qDebug() << m_currentlyUsedSpace << m_settings.maxOfflineMapSize();
+    qDebug() << createFileName(tile);
+//    qDebug() << info.displayName() << " BytesAvailable: " << info.bytesAvailable() <<" " << m_settings.offlineDirectory();
     //    qDebug() << "Bytes available: " << info.bytesAvailable();
     if(m_currentlyUsedSpace < m_settings.maxOfflineMapSize() && info.bytesAvailable() - tile->imageData().size() > 0){
         if(tile->imageData().isEmpty()){
