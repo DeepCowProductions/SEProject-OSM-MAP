@@ -16,6 +16,7 @@ Item {
     property alias path: polylineItem.path
     property alias polyline: polylineItem
     property alias map: map
+    property alias plugin: osmPlugin
 
     property int currentValue: 0
     property int amount: 100
@@ -45,11 +46,34 @@ Item {
     function toggleFollow () {
         console.log("toggle follow")
         followPerson = !followPerson
+        toggleTimer()
     }
+
 
     function toggleRecordRoute () {
         console.log("toggle Record Route")
+        if (!recordRoute)
+            clearPath()
         recordRoute =!recordRoute
+        toggleTimer()
+    }
+
+    function toggleTimer() {
+        if (timer.running) {
+            if (recordRoute || followPerson) {
+                console.log("timer needed, keep running")
+            }else{
+                console.log("timer not needed, stopping")
+                timer.stop()
+            }
+        } else {
+            if (followPerson || recordRoute ) {
+                console.log("timer needed, starting ")
+                timer.start()
+            }else{
+                console.log("timer not needed , keeep it off")
+            }
+        }
     }
 
     function clearPath () {
@@ -118,12 +142,23 @@ Item {
             console.log("Position source loaded")
         }
         onPositionChanged: {
-            console.log("PositionChanged: recordroute is " + recordRoute + ", followPerson is " + followPerson)
+//            console.log("PositionChanged: recordroute is " + recordRoute + ", followPerson is " + followPerson)
+            console.log("PositionChanged, new pos is: " +  positionSource.position.coordinate )
+        }
+    }
+
+    Timer {
+        id: timer
+        interval: 200
+        repeat: true
+        onTriggered: {
+            console.log("timer Timeout: recordroute is " + recordRoute + ", followPerson is " + followPerson)
+
             if (Qt.platform.os == "android") {
                 var coord = position.coordinate;
                 console.log("Coordinate from positionSource:", coord.longitude, coord.latitude,coord.altitude);
                 if (followPerson) {
-                    upateLocationMarker(coord)
+                    updateCurrenPosttionMarker(coord)
                     map.center =  positionSource.position.coordinate
                 }
                 if (recordRoute) {
@@ -132,26 +167,18 @@ Item {
                     console.log(polylineItem.pathLength())
                     updatePath()
                 }
-            }
-        }
-    }
-
-    Timer {
-        id: timer
-        interval: 1000
-        repeat: true
-        onTriggered: {
-            console.log("timer Timeout: recordroute is " + recordRoute + ", followPerson is " + followPerson)
-            if (recordRoute) {
-                polyline.addCoordinate(map.center)
-                updatePath()
-                //            marker.coordinate = map.center
-                //            map.addMapItem(marker)
-                console.log(polylineItem.pathLength())
-                console.log("Recorded Coordinate list:" + path)
-            }
-            if (followPerson) {
-                updateCurrenPosttionMarker(map.center)
+            }else {
+                if (recordRoute) {
+                    polyline.addCoordinate(map.center)
+                    updatePath()
+                    //            marker.coordinate = map.center
+                    //            map.addMapItem(marker)
+                    console.log(polylineItem.pathLength())
+                    console.log("Recorded Coordinate list:" + path)
+                }
+                if (followPerson) {
+                    updateCurrenPosttionMarker(map.center)
+                }
             }
         }
     }
@@ -261,14 +288,6 @@ Item {
                 onClicked: {
                     console.log ("default hanlder for toggleTrackingButton")
                     toggleFollow()
-                    if (Qt.platform.os != "android") {
-                        // TEMP only for desktop
-                        if (timer.running) {
-                            timer.stop()
-                        }else {
-                            timer.start()
-                        }
-                    }
                 }
                 contentItem: Image {
                     source: "qrc:/targetInf"
@@ -309,14 +328,6 @@ Item {
                 onClicked: {
                     console.log ("default hanlder for toggleRecordRouteButton ")
                     toggleRecordRoute()
-                    // TEMP only for desktop
-                    if (Qt.platform.os != "android") {
-                        if (timer.running) {
-                            timer.stop()
-                        }else {
-                            timer.start()
-                        }
-                    }
                 }
                 contentItem: Image {
                     source: "qrc:/track"
