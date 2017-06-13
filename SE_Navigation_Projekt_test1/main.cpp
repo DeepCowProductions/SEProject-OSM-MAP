@@ -9,6 +9,7 @@
 #include <QScreen>
 #include "src/OsmTilesOffline/tilesdownloader.h"
 #include "src/OsmTilesOffline/downloadthread.h"
+#include "src/OsmTilesOffline/tileofflinemanager.h"
 #include <stdexcept>
 #include <QFile>
 
@@ -37,10 +38,13 @@ int main(int argc, char *argv[])
     }
 
     DownloadThread * thread = new DownloadThread(item);
-
+    TileOfflineManager * offlineManager = new TileOfflineManager("jpg", item);
     QObject::connect(item, SIGNAL(saveTiles(QVariant, QString, int, int, int, int)), thread, SLOT(startDownload(QVariant, QString, int, int, int, int)));
 
     QObject::connect(thread, SIGNAL(downloadFinished()), item, SIGNAL(enableButton()));
+
+    QObject::connect(item, SIGNAL(clearDirectory(QString)), offlineManager, SLOT(deleteAll(QString)));
+    QObject::connect(thread, SIGNAL(updateProgressBar(int,int)), item, SIGNAL(updateProgressBar(int, int )));
     //    TilesDownloader * downloader = new TilesDownloader(item, screenSize);
 
     //    QObject::connect(downloader, SIGNAL(downloadFinished()), item, SIGNAL(enableButton()));
@@ -49,7 +53,6 @@ int main(int argc, char *argv[])
     QMetaObject::invokeMethod(item, "initApp"
                               //                             , Q_ARG(QVariant, QVariant::fromValue(1))
                               );
-
     QFile f;
     f.setFileName(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/errorlog.txt");
     f.open(QIODevice::WriteOnly);

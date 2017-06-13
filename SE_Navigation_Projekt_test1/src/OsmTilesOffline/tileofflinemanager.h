@@ -16,7 +16,7 @@ class TileOfflineManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit TileOfflineManager(QString format, QObject *parent = 0);
+    explicit TileOfflineManager(QString format = "jpg", QObject *parent = 0);
 
     /**
      * @brief saveToFile speichert das Tile in ein Standardverzeichnis
@@ -26,12 +26,6 @@ public:
      * @return gibt an ob das speichern erfolgreich war oder nicht.
      */
     bool saveToFile(Tile * tile);
-
-    /**
-     * @brief deleteAll Lösche alle gespeicherten Offline-Verzeichnisse.
-     * @return Gibt an ob das Löschen erfolgreich war oder nicht.
-     */
-    bool deleteAll();
 
     /**
      * @brief deleteTile Lösche das angegebene Tile aus dem Offline-Verzeichnis.
@@ -70,9 +64,17 @@ public:
 
 signals:
 
+
+
     void notEnoughSpace();
 
 public slots:
+
+    /**
+     * @brief deleteAll Lösche alle gespeicherten Offline-Verzeichnisse.
+     * @return Gibt an ob das Löschen erfolgreich war oder nicht.
+     */
+    bool deleteAll(QString directory);
 
 private:
     Settings m_settings;

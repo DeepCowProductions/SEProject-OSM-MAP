@@ -17,6 +17,10 @@ Item {
     property alias polyline: polylineItem
     property alias map: map
 
+    property int currentValue: 0
+    property int amount: 100
+    property bool showProgressBar: false
+
     property var currentPosition: positionSource.valid ? positionSource.position.coordinate : map.center
     property var postest: QtPositioning.coordinate(1.0,-30.5)
 
@@ -104,7 +108,7 @@ Item {
         clearPath()
         updatePath(coords)
     }
-    signal saveTiles(variant center,string fileProvider, int zoomlevel);
+    signal saveTiles(variant center,string fileProvider, int zoomlevel, int depth);
 
     PositionSource {
         id: positionSource
@@ -223,7 +227,7 @@ Item {
 
         PluginParameter {
             name: "osm.mapping.offline.directory"
-            value: "/home/maik/Schreibtisch/OSM-Data"
+            value: settings.offlineDirectory
         }
         Component.onCompleted: {
             console.log("OsmPlugin loaded")
@@ -389,7 +393,7 @@ Item {
                 onAccepted: {
                     visible = false
                     map.forceActiveFocus()
-//                    saveTiles(map.center, "korona.geog.uni-heidelberg.de", map.zoomLevel,( zoomleveldepth-minZoom))
+                    saveTiles(map.center, "korona.geog.uni-heidelberg.de", map.zoomLevel,( zoomleveldepth-minZoom))
                     console.log(map.center+", " + "korona.geog.uni-heidelberg.de"+", " + map.zoomLevel +", "+ ( zoomleveldepth-minZoom))
                 }
                 onRejected: {
@@ -486,11 +490,12 @@ Item {
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width * 0.6
-            isActive: true
-            value: 50
+            minnValue: 0
+            value: currentValue
+            maxValue: amount
+            isActive: showProgressBar
         }
     }
-
     // Only Temporary
     Component.onCompleted: {
         map.addMapItem(polyline)

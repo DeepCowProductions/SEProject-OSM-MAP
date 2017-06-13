@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QThread>
+#include <QMutex>
 
 #include "tilesdownloader.h"
 
@@ -15,6 +16,9 @@ public:
     void run() Q_DECL_OVERRIDE;
 
 signals:
+
+    void updateProgressBar(int current, int amount);
+
     void downloadFinished();
 
     void downloadFailed();
@@ -25,6 +29,7 @@ public slots:
 
 
 private:
+    QMutex m_mutex;
     QVariant m_center;
     QString m_provider;
     QPoint m_windowSize;
