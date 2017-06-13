@@ -131,7 +131,7 @@ Item {
 
                                 FolderListModel {
                                     id: folderModel
-                                    folder: "file://"+mapInstance.plugin.parameters[0].value
+                                    folder: mapInstance.plugin.parameters[0].value
                                 }
 
                                 Component {
@@ -144,8 +144,7 @@ Item {
                                         anchors.fill: parent
                                         onClicked: {
                                             folderListView.currentIndex = index
-                                            console.log(folderListView.currentIndex)
-                                            testImage.source = "file://"+mapInstance.plugin.parameters[0].value + "/" +
+                                            testImage.source = mapInstance.plugin.parameters[0].value + "/" +
                                                     folderModel.get(folderListView.currentIndex, "fileName")
                                         }
                                     }
@@ -198,10 +197,10 @@ Item {
 //                        }
 //                    }
                     Row {
-                        width: parent.width
-                        height: 50
+                        width: 100
+                        height: 100
                         Rectangle{
-                            width: parent.width * 0.7
+                            width: parent.width
                             height: parent.height
                             Image{
                                 id: testImage

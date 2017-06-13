@@ -255,7 +255,10 @@ Item {
 
         PluginParameter {
             name: "osm.mapping.offline.directory"
-            value: settings.offlineDirectory
+            value: "file://" + settings.offlineDirectory
+            Component.onCompleted: {
+                console.log(name + ", " +  value)
+            }
         }
 
 //        PluginParameter {
