@@ -4,6 +4,7 @@ import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.0
 import QtPositioning 5.6
 import QtLocation 5.6
+import Qt.labs.platform 1.0
 
 
 Item {
@@ -256,6 +257,11 @@ Item {
             name: "osm.mapping.offline.directory"
             value: settings.offlineDirectory
         }
+
+//        PluginParameter {
+//            name: "osm.mapping.cache.directory"
+//            value: StandardPaths.writableLocation(StandardPaths.standardLocations(1))
+//        }
         Component.onCompleted: {
             console.log("OsmPlugin loaded")
             //             console.log(osmPlugin.OfflineMappingFeature.)

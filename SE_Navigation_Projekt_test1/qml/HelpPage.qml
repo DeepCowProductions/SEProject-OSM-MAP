@@ -127,6 +127,7 @@ Item {
                             ListView {
                                 width: parent.width
                                 height: parent.height
+                                id: folderListView
 
                                 FolderListModel {
                                     id: folderModel
@@ -135,7 +136,20 @@ Item {
 
                                 Component {
                                     id: fileDelegate
+                                    Rectangle {
+                                        width: 500
+                                        height: 20
                                     Text { text: fileName }
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: {
+                                            folderListView.currentIndex = index
+                                            console.log(folderListView.currentIndex)
+                                            testImage.source = "file://"+mapInstance.plugin.parameters[0].value + "/" +
+                                                    folderModel.get(folderListView.currentIndex, "fileName")
+                                        }
+                                    }
+                                    }
                                 }
 
                                 model: folderModel
@@ -146,6 +160,58 @@ Item {
 
                     HeaderSpacer{
                         height: 1
+                    }
+//                    Row {
+//                        width: parent.width
+//                        height: 50
+//                        Rectangle{
+//                            width: parent.width * 0.7
+//                            height: parent.height
+//                            Text{
+//                                wrapMode: TextField.Wrap
+//                                anchors.leftMargin: 10
+//                                anchors.fill: parent
+//                                verticalAlignment: Text.AlignVCenter
+//                                horizontalAlignment: Text.AlignLeft
+//                                text: mapInstance.plugin.parameters[1].name
+//                                color: "navy"
+//                                font.pointSize: 12
+//                            }
+//                        }
+//                    }
+//                    Row {
+//                        width: parent.width
+//                        height: 100
+//                        Rectangle{
+//                            width: parent.width * 0.7
+//                            height: parent.height
+//                            TextField{
+//                                wrapMode: TextField.Wrap
+//                                anchors.leftMargin: 10
+//                                anchors.fill: parent
+//                                verticalAlignment: Text.AlignVCenter
+//                                horizontalAlignment: Text.AlignLeft
+//                                text: mapInstance.plugin.parameters[1].value
+//                                color: "navy"
+//                                font.pointSize: 12
+//                            }
+//                        }
+//                    }
+                    Row {
+                        width: parent.width
+                        height: 50
+                        Rectangle{
+                            width: parent.width * 0.7
+                            height: parent.height
+                            Image{
+                                id: testImage
+                                anchors.leftMargin: 10
+                                anchors.fill: parent
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                source: ""
+                            }
+                        }
                     }
                 }
             }

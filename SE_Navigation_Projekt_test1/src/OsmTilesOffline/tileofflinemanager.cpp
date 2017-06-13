@@ -4,14 +4,16 @@ TileOfflineManager::TileOfflineManager(QString format, QObject *parent) : QObjec
 {
     m_format = format;
     m_currentlyUsedSpace = calculateUsedSpace();
-    m_settings.setUsedOfflineDirectorySize(m_currentlyUsedSpace);
+//    m_settings.setUsedOfflineDirectorySize(m_currentlyUsedSpace);
 }
 
 bool TileOfflineManager::saveToFile(Tile *tile)
 {
     bool ret = false;
     QStorageInfo info(m_settings.offlineDirectory());
-    //    qDebug() << "Bytes available: " << info.bytesAvailable();
+    qDebug() << "Bytes available: " << info.bytesAvailable();
+    qDebug() << m_currentlyUsedSpace << m_settings.maxOfflineMapSize();
+    qDebug() << createFileName(tile);
     if(m_currentlyUsedSpace < m_settings.maxOfflineMapSize() && info.bytesAvailable() - tile->imageData().size() > 0){
         if(tile->imageData().isEmpty()){
             qDebug() << "Datei ist leer";
@@ -36,7 +38,7 @@ bool TileOfflineManager::saveToFile(Tile *tile)
     }else{
         emit notEnoughSpace();
     }
-    m_settings.setUsedOfflineDirectorySize(calculateUsedSpace());
+//    m_settings.setUsedOfflineDirectorySize(calculateUsedSpace());
     return ret;
 }
 
@@ -139,7 +141,7 @@ bool TileOfflineManager::copyChacheTileIfPossible(Tile * tile)
         cacheFile.remove();
         qDebug() << "Got tile from generic Cache";
     }
-    m_settings.setUsedOfflineDirectorySize(calculateUsedSpace());
+//    m_settings.setUsedOfflineDirectorySize(calculateUsedSpace());
     return ret;
 }
 
