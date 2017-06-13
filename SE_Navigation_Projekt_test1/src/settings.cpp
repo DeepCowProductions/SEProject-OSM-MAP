@@ -12,7 +12,8 @@ Settings::Settings()
     readSettings();
     if(m_offlineDirectory.isEmpty())
         setOfflineDirectory(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
-
+    if(m_maxOfflineMapSize == 0)
+        setMaxOfflineMapSize(1000);
 
     qDebug() << "settings saved at: " << m_settings->fileName() << "  with organisation name: " << m_settings->organizationName();
 }

@@ -230,6 +230,8 @@ Item {
             value: settings.offlineDirectory
         }
         Component.onCompleted: {
+            console.log(settings.offlineDirectory)
+            console.log()
             console.log("OsmPlugin loaded")
             //             console.log(osmPlugin.OfflineMappingFeature.)
         }
