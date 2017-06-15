@@ -131,6 +131,7 @@ bool TileOfflineManager::copyChacheTileIfPossible(Tile * tile)
         QString path = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
         QDir cacheDirectory(searchSubdirectoriesForTile(tile, path));
         QFile cacheFile(cacheDirectory.filePath(tileName));
+//        cacheFile.rename(cacheFile.fileName(), cacheFile)
         ret = cacheFile.copy(saveDirectory.filePath(tileName));
         cacheFile.remove();
         qDebug() << "Got tiles from Cache";

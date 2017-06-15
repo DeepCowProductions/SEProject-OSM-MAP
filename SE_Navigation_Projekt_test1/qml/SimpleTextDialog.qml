@@ -1,6 +1,5 @@
 import QtQuick 2.7
-import QtQuick.Controls 2.0
-import QtQuick.Dialogs 1.2
+import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.0
 
@@ -11,7 +10,7 @@ Dialog {
     standardButtons: "NoButton"
     //    onButtonClicked: ( buttonClicked === StandardButton.Ok ) ? accepted() : rejected()
 
-    modality: Qt.WindowModal
+//    modality: Qt.WindowModal
     title: "Enter a name pls"
     Rectangle {
         color: "#EEEEFF"
