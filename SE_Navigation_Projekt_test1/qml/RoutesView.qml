@@ -81,6 +81,7 @@ Item {
                     infoPanelNumber.info = roadsListView.model.getCoordsAtIndex(index).length
                     infoPanelDate.info = savedAtDate
                     //                    infoPanelPos.info = ""
+                    inEditMode = false
 
                 }
                 onDoubleClicked: {
@@ -185,7 +186,7 @@ Item {
                             highlightFollowsCurrentItem: false
                             delegate: itemDelegate
                             focus: true
-                            onCurrentItemChanged: console.log(model.get(roadsListView.currentIndex).name + ' selected')
+                            onCurrentItemChanged: console.log(routesModel.getName(roadsListView.currentIndex)+ ' selected')
                         }
                     }
                 }
@@ -234,7 +235,10 @@ Item {
                                         text: info + " "
                                         color: "black"
                                         font.pointSize: 12
+
                                     }
+                                    border.color: inEditMode ? "lightblue" : "transparent"
+                                    border.width: inEditMode ? 1 : 0
                                 }
                             }
                             Row{
@@ -370,6 +374,9 @@ Item {
                             onClicked: {
                                 if (inEditMode) {
                                     inEditMode = false
+                                    infoPanelName.info = routesModel.getName(listView.currentIndex)
+                                }else{
+                                    routesModel.deleteItem(listView.currentIndex)
                                 }
                             }
                         }
@@ -385,9 +392,12 @@ Item {
                             onClicked: {
                                 if (inEditMode) {
                                     inEditMode = false
+                                    routesModel.changeItemName(listView.currentIndex,infoPanelName.text)
+                                    listView.update()
                                 }
                                 else {
                                     inEditMode = true
+                                    infoPanelName.forceActiveFocus()
                                 }
                             }
                         }
@@ -401,8 +411,7 @@ Item {
                                 fillMode: Image.PreserveAspectFit
                             }
                             onClicked: {
-                                //TODO
-//                                mapRequest(listView.currentIndex.getCoords())
+                                mapRequest(routesModel.getCoordsAtIndex(listView.currentIndex))
                             }
                         }
                     }

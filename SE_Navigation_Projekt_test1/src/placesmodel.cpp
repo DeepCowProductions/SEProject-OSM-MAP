@@ -46,6 +46,26 @@ QVariant PlacesModel::data(const QModelIndex &index, int role) const
     return QVariant(value);
 }
 
+bool PlacesModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if (data(index, role) != value) {
+        int row = index.row();
+        switch (role) {
+        case NameRole       : m_places[row].setName(value.toString());         break;
+    //    case CoordinateRole : m_places[row].coordinate();   break;
+        case LatitudeRole : m_places[row].coordinate().setLatitude(value.toDouble());     break;
+        case LongitudeRole : m_places[row].coordinate().setLongitude(value.toDouble());   break;
+        case SavedAtDateRole: m_places[row].setSavedAtDate(QDate::currentDate());   break;
+    //    case AddressRole    : m_places[row].address();      break;
+    //    case BoundingBoxRole: m_places[row].boundingBox();  break;
+        }
+        emit dataChanged(index, index, QVector<int>() << role);
+        return true;
+    }
+    return false;
+
+}
+
 bool PlacesModel::readUserDataFromJson(QJsonObject &object)
 {
     QJsonArray pa;
@@ -148,7 +168,38 @@ bool PlacesModel::removeItem(const QModelIndex &parent)
 {
 //    beginRemoveRows(parent, row, row + count - 1);
     // FIXME: Implement me!
-//    endRemoveRows();
+    //    endRemoveRows();
+}
+
+bool PlacesModel::deleteItem(const int &index)
+{
+    beginRemoveRows(QModelIndex() , index , index);
+//    m_roads.clear();
+    m_places.removeAt(index);
+    endRemoveRows();
+    writeUserData();
+    return true;
+}
+
+bool PlacesModel::changeItemName(const int &i, const QVariant &value)
+{
+    return setData(index(i,0),value,NameRole);
+    writeUserData();
+}
+
+QString PlacesModel::getName(int index)
+{
+    return m_places[index].name();
+}
+
+double PlacesModel::getLatiAtIndex(int index)
+{
+    m_places[index].coordinate().latitude();
+}
+
+double PlacesModel::getLongiAtIndex(int index)
+{
+    m_places[index].coordinate().longitude();
 }
 
 bool PlacesModel::clearList()

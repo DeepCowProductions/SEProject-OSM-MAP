@@ -171,17 +171,59 @@ bool RoutesModel::addItem( QString name, QJSValue value )
     return true;
 }
 
-//bool RoadsModel::addItem( QString name, QList<QGeoCoordinate> coords )
+bool RoutesModel::deleteItem(const int &index)
+{
+    beginRemoveRows(QModelIndex() , index , index);
+//    m_roads.clear();
+    m_roads.removeAt(index);
+    endRemoveRows();
+    writeUserData();
+    return true;
+}
+
+bool RoutesModel::changeItemName(const int &i, const QVariant &value)
+{
+//    if (m_roads[i].name() != value) {
+//        m_roads[i].setName(value.toString());
+//        emit dataChanged(index(i,-1), index(i,-1), QVector<int>() << NameRole); // maybe not correct...
+//        return true;
+//    }
+//    return false;
+    return setData(index(i,0),value,NameRole);
+    writeUserData();
+}
+
+bool RoutesModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if (data(index, role) != value) {
+        int row = index.row();
+        switch (role) {
+        case NameRole :
+            m_roads[row].setName(value.toString());
+            break;
+//        case CoordinatesRole:
+//            m_roads[row]; // not yet used or implemented
+//            break;
+        case SavedAtDateRole:
+//            m_roads[row].setSavedAtDate(QDate::currentDate());
+            m_roads[row].setSavedAtDate(m_roads[row].savedAtDate());
+            break;
+        }
+
+        emit dataChanged(index, index, QVector<int>() << role);
+        return true;
+    }
+    return false;
+}
+
+//Qt::ItemFlags RoutesModel::flags(const QModelIndex &index) const
 //{
-//    qDebug() << name << coords;
-//    beginInsertRows(QModelIndex(),m_roads.size(),m_roads.size() ); // for updating the listView inside qml (required)
-//    Road r;
-//    r.setName(name);
-//    r.setSavedAtDate(QDate::currentDate());
-//    r.setCoordinates(coords);
-//    m_roads.append(r);
-//    endInsertRows();
+//    if (!index.isValid())
+//        return Qt::NoItemFlags;
+
+//    return Qt::ItemIsEditable; // FIXME: Implement me!
 //}
+
 
 QList<QVariant> RoutesModel::getCoordsAtIndex(int index)
 {
@@ -194,6 +236,11 @@ QList<QVariant> RoutesModel::getCoordsAtIndex(int index)
         tmp.push_back(QVariant::fromValue(i));
 
     return tmp;
+}
+
+QString RoutesModel::getName(int index)
+{
+    return m_roads[index].name();
 }
 
 bool RoutesModel::clearList()

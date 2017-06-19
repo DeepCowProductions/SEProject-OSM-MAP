@@ -8,6 +8,7 @@ import fhswf.se.nav.models 1.0
 
 ApplicationWindow {
     property alias mainStack: mainStack
+    property alias settings : settingsObject
 
     property variant mapInstance
     property variant locationsInstance
@@ -17,22 +18,10 @@ ApplicationWindow {
     property variant helpInstance
 
     signal saveTiles(variant coordinates, string tilesProvider, int zoomlevel, int depth, int width, int height);
-    property alias settings : settingsObject
-
     signal enableButton();
     signal updateProgressBar(int currentValue, int amount);
     signal clearDirectory(string directory);
 
-    onEnableButton: {
-        console.log("Tiles saved in Offline directory!");
-        mapInstance.saveButtonEnabled = true;
-        console.log(mapInstance.saveButtonEnabled);
-    }
-    onUpdateProgressBar: {
-        mapInstance.currentValue = currentValue
-        mapInstance.amount = amount
-        currentValue === amount ? mapInstance.showProgressBar = false : mapInstance.showProgressBar = true
-    }
     function test () {
         console.log("test2")
     }
@@ -63,11 +52,6 @@ ApplicationWindow {
           return dist
     }
 
-    id: appWindow
-    visible: true
-    width: 360
-    height: 640
-    title: qsTr("SE Projekt - Mobile Navigation")
 
     function initApp() {
         console.log("invoke initApp -  creating mapItem - started")
@@ -83,6 +67,22 @@ ApplicationWindow {
 
     }
 
+    id: appWindow
+    visible: true
+    width: 360
+    height: 640
+    title: qsTr("SE Projekt - Mobile Navigation")
+
+    onEnableButton: {
+        console.log("Tiles saved in Offline directory!");
+        mapInstance.saveButtonEnabled = true;
+        console.log(mapInstance.saveButtonEnabled);
+    }
+    onUpdateProgressBar: {
+        mapInstance.currentValue = currentValue
+        mapInstance.amount = amount
+        currentValue === amount ? mapInstance.showProgressBar = false : mapInstance.showProgressBar = true
+    }
 
     Settings {
         id: settingsObject
@@ -144,14 +144,16 @@ ApplicationWindow {
                 mapInstance.forceActiveFocus()
             }
             saveThisLocationButton.onClicked: {
-                saveLocationDialog.createObject(mapInstance)
+                saveLocationDialog.createObject(locationsInstance.mainCol)
             }
             saveThisRouteButton.onClicked: {
                 if (mapInstance.recordRoute)
-                    saveRouteDialog.createObject(mapInstance)
+                    saveRouteDialog.createObject(locationsInstance.mainCol)
             }
             showPinButton.onClicked: {
-                updateLocationMarker(locationPin.coordinateEx())
+                mapInstance.updateLocationMarker(locationPin.coordinateEx())
+                mainStack.pop(mapInstance)
+                mapInstance.forceActiveFocus()
             }
             clearMapItemsButton.onClicked: {
                 mapInstance.map.clearMapItems()

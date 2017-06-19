@@ -11,10 +11,19 @@ Item {
     property alias backButton: backButton
     property var offlineSize: getSizeOffline()
 //    property var cacheSize: getSizeCache()
-    id: topParent
 
     signal deleteDirectory(string directory);
     signal configurationChanged ()
+
+    function getSizeOffline() {
+        console.log("call offline size calc")
+        var c = 0
+        for (var i = 0; i <folderOffline.count; i++  ){
+            c = c + folderOffline.get (i ,"fileSize")
+        }
+        return  Math.round(((c / 1024) /1024) * 100) / 100
+    }
+    id: topParent
 
     onConfigurationChanged:  {
         console.log("saving settings from qml")
@@ -32,14 +41,7 @@ Item {
 ////        folder: "file://"+mapInstance.plugin.parameters[1].value
 //    }
 
-    function getSizeOffline() {
-        console.log("call offline size calc")
-        var c = 0
-        for (var i = 0; i <folderOffline.count; i++  ){
-            c = c + folderOffline.get (i ,"fileSize")
-        }
-        return  Math.round(((c / 1024) /1024) * 100) / 100
-    }
+
 //    function getSizeCache() {
 //        console.log("call cache size calc")
 //        var c = 0
@@ -253,7 +255,7 @@ Item {
                         Rectangle{
                             width: parent.width
                             height:  parent.height
-                            Button{
+                            HighlightButton{
                                 id: clearOfflineDirectory
                                 anchors.leftMargin: 10
                                 anchors.rightMargin: 10
@@ -323,7 +325,7 @@ Item {
                         Rectangle{
                             width: parent.width
                             height:  parent.height
-                            Button{
+                            HighlightButton{
                                 id: clearCacheDirectory
                                 anchors.leftMargin: 10
                                 anchors.rightMargin: 10

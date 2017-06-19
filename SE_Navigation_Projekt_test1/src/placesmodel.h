@@ -36,6 +36,7 @@ public:
     int rowCount(const QModelIndex &parent= QModelIndex()) const Q_DECL_OVERRIDE;
     int columnCount(const QModelIndex &parent= QModelIndex()) const Q_DECL_OVERRIDE;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
 signals:
 
@@ -46,6 +47,11 @@ public slots:
     Q_INVOKABLE bool writeUserData();
     Q_INVOKABLE bool addItem(QString name, QGeoCoordinate coord);
     Q_INVOKABLE bool removeItem(const QModelIndex &parent = QModelIndex());
+    Q_INVOKABLE bool deleteItem(const int &index);
+    Q_INVOKABLE bool changeItemName(const int &i, const QVariant &value);
+    Q_INVOKABLE QString getName(int index);
+    Q_INVOKABLE double getLatiAtIndex(int index);
+    Q_INVOKABLE double getLongiAtIndex(int index);
 
 protected:
 

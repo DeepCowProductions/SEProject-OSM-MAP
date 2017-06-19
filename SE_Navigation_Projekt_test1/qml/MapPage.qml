@@ -18,30 +18,45 @@ Item {
     property alias polyline: polylineItem
     property alias map: map
     property alias plugin: osmPlugin
+    property alias posSrc: positionSource
 
+    property real fakedirection
     property int currentValue: 0
     property int amount: 100
     property bool showProgressBar: false
+    property bool posSrcValid: positionSource.valid && positionSource.name != "geoclue" /*geoclue for desktop geoService usually not working */
 
-    property var currentPosition: positionSource.valid ? positionSource.position.coordinate : map.center
-    property var postest: QtPositioning.coordinate(1.0,-30.5)
+    property var pos: positionSource.valid ? positionSource.position : "undefined"
+    property var posCoord: positionSource.valid ? positionSource.position.coordinate : map.center
 
     property bool followPerson
-    onFollowPersonChanged: {
-        console.log("followPerson changed, new value is: " + followPerson)
-        if (!followPerson) {
-            //            map.removeMapItem(currentPositionMarker)
-        }
-    }
+    property bool recordRoute
     property bool saveButtonEnabled: true
 
-    property bool recordRoute
-    onRecordRouteChanged: {
-        console.log("racordroute changed, new value is: " + recordRoute)
-        if(!recordRoute) {
-            console.log("opening save dialog...")
-            saveMsgOnRecordToggle.createObject(map)
+    signal mapRequestPosition (var coord)
+    signal mapRequestRoute(var coords)
+    signal saveTiles(variant center,string fileProvider, int zoomlevel, int depth);
+
+    function translatePosError(value) {
+        var c = "";
+        switch (value) {
+        case PositionSource.AccessError :
+            c = "No privileges to get geo position"
+            break;
+        case PositionSource.ClosedError :
+            c = "position service closed or shutdown"
+            break;
+        case PositionSource.NoError :
+            c = "position service running withour errors"
+            break;
+        case PositionSource.UnknownSourceError :
+            c = "unkown error while getting geo position"
+            break;
+        case PositionSource.SocketError :
+            c = "unable to connect to nmea-backend socket"
+            break;
         }
+        return c;
     }
 
     function toggleFollow () {
@@ -49,7 +64,6 @@ Item {
         followPerson = !followPerson
         toggleTimer()
     }
-
 
     function toggleRecordRoute () {
         console.log("toggle Record Route")
@@ -59,10 +73,14 @@ Item {
         toggleTimer()
     }
 
+    function toggleSaveButton () {
+        saveButton.enabled = !saveButton.enabled
+    }
+
     function toggleTimer() {
         if (timer.running) {
             if (recordRoute || followPerson) {
-                console.log("timer needed, keep running")
+                console.log("timer needed, keeping it running")
             }else{
                 console.log("timer not needed, stopping")
                 timer.stop()
@@ -72,7 +90,7 @@ Item {
                 console.log("timer needed, starting ")
                 timer.start()
             }else{
-                console.log("timer not needed , keeep it off")
+                console.log("timer not needed , keeping it off")
             }
         }
     }
@@ -107,15 +125,34 @@ Item {
         locationMarker.coordinate = newCoord
         map.addMapItem(locationMarker)
     }
-
-    function updateCurrenPosttionMarker (newCoord) {
+    function updateCurrenPositionMarker (newCoord) {
         console.log("update current location marker")
         map.removeMapItem(currentPositionMarker)
         currentPositionMarker.coordinate = newCoord
         map.addMapItem(currentPositionMarker)
     }
+    function updatePinPositionMarker (newCoord) {
+        console.log("update current pin marker")
+        map.removeMapItem(pinPositionMarker)
+        pinPositionMarker.coordinate = newCoord
+        map.addMapItem(pinPositionMarker)
+    }
 
-    signal mapRequestPosition (var coord)
+    onFollowPersonChanged: {
+        console.log("followPerson changed, new value is: " + followPerson)
+        if (!followPerson) {
+            //            map.removeMapItem(currentPositionMarker)
+        }
+    }
+
+    onRecordRouteChanged: {
+        console.log("racordroute changed, new value is: " + recordRoute)
+        if(!recordRoute) {
+            console.log("opening save dialog...")
+            saveMsgOnRecordToggle.createObject(map)
+        }
+    }
+
     onMapRequestPosition: {
         if(followPerson) {
             toggleFollow()
@@ -125,7 +162,6 @@ Item {
         map.zoomLevel = 8
     }
 
-    signal mapRequestRoute(var coords)
     onMapRequestRoute: {
         if(recordRoute) {
             toggleRecordRoute()
@@ -133,34 +169,35 @@ Item {
         clearPath()
         updatePath(coords)
     }
-    signal saveTiles(variant center,string fileProvider, int zoomlevel, int depth);
 
     PositionSource {
         id: positionSource
         updateInterval: 10
-        active: valid
         Component.onCompleted: {
             console.log("Position source loaded")
+            console.log("PositionSOurece is : " + valid + ", name: " + name)
+            if (posSrcValid) start()
+            console.log("PositionSOurece is after start() : " + valid + " and " + active)
         }
         onPositionChanged: {
-//            console.log("PositionChanged: recordroute is " + recordRoute + ", followPerson is " + followPerson)
+            //            console.log("PositionChanged: recordroute is " + recordRoute + ", followPerson is " + followPerson)
             console.log("PositionChanged, new pos is: " +  positionSource.position.coordinate )
+            if (posSrcValid) updateCurrenPositionMarker(positionSource.position.coordinate)
         }
     }
 
     Timer {
         id: timer
-        interval: 200
+        interval: 500
         repeat: true
         onTriggered: {
-            console.log("timer Timeout: recordroute is " + recordRoute + ", followPerson is " + followPerson)
-
-            if (Qt.platform.os == "android") {
-                var coord = position.coordinate;
-                console.log("Coordinate from positionSource:", coord.longitude, coord.latitude,coord.altitude);
+            //            console.log("timer Timeout: recordroute is " + recordRoute + ", followPerson is " + followPerson)
+            if (posSrcValid) {
+                var coord = pos.coordinate;
+                //                console.log("Coordinate from positionSource:", coord.longitude, coord.latitude,coord.altitude);
                 if (followPerson) {
-                    updateCurrenPosttionMarker(coord)
-                    map.center =  positionSource.position.coordinate
+                    updateCurrenPositionMarker(coord)
+                    map.center = positionSource.position.coordinate
                 }
                 if (recordRoute) {
                     polyline.addCoordinate(coord)
@@ -178,7 +215,7 @@ Item {
                     console.log("Recorded Coordinate list:" + path)
                 }
                 if (followPerson) {
-                    updateCurrenPosttionMarker(map.center)
+                    updateCurrenPositionMarker(map.center)
                 }
             }
         }
@@ -188,41 +225,45 @@ Item {
         id: polylineItem
         line.width: 2
         line.color: 'red'
-        Component.onCompleted: {
-            console.log("PlayLine loaded")
-        }
-    }
-
-    Image {
-        id:image
-        source: "../res/marker.png"
-    }
-    Image {
-        id:image2
-        source: "../res/marker.png"
-    }
-    MapQuickItem {
-        id: locationMarker
-        sourceItem: image
-        anchorPoint.x: image.width/2
-        anchorPoint.y: image.width
-        smooth: false
-        opacity: 0.8
-        Component.onCompleted: {
-            console.log("LocationMarker loaded")
-        }
     }
 
     MapQuickItem {
         id: currentPositionMarker
-        sourceItem: image2
-        anchorPoint.x: image.width/2
-        anchorPoint.y: image.width
+        sourceItem:  Image {
+            property real rl: Math.sqrt(((width*scale*width*scale)/ 4 )+ ((height*scale*height*scale) / 4))
+            id:markerImage1
+            source: "qrc:/navdot"
+            scale: 0.7
+            rotation: (posSrcValid && positionSource.position.directionValid) ? positionSource.position.direction - map.bearing :  fakedirection -map.bearing
+        }
+        anchorPoint.x: Math.cos (((markerImage1.rotation+45)/360)*2*Math.PI)* markerImage1.rl
+        anchorPoint.y: Math.sin (((markerImage1.rotation+45)/360)*2*Math.PI)* markerImage1.rl
         smooth: false
         opacity: 0.8
-        Component.onCompleted: {
-            console.log("CurrentPositionMarker loaded")
+    }
+
+    MapQuickItem {
+        id: locationMarker
+        sourceItem:     Image {
+            id:markerImage2
+            source: "../res/marker.png"
         }
+        anchorPoint.x: sourceItem.width/2
+        anchorPoint.y: sourceItem.height
+        smooth: false
+        opacity: 0.8
+    }
+
+    MapQuickItem {
+        id: pinPositionMarker
+        sourceItem:     Image {
+            id:markerImage3
+            source: "../res/marker3.png"
+        }
+        anchorPoint.x: (sourceItem.width)/2
+        anchorPoint.y: sourceItem.height
+        smooth: false
+        opacity: 0.8
     }
 
     //    GeocodeModel {
@@ -261,10 +302,10 @@ Item {
             }
         }
 
-//        PluginParameter {
-//            name: "osm.mapping.cache.directory"
-//            value: StandardPaths.writableLocation(StandardPaths.standardLocations(1))
-//        }
+        //        PluginParameter {
+        //            name: "osm.mapping.cache.directory"
+        //            value: StandardPaths.writableLocation(StandardPaths.standardLocations(1))
+        //        }
         Component.onCompleted: {
             console.log(settings.offlineDirectory)
             console.log()
@@ -313,15 +354,17 @@ Item {
 
                 width: (parent.width-16) * 0.2
                 height: parent.height
-                function toggleSaveButton () {
-                    saveButton.enabled = !saveButton.enabled
-                }
                 onClicked: {
                     console.log ("default hanlder for centerOnMeButton")
                     //                geocodeModel.query = fromAddress
                     //                geocodeModel.update()
-                    map.center = positionSource.position.coordinate
-                    updateLocationMarker(positionSource.position.coordinate)
+                    if (posSrcValid) {
+                        map.center = positionSource.position.coordinate
+                        updateLocationMarker(positionSource.position.coordinate)
+                    }
+                    else {
+                        updateLocationMarker(map.center)
+                    }
                 }
                 contentItem: Image {
                     source: "qrc:/target"
@@ -341,7 +384,7 @@ Item {
                     toggleRecordRoute()
                 }
                 contentItem: Image {
-                    source: "qrc:/track"
+                    source: "qrc:/rec2"
                     fillMode: Image.PreserveAspectFit
                 }
                 activeCondition: recordRoute
@@ -381,7 +424,6 @@ Item {
                 title: "Do you want to savee this route?"
                 labelText: "Enter a name to save"
                 onAccepted: {
-                    console.log("saveDialog accepted")
                     console.log("input is: " + input)
                     console.log("path to save s : " + path)
                     console.log("qml: call roadsModel.addItem(...)")
@@ -438,9 +480,6 @@ Item {
             //            width: (parent.width -16)  * 0.16
             //            height: (parent.height - 8) * 0.08
 
-            Component.onCompleted: {
-                console.log("Save Button erstellt")
-            }
             contentItem: Image {
                 source: "qrc:/file"
                 fillMode: Image.PreserveAspectFit
@@ -456,9 +495,6 @@ Item {
             //            width: (parent.width -16)  * 0.16
             //            height: (parent.height - 8) * 0.08
 
-            Component.onCompleted: {
-                console.log("Save Button erstellt")
-            }
             contentItem: Image {
                 source: "qrc:/pindrop"
                 fillMode: Image.PreserveAspectFit
@@ -466,7 +502,7 @@ Item {
             radius: 9000
             onClicked: {
                 locationPin.setCoordinateEx(map.center)
-                updateLocationMarker(locationPin.coordinateEx())
+                updatePinPositionMarker(locationPin.coordinateEx())
             }
         }
         RoundHighlightButton{
@@ -477,16 +513,14 @@ Item {
             //            width: (parent.width -16)  * 0.16
             //            height: (parent.height - 8) * 0.08
 
-            Component.onCompleted: {
-                console.log("Save Button erstellt")
-            }
             contentItem: Image {
-                source: "qrc:/search"
+                source: "qrc:/locatePin"
                 fillMode: Image.PreserveAspectFit
             }
             radius: 9000
             onClicked: {
-                updateLocationMarker(locationPin.coordinateEx())
+                updatePinPositionMarker(locationPin.coordinateEx())
+                map.center = locationPin.coordinateEx()
             }
         }
         RoundHighlightButton{
@@ -498,9 +532,6 @@ Item {
             //            width: (parent.width -16)  * 0.16
             //            height: (parent.height - 8) * 0.08
 
-            Component.onCompleted: {
-                console.log("Save Button erstellt")
-            }
             contentItem: Image {
                 source: "qrc:/helpoutline"
                 fillMode: Image.PreserveAspectFit
@@ -519,7 +550,7 @@ Item {
         }
     }
     // Only Temporary
-    Component.onCompleted: {
-        map.addMapItem(polyline)
-    }
+//    Component.onCompleted: {
+//        map.addMapItem(polyline)
+//    }
 }

@@ -35,12 +35,17 @@
         <file alias="pindrop">icons/ic_pin_drop_black_24dp.png</file>
         <file>icons/ic_person_pin_circle_black_24dp.png</file>
         <file>icons/ic_near_me_black_24dp.png</file>
-        <file>icons/ic_navigation_black_24dp.png</file>
+        <file alias="nav">icons/ic_navigation_black_24dp.png</file>
         <file>icons/ic_edit_location_black_24dp.png</file>
         <file alias="addLocation">icons/ic_add_location_black_24dp.png</file>
         <file alias="add">icons/ic_add_black_24dp.png</file>
         <file alias="map">icons/ic_map_black_24dp.png</file>
         <file alias="x">icons/ic_clear_black_24dp.png</file>
         <file alias="ok">icons/ic_done_black_24dp.png</file>
+        <file alias="tagetEmpty">icons/ic_gps_not_fixed_black_24dp.png</file>
+        <file alias="locatePin">icons/locatePin.png</file>
+        <file alias="recRoute">icons/roadRecord.png</file>
+        <file alias="rec2">icons/roadRecord2.png</file>
+        <file alias="navdot">icons/navdot.png</file>
     </qresource>
 </RCC>

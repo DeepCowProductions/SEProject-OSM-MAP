@@ -44,10 +44,11 @@ Rectangle {
                 Text {
                     anchors.fill: parent
                     wrapMode: Text.NoWrap
-                    text: "Downloading Tile: " + progressBar.value + " of " + progressBar.to
+                    text: progressBar.value == 0 ? "Preparing Download" : "Downloading Tile: " + progressBar.value + " of " + progressBar.to
                     font.pointSize: (spacer.height ) * 0.5
                     leftPadding: 2
-
+                    horizontalAlignment: Text.AlignLeft
+                    verticalAlignment: Text.AlignVCenter
                 }
             }
         }

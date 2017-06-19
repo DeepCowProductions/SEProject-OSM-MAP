@@ -6,7 +6,6 @@ CONFIG += c++11
 
 SOURCES += main.cpp \
     src/settings.cpp \
-    src/userdata.cpp \
     src/place.cpp \
     src/placesmodel.cpp \
     src/OsmTilesOffline/tilesdownloader.cpp \
@@ -14,7 +13,6 @@ SOURCES += main.cpp \
     src/OsmTilesOffline/tile.cpp \
     src/OsmTilesOffline/tileofflinemanager.cpp \
     src/locationpin.cpp \
-    src/teteteettetet.cpp \
     src/OsmTilesOffline/downloadthread.cpp \
     src/routesmodel.cpp \
     src/route.cpp
@@ -33,7 +31,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     src/settings.h \
-    src/userdata.h \
     src/place.h \
     src/placesmodel.h \
     src/OsmTilesOffline/tilesdownloader.h \
@@ -42,7 +39,6 @@ HEADERS += \
     src/OsmTilesOffline/tileofflinemanager.h \
     src/Singleton/networkaccesmanagersingleton.hpp \
     src/locationpin.h \
-    src/teteteettetet.h \
     src/OsmTilesOffline/downloadthread.h \
     src/routesmodel.h \
     src/route.h

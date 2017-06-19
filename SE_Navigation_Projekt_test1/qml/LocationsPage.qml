@@ -13,6 +13,7 @@ Item {
     property alias saveThisRouteButton: saveThisRouteButton
     property alias viewRoadsButton: viewRoadsButton
     property alias saveThisLocationButton: saveThisLocationButton
+    property alias mainCol: mainCol
     //    signal mapRequest(double latitude, double longitude)
 
     property alias clearMapItemsButton: clearMapItem
@@ -57,6 +58,7 @@ Item {
         }
 
         Rectangle {
+            id: mainCol
             width: parent.width
             height: parent.height - headerSpacer.height - buttonRow.height
             Flickable {
@@ -89,7 +91,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignVCenter
-                                        text: "Current Position: "
+                                        text: "Current position: "
                                         color: "navy"
                                         font.pointSize: 12
                                     }
@@ -102,9 +104,9 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignVCenter
-                                        text: mapInstance.postest +" "
+                                        text: mapInstance.position.coordinate +" "
                                         color: "black"
-                                        font.pointSize: 12
+                                        font.pointSize: 10
                                     }
                                 }
                             }
@@ -135,7 +137,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignLeft
-                                        text: mapInstance.postest.latitude + "°"
+                                        text: mapInstance.position.coordinate.latitude + "°"
                                         color: "black"
                                         font.pointSize: 7
                                     }
@@ -162,7 +164,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignLeft
-                                        text: mapInstance.postest.longitude +"°"
+                                        text: mapInstance.position.coordinate.longitude +"°"
                                         color: "black"
                                         font.pointSize: 7
                                     }
@@ -183,7 +185,7 @@ Item {
                                 id: saveThisLocationButton
                                 width: parent.width
                                 height: parent.height
-                                text: "save this Location"
+                                text: "save this location"
                                 contentItem : Item {
                                     width: parent.width
                                     height: parent.height
@@ -200,7 +202,7 @@ Item {
                                         anchors.bottom: parent.bottom
                                         anchors.top: parent.top
                                         width: parent.width * 0.8
-                                        text: "Save this Location"
+                                        text: "Save this location"
                                         horizontalAlignment: Text.AlignHCenter
                                         verticalAlignment: Text.AlignVCenter
                                     }
@@ -222,7 +224,7 @@ Item {
                                 id: viewPlacesButton
                                 width: parent.width
                                 height: parent.height
-                                text: "View my Saved Places"
+                                text: "View my saved places"
                                 contentItem : Item {
                                     width: parent.width
                                     height: parent.height
@@ -239,7 +241,7 @@ Item {
                                         anchors.bottom: parent.bottom
                                         anchors.top: parent.top
                                         width: parent.width * 0.8
-                                        text: "View my Saved Places"
+                                        text: "View my saved places"
                                         horizontalAlignment: Text.AlignHCenter
                                         verticalAlignment: Text.AlignVCenter
                                     }
@@ -268,7 +270,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignVCenter
-                                        text: "Currently tracking a Route: "
+                                        text: "Currently tracking a route: "
                                         color: "navy"
                                         font.pointSize: 12
                                     }
@@ -301,7 +303,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignLeft
-                                        text: "Number of Points Saved:"
+                                        text: "Number of points saved:"
                                         color: "navy"
                                         font.pointSize: 7
                                     }
@@ -381,7 +383,7 @@ Item {
                                         anchors.bottom: parent.bottom
                                         anchors.top: parent.top
                                         width: parent.width * 0.8
-                                        text: "Save this Route"
+                                        text: "Save this route"
                                         horizontalAlignment: Text.AlignHCenter
                                         verticalAlignment: Text.AlignVCenter
                                     }
@@ -421,7 +423,7 @@ Item {
                                         anchors.bottom: parent.bottom
                                         anchors.top: parent.top
                                         width: parent.width * 0.8
-                                        text: "View my Saved Roads"
+                                        text: "View my saved routes"
                                         horizontalAlignment: Text.AlignHCenter
                                         verticalAlignment: Text.AlignVCenter
                                     }
@@ -443,29 +445,29 @@ Item {
                                 width: parent.width
                                 height: parent.height * 0.5
                                 Rectangle{
-                                    width: parent.width * 0.7
+                                    width: parent.width * 0.4
                                     height: parent.height
                                     Text{
                                         anchors.leftMargin: 10
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignVCenter
-                                        text: "Currently pinned Location: "
+                                        text: "Pinned location: "
                                         color: "navy"
                                         font.pointSize: 12
                                     }
                                 }
                                 Rectangle{
-                                    width: parent.width * 0.3
+                                    width: parent.width * 0.6
                                     height: parent.height
                                     Text{
                                         anchors.leftMargin: 10
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignVCenter
-                                        text: locationPin.position
+                                        text: locationPin.coordinateEx().toString()
                                         color: "black"
-                                        font.pointSize: 12
+                                        font.pointSize: 10
                                     }
                                 }
                             }
@@ -497,7 +499,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignLeft
-                                        text: locationPin.latitude
+                                        text: locationPin.coordinateEx().latitude
                                         color: "black"
                                         font.pointSize: 7
                                     }
@@ -524,7 +526,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignLeft
-                                        text: locationPin.longitude
+                                        text: locationPin.coordinateEx().longitude
                                         color: "black"
                                         font.pointSize: 7
                                     }
@@ -555,7 +557,7 @@ Item {
                                         anchors.top: parent.top
                                         anchors.left: parent.left
                                         anchors.bottom: parent.bottom
-                                        source: "qrc:/search"
+                                        source: "qrc:/locatePin"
                                         width: parent.width * 0.2
                                         fillMode: Image.PreserveAspectFit
                                     }
@@ -564,7 +566,7 @@ Item {
                                         anchors.bottom: parent.bottom
                                         anchors.top: parent.top
                                         width: parent.width * 0.8
-                                        text: "Show On Map"
+                                        text: "Show pin on map"
                                         horizontalAlignment: Text.AlignHCenter
                                         verticalAlignment: Text.AlignVCenter
                                     }
@@ -586,7 +588,7 @@ Item {
                                 id: clearMapItem
                                 width: parent.width
                                 height: parent.height
-                                text: "Clear Map Items"
+                                text: "Clear map items"
                                 contentItem : Item {
                                     width: parent.width
                                     height: parent.height
@@ -603,13 +605,64 @@ Item {
                                         anchors.bottom: parent.bottom
                                         anchors.top: parent.top
                                         width: parent.width * 0.8
-                                        text: "Clear Map Items"
+                                        text: "Clear map items"
                                         horizontalAlignment: Text.AlignHCenter
                                         verticalAlignment: Text.AlignVCenter
                                     }
                                 }
                             }
                         }
+                    }
+
+                    Rectangle {
+                        width: parent.width
+                        height: 50
+                        //            border.color: "lightgray"
+                        //            border.width: 1
+                        Column {
+                            anchors.fill: parent
+                            Row {
+                                padding: 1
+                                spacing: 4
+                                width: parent.width
+                                height: parent.height * 0.5
+                                Rectangle{
+                                    width: parent.width * 0.7
+                                    height: parent.height
+                                    Text{
+                                        anchors.leftMargin: 10
+                                        anchors.fill: parent
+                                        verticalAlignment: Text.AlignVCenter
+                                        horizontalAlignment: Text.AlignVCenter
+                                        text: "PositionSource/GPS status: "
+                                        color: "navy"
+                                        font.pointSize: 10
+                                    }
+                                }
+                            }
+
+                            Row{
+                                width: parent.width
+                                height: parent.height * 0.5
+                                padding: 1
+                                spacing: 4
+                                Rectangle{
+                                    width: parent.width
+                                    height: parent.height
+                                    Text{
+                                        anchors.leftMargin: 10
+                                        anchors.fill: parent
+                                        text: mapInstance.translatePosError(mapInstance.posSrc.sourceError)
+                                        verticalAlignment: Text.AlignVCenter
+                                        horizontalAlignment: Text.AlignVCenter
+                                        color: "navy"
+                                        font.pointSize: 7
+                                    }
+                                }
+
+                            }
+                        }
+
                     }
 
 

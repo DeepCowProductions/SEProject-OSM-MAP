@@ -81,6 +81,7 @@ Item {
                     infoPanelLongi.info = longitude +"°"
                     infoPanelDate.info = savedAtDate
                     //                    infoPanelPos.info = ""
+                    inEditMode = false
                 }
                 onDoubleClicked: {
                     mapRequest(longitude, latitude)
@@ -184,7 +185,7 @@ Item {
                             highlightFollowsCurrentItem: true
                             delegate: itemDelegate
                             focus: true
-                            onCurrentItemChanged: console.log(model.get(pLacesListView.currentIndex).name + ' selected')
+                            onCurrentItemChanged: console.log(model.getName(pLacesListView.currentIndex) + ' selected')
                         }
 
                         RoundHighlightButton{
@@ -249,6 +250,8 @@ Item {
                                         color: "black"
                                         font.pointSize: 12
                                     }
+                                    border.color: inEditMode ? "lightblue" : "transparent"
+                                    border.width: inEditMode ? 1 : 0
                                 }
                             }
                             Row{
@@ -384,6 +387,9 @@ Item {
                             onClicked: {
                                 if (inEditMode) {
                                     inEditMode = false
+                                    infoPanelName.info = placesModel.getName(listView.currentIndex)
+                                }else{
+                                    placesModel.deleteItem(listView.currentIndex)
                                 }
                             }
                         }
@@ -399,9 +405,12 @@ Item {
                             onClicked: {
                                 if (inEditMode) {
                                     inEditMode = false
+                                    placesModel.changeItemName(listView.currentIndex,infoPanelName.text)
+                                    listView.update()
                                 }
                                 else {
                                     inEditMode = true
+                                    infoPanelName.forceActiveFocus()
                                 }
                             }
                         }
@@ -415,8 +424,7 @@ Item {
                                 fillMode: Image.PreserveAspectFit
                             }
                             onClicked: {
-                                //TODO
-//                                mapRequest(listView.currentIndex.latitude,listView.currentIndex.longitute)
+                                mapRequest(placesModel.getLatiAtIndex(listView.currentIndex), placesModel.getLongiAtIndex(listView.currentIndex))
                             }
                         }
 

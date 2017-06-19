@@ -15,7 +15,7 @@ Dialog {
     Rectangle {
         color: "#EEEEFF"
         anchors.fill: parent
-        implicitWidth: 300
+        implicitWidth: 220
         implicitHeight: 150
         Column  {
             padding: 10
@@ -44,32 +44,50 @@ Dialog {
                     //                    horizontalAlignment: TextInput.AlignHCenter
                     verticalAlignment: TextInput.AlignVCenter
                     anchors.leftMargin: 4
+                    Keys.onEnterPressed: {textInput.text.trim(); accept();}
+                    Keys.onEscapePressed: reject()
+                    Keys.onBackPressed: reject() // especially necessary on Android
                 }
             }
             Row {
+                width: 200
+                height: 40
                 spacing: 10
                 //                anchors.top : textRect.bottom
-                Button {
+                HighlightButton {
                     id: acceptButton
+                    width: parent.width * 0.5
+                    height: parent.height
                     text: "Ok"
                     onClicked: {
+                        textInput.text.trim()
                         accepted()
                         close()
                     }
+                    contentItem: Image {
+                        source: "qrc:/ok"
+                        fillMode: Image.PreserveAspectFit
+                    }
                 }
-                Button {
+                HighlightButton {
                     id: rejectButton
+                    width: parent.width * 0.5
+                    height: parent.height
                     text: "Cancel"
                     onClicked: {
                         rejected()
                         close()
                     }
+                    contentItem: Image {
+                        source: "qrc:/x"
+                        fillMode: Image.PreserveAspectFit
+                    }
                 }
             }
         }
 //                Keys.onPressed: if (event.key === Qt.Key_R && (event.modifiers & Qt.ControlModifier)) filledDialog.click(StandardButton.Retry)
-                Keys.onEnterPressed: filledDialog.accept()
-                Keys.onEscapePressed: filledDialog.reject()
-                Keys.onBackPressed: filledDialog.reject() // especially necessary on Android
+                Keys.onEnterPressed: {textInput.text.trim(); accept();}
+                Keys.onEscapePressed: reject()
+                Keys.onBackPressed: reject() // especially necessary on Android
     }
 }
