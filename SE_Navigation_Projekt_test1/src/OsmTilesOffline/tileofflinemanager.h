@@ -1,9 +1,6 @@
 #ifndef TILEOFFLINEMANAGER_H
 #define TILEOFFLINEMANAGER_H
 
-#include "tile.h"
-#include "src/settings.h"
-
 #include <QObject>
 #include <QString>
 #include <QStandardPaths>
@@ -12,11 +9,13 @@
 #include <QDirIterator>
 #include <QStorageInfo>
 
+#include "tile.h"
+#include "src/settings.h"
 class TileOfflineManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit TileOfflineManager(QString format = "jpg", QObject *parent = 0);
+    explicit TileOfflineManager(QObject *parent = 0);
 
     /**
      * @brief saveToFile speichert das Tile in ein Standardverzeichnis
@@ -27,6 +26,7 @@ public:
      */
     bool saveToFile(Tile * tile);
 
+    Q_INVOKABLE bool deleteAll();
     /**
      * @brief deleteTile Lösche das angegebene Tile aus dem Offline-Verzeichnis.
      * @param das Tile das gelöscht werden soll.
@@ -60,7 +60,13 @@ public:
      */
     QString searchSubdirectoriesForTile(Tile * tile, QString directory);
 
+    bool changeOfflineDirectory(QString newDirectory);
 
+
+    /**
+     * @brief calculateUsedSpace ermittelt wie viel Speicher bereits verbraucht wurde
+     */
+    Q_INVOKABLE int calculateUsedSpace(QString directory);
 
 signals:
 
@@ -70,21 +76,11 @@ signals:
 
 public slots:
 
-    /**
-     * @brief deleteAll Lösche alle gespeicherten Offline-Verzeichnisse.
-     * @return Gibt an ob das Löschen erfolgreich war oder nicht.
-     */
-    bool deleteAll(QString directory);
-
 private:
     Settings m_settings;
 
     int m_currentlyUsedSpace;
 
-    /**
-     * @brief calculateUsedSpace ermittelt wie viel Speicher bereits verbraucht wurde
-     */
-    int calculateUsedSpace();
 
     /**
      * @brief createFileName erstellt den Dateinamen unter dem das Tile gespeichert werden soll
@@ -93,7 +89,7 @@ private:
      */
     QString createFileName(Tile *tile);
 
-    QString m_format;
+
 };
 
 #endif // TILEOFFLINEMANAGER_H

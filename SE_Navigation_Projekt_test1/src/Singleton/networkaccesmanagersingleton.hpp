@@ -14,7 +14,7 @@
  *
  *       https://wiki.qt.io/Qt_thread-safe_singleton
  */
-class TilesOfflineManagerSingleton : public QObject
+class NetworkAccesManagerSingleton : public QObject
 {
 
 public:
@@ -24,11 +24,11 @@ private:
 
     static QNetworkAccessManager * m_manager;
 
-    TilesOfflineManagerSingleton(QObject * parent = 0) : QObject(parent){
+    NetworkAccesManagerSingleton(QObject * parent = 0) : QObject(parent){
 
     }
 
-    ~TilesOfflineManagerSingleton();/*{
+    ~NetworkAccesManagerSingleton();/*{
         if(m_manager)
             delete m_manager;
     }*/
@@ -36,9 +36,9 @@ private:
 
 };
 
-QNetworkAccessManager * TilesOfflineManagerSingleton::m_manager = 0;
+QNetworkAccessManager * NetworkAccesManagerSingleton::m_manager = 0;
 
-QNetworkAccessManager * TilesOfflineManagerSingleton::getInstance()
+QNetworkAccessManager * NetworkAccesManagerSingleton::getInstance()
 {
     if(!m_manager)
         m_manager = new QNetworkAccessManager();

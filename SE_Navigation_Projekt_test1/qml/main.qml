@@ -5,10 +5,12 @@ import QtPositioning 5.6
 import QtLocation 5.6
 import fhswf.se.nav.settings 1.0
 import fhswf.se.nav.models 1.0
+import fhswf.se.nav.offlinemanager 1.0
 
 ApplicationWindow {
     property alias mainStack: mainStack
     property alias settings : settingsObject
+    property alias offlineManager: tileManagerObject
 
     property variant mapInstance
     property variant locationsInstance
@@ -18,7 +20,7 @@ ApplicationWindow {
     property variant helpInstance
 
     signal saveTiles(variant coordinates, string tilesProvider, int zoomlevel, int depth, int width, int height);
-    signal enableButton();
+    signal downloadFinished();
     signal updateProgressBar(int currentValue, int amount);
     signal clearDirectory(string directory);
 
@@ -47,8 +49,8 @@ ApplicationWindow {
           dist = Math.acos(dist)
           dist = dist * 180/Math.PI
           dist = dist * 60 * 1.1515
-          if (unit=="K") { dist = dist * 1.609344 }
-          if (unit=="N") { dist = dist * 0.8684 }
+          if (unit==="K") { dist = dist * 1.609344 }
+          if (unit==="N") { dist = dist * 0.8684 }
           return dist
     }
 
@@ -73,10 +75,14 @@ ApplicationWindow {
     height: 640
     title: qsTr("SE Projekt - Mobile Navigation")
 
-    onEnableButton: {
+    onDownloadFinished: {
         console.log("Tiles saved in Offline directory!");
         mapInstance.saveButtonEnabled = true;
         console.log(mapInstance.saveButtonEnabled);
+        if(settingsInstance)
+            settingsInstance.offlineDirectorySize.text = Math.round((offlineManager.calculateUsedSpace("offline") / 1024 / 1024)*100) / 100
+        if(mapInstance.showProgressBar)
+            mapInstance.showProgressBar = false
     }
     onUpdateProgressBar: {
         mapInstance.currentValue = currentValue
@@ -86,6 +92,10 @@ ApplicationWindow {
 
     Settings {
         id: settingsObject
+    }
+
+    TileManager{
+        id: tileManagerObject
     }
 
     StackView {
@@ -248,7 +258,7 @@ ApplicationWindow {
                 if (!settingsInstance) {
                     console.log("creating new instance of item")
                     settingsInstance = settingsPageComp.createObject(mainStack);
-                }
+                                    }
                 else{
                     console.log("item instance already here...")
                 }
@@ -290,6 +300,12 @@ ApplicationWindow {
         SettingsPage {
             id: settingsPage
             backButton.onClicked: {
+                configurationChanged()
+                if(settings.offlineDirectory !== mapInstance.plugin.parameters[0].value){
+                    mainStack.pop(mapInstance)
+                    initApp()
+                }
+
                 mainStack.pop(mapInstance)
                 mapInstance.forceActiveFocus()
             }
@@ -298,7 +314,7 @@ ApplicationWindow {
                 clearDirectory(directory)
             }
 
-            Component.onCompleted: console.log("settingsPage complete")
+            Component.onCompleted: console.log("finished Settingspage")
         }
     }
     Component {

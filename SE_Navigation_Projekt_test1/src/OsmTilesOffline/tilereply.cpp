@@ -8,7 +8,7 @@ TileReply::TileReply(QNetworkReply * reply, Tile *tile, QObject *parent) : QObje
 
     m_reply = reply;
 //    qDebug() << connect(m_reply, &QNetworkReply::finished, this, &TileReply::networkReplyFinished);
-    qDebug() << connect(m_reply, SIGNAL(error(QNetworkReply::NetworkError)), this , SLOT(networkErrorOccured(QNetworkReply::NetworkError)));
+    connect(m_reply, SIGNAL(error(QNetworkReply::NetworkError)), this , SLOT(networkErrorOccured(QNetworkReply::NetworkError)));
     m_finished = false;
     m_tile = tile;
 

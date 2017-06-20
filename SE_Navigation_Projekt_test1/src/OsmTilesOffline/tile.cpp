@@ -1,15 +1,16 @@
 #include "tile.h"
 
-Tile::Tile(int x, int y, int zoomlevel, QString pluginName, int mapId, QObject * parent) : QObject(parent)
+Tile::Tile(int x, int y, int zoomlevel, QString pluginName, int mapId, QString format, QObject * parent) : QObject(parent)
 {
     m_x = x;
     m_y = y;
     m_zoomlevel = zoomlevel;
     m_pluginName = pluginName;
     m_mapId = mapId;
+    m_format = format;
 }
 
-Tile::Tile(double longitude, double latitude, int zoomlevel, QString pluginName, int mapId, QObject *parent) : QObject(parent)
+Tile::Tile(double longitude, double latitude, int zoomlevel, QString pluginName, int mapId, QString format, QObject *parent) : QObject(parent)
 {
     m_zoomlevel = zoomlevel;
     m_x = long2tilex(longitude);
@@ -17,6 +18,7 @@ Tile::Tile(double longitude, double latitude, int zoomlevel, QString pluginName,
 
     m_pluginName = pluginName;
     m_mapId = mapId;
+    m_format = format;
 }
 
 int Tile::long2tilex(double lon)
@@ -27,6 +29,16 @@ int Tile::long2tilex(double lon)
 int Tile::lat2tiley(double lat)
 {
     return (int)(floor((1.0 - log( tan(lat * M_PI/180.0) + 1.0 / cos(lat * M_PI/180.0)) / M_PI) / 2.0 * pow(2.0, m_zoomlevel)));
+}
+
+QString Tile::format() const
+{
+    return m_format;
+}
+
+void Tile::setFormat(const QString &format)
+{
+    m_format = format;
 }
 
 QByteArray Tile::imageData() const

@@ -46,7 +46,6 @@ public slots:
     Q_INVOKABLE bool readUserData();
     Q_INVOKABLE bool writeUserData();
     Q_INVOKABLE bool addItem(QString name, QGeoCoordinate coord);
-    Q_INVOKABLE bool removeItem(const QModelIndex &parent = QModelIndex());
     Q_INVOKABLE bool deleteItem(const int &index);
     Q_INVOKABLE bool changeItemName(const int &i, const QVariant &value);
     Q_INVOKABLE QString getName(int index);

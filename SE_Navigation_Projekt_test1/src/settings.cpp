@@ -1,5 +1,6 @@
 #include "settings.h"
 #include <QStandardPaths>
+#include "src/OsmTilesOffline/tileofflinemanager.h"
 
 Settings::Settings()
 {
@@ -14,6 +15,18 @@ Settings::Settings()
         setOfflineDirectory(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
     if(m_maxOfflineMapSize <= 0)
         setMaxOfflineMapSize(1000);
+    m_existsSdCar = false;
+
+#ifdef Q_OS_ANDROID
+    QAndroidJniObject mediaDir = QAndroidJniObject::callStaticObjectMethod("android/os/Environment", "getExternalStorageDirectory", "()Ljava/io/File;");
+    QAndroidJniObject mediaPath = mediaDir.callObjectMethod( "getAbsolutePath", "()Ljava/lang/String;" );
+    QDir sdCardDircectory(mediaPath.toString() + "/Android/data/");
+    if(sdCardDircectory.exists()){
+        m_existsSdCar = true;
+        m_sdCardPath = sdCardDircectory.absolutePath() + "osm-tiles";
+    }
+
+#endif
 
     qDebug() << "settings saved at: " << m_settings->fileName() << "  with organisation name: " << m_settings->organizationName();
 }
@@ -56,6 +69,22 @@ int Settings::usedOfflineDirectorySize() const
     return m_usedOfflineDirectorySize;
 }
 
+bool Settings::sdCard() const
+{
+    return m_sdCard;
+}
+
+bool Settings::device() const
+{
+    return m_device;
+}
+
+bool Settings::existsSdCar() const
+{
+    return m_existsSdCar;
+}
+
+
 void Settings::save()
 {
     qDebug() << "invoke Settings:save";
@@ -82,6 +111,8 @@ void Settings::readSettings()
     setCurrentOfflineMapSize(m_settings->value("currentOfflineMapSize").toInt());
     setOfflineDirectory(m_settings->value("offlineDirectory").toString());
     setUsedOfflineDirectorySize(m_settings->value("usedOfflineDirectorySize").toInt());
+    setSdCard(m_settings->value("sdCard").toBool());
+    setDevice(m_settings->value("deviceStorage").toBool());
     // #???#
 
 }
@@ -95,6 +126,9 @@ void Settings::writeSettings()
     m_settings->setValue("maxOfflineMapSize",m_maxOfflineMapSize);
     m_settings->setValue("currentOfflineMapSize",m_currentOfflineMapSize);
     m_settings->setValue("offlineDirectory", m_offlineDirectory);
+
+    m_settings->setValue("sdCard", m_sdCard);
+    m_settings->setValue("deviceStorage", m_device);
 
     // force writing to storage by calling sync - not neccessary but makes things easier
     m_settings->sync();
@@ -155,4 +189,37 @@ void Settings::setUsedOfflineDirectorySize(int usedOfflineDirectorySize)
     m_settings->sync();
     readSettings();
     emit usedOfflineDirectorySizeChanged(usedOfflineDirectorySize);
+}
+
+void Settings::setSdCard(bool sdCard)
+{
+    if (m_sdCard == sdCard)
+        return;
+    m_sdCard = sdCard;
+    if(m_sdCard){
+        TileOfflineManager offline;
+        offline.changeOfflineDirectory(m_sdCardPath);
+    }
+    emit sdCardChanged(sdCard);
+}
+
+void Settings::setDevice(bool device)
+{
+    if (m_device == device)
+        return;
+    m_device = device;
+    if(m_sdCard){
+        TileOfflineManager offline;
+        offline.changeOfflineDirectory(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
+    }
+    emit deviceChanged(device);
+}
+
+void Settings::setExistsSdCar(bool existsSdCar)
+{
+    if (m_existsSdCar == existsSdCar)
+        return;
+
+    m_existsSdCar = existsSdCar;
+    emit existsSdCarChanged(existsSdCar);
 }

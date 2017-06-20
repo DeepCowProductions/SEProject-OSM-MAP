@@ -164,12 +164,6 @@ bool PlacesModel::addItem(QString name, QGeoCoordinate coord)
     return true;
 }
 
-bool PlacesModel::removeItem(const QModelIndex &parent)
-{
-//    beginRemoveRows(parent, row, row + count - 1);
-    // FIXME: Implement me!
-    //    endRemoveRows();
-}
 
 bool PlacesModel::deleteItem(const int &index)
 {
@@ -195,12 +189,12 @@ QString PlacesModel::getName(int index)
 
 double PlacesModel::getLatiAtIndex(int index)
 {
-    m_places[index].coordinate().latitude();
+    return m_places[index].coordinate().latitude();
 }
 
 double PlacesModel::getLongiAtIndex(int index)
 {
-    m_places[index].coordinate().longitude();
+    return m_places[index].coordinate().longitude();
 }
 
 bool PlacesModel::clearList()
