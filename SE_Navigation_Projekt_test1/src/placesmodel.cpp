@@ -183,8 +183,9 @@ bool PlacesModel::deleteItem(const int &index)
 
 bool PlacesModel::changeItemName(const int &i, const QVariant &value)
 {
-    return setData(index(i,0),value,NameRole);
+    bool suc = setData(index(i,0),value,NameRole);
     writeUserData();
+    return suc;
 }
 
 QString PlacesModel::getName(int index)

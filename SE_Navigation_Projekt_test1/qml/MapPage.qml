@@ -159,7 +159,7 @@ Item {
         }
         updateLocationMarker(coord)
         map.center = coord
-        map.zoomLevel = 8
+//        map.zoomLevel = 10
     }
 
     onMapRequestRoute: {

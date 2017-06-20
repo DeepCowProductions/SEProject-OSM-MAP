@@ -10,7 +10,7 @@ import Qt.labs.folderlistmodel 2.1
 Item {
     property alias backButton: backButton
     property var offlineSize: getSizeOffline()
-//    property var cacheSize: getSizeCache()
+    //    property var cacheSize: getSizeCache()
 
     signal deleteDirectory(string directory);
     signal configurationChanged ()
@@ -36,20 +36,20 @@ Item {
         id: folderOffline
         folder: "file://"+mapInstance.plugin.parameters[0].value
     }
-//    FolderListModel {
-//        id: folderCache
-////        folder: "file://"+mapInstance.plugin.parameters[1].value
-//    }
+    //    FolderListModel {
+    //        id: folderCache
+    ////        folder: "file://"+mapInstance.plugin.parameters[1].value
+    //    }
 
 
-//    function getSizeCache() {
-//        console.log("call cache size calc")
-//        var c = 0
-//        for (var i = 0; i <folderCache.count; i++  ){
-//            c = c + folderCache.get (i ,"fileSize")
-//        }
-//        return  Math.round(((c / 1024) /1024) * 100) / 100
-//    }
+    //    function getSizeCache() {
+    //        console.log("call cache size calc")
+    //        var c = 0
+    //        for (var i = 0; i <folderCache.count; i++  ){
+    //            c = c + folderCache.get (i ,"fileSize")
+    //        }
+    //        return  Math.round(((c / 1024) /1024) * 100) / 100
+    //    }
 
     Column{
         id:mainColumn
@@ -142,11 +142,24 @@ Item {
                                 font.pointSize: 12
                             }
                         }
-                        TextField {
-                            id: pathToOfflineDirecory
-                            width: parent.width * 0.25
-                            text: settings.offlineDirectory
-                            //                            enabled: false
+
+                    }
+                    Row {
+                        width: parent.width
+                        height: 50
+                        Rectangle{
+                            width: parent.width
+                            height: parent.height
+                            TextField {
+                                id: pathToOfflineDirecory
+                                width: parent.width
+                                text: settings.offlineDirectory
+                                //                            enabled: false
+                                wrapMode: TextField.Wrap
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                font.pointSize: 8
+                            }
                         }
                     }
                     Row {
@@ -195,7 +208,7 @@ Item {
                         TextField {
                             id: currentlyUsedSize
                             width: parent.width * 0.25
-//                            text: Math.round(((settings.usedOfflineDirectorySize / 1024) /1024) * 100) / 100
+                            //                            text: Math.round(((settings.usedOfflineDirectorySize / 1024) /1024) * 100) / 100
                             text: getSizeOffline()
                             placeholderText: ""
                         }
