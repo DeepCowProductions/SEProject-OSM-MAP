@@ -26,7 +26,18 @@ public:
     QDate savedAtDate() const;
     void setSavedAtDate(const QDate &savedAtDate);
 
+    /**
+     * @brief readFromJason
+     * Liest ein QJsonObject und extrahiert alle Informationen um die Propeties dieser Klasse zu füllen.
+     *
+     * @param object QJsonObject welches die gewünschten Informationen enthält.
+     */
     void readFromJason(QJsonObject &object);
+    /**
+     * Schreibt ein QJsonObject mit den Informationen dieser Klasse.
+     *
+     * @return Ein fertiges QJsonObject mit den erwünschten Informationen.
+     */
     QJsonObject writeToJason();
 
 private:

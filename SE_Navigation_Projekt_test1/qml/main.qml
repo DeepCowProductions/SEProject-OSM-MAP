@@ -24,10 +24,6 @@ ApplicationWindow {
     signal updateProgressBar(int currentValue, int amount);
     signal clearDirectory(string directory);
 
-    function test () {
-        console.log("test2")
-    }
-
     function pathLength(cords) {
         if (cords.length <2)
             return 0;
@@ -54,7 +50,6 @@ ApplicationWindow {
           return dist
     }
 
-
     function initApp() {
         console.log("invoke initApp -  creating mapItem - started")
         //        placesModelInstance = placesModelComp.createObject();
@@ -66,7 +61,6 @@ ApplicationWindow {
         //        mainStack.pop()
         mapInstance.forceActiveFocus()
         console.log("invoke initApp -  creating mapItem - finished")
-
     }
 
     id: appWindow

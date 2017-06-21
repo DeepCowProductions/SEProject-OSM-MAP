@@ -16,7 +16,8 @@ Item {
     property alias editRouteButton: editRoute
     property alias displayOnMapButton: displayOnMap
 
-    property bool inEditMode: false
+    property bool firstItem : true
+    property int  editMode: 0
 
     signal mapRequest(variant array)
 
@@ -81,11 +82,21 @@ Item {
                     infoPanelNumber.info = roadsListView.model.getCoordsAtIndex(index).length
                     infoPanelDate.info = savedAtDate
                     //                    infoPanelPos.info = ""
-                    inEditMode = false
-
+                    editMode = 0
                 }
                 onDoubleClicked: {
                     mapRequest(roadsListView.model.getCoordsAtIndex(index))
+                }
+                Component.onCompleted: {
+                    if (firstItem) {
+                    roadsListView.currentIndex = index
+                    infoPanelName.info = name
+                    infoPanelLength.info = pathLength(roadsListView.model.getCoordsAtIndex(index))
+                    infoPanelNumber.info = roadsListView.model.getCoordsAtIndex(index).length
+                    infoPanelDate.info = savedAtDate
+                    //                    infoPanelPos.info = ""
+                    firstItem = false
+                    }
                 }
             }
         }
@@ -225,7 +236,7 @@ Item {
                                     width: parent.width * 0.8
                                     height: parent.height
                                     TextInput{
-                                        readOnly: !inEditMode
+                                        readOnly: editMode != 1
                                         property string info
                                         id: infoPanelName
                                         anchors.leftMargin: 10
@@ -234,15 +245,16 @@ Item {
                                         text: info + " "
                                         color: "black"
                                         font.pointSize: 12
-                                        onEditingFinished: {
-                                            console.log("edit fin")
+                                        onAccepted: {
+                                            console.log("edit aceepted")
                                             inEditMode = false
+                                            editMode = 0
                                             routesModel.changeItemName(listView.currentIndex,infoPanelName.text)
                                             listView.update()
                                         }
                                     }
-                                    border.color: inEditMode ? "lightblue" : "transparent"
-                                    border.width: inEditMode ? 1 : 0
+                                    border.color: editMode == 1 ? "lightblue" : "transparent"
+                                    border.width: editMode == 1 ? 1 : 0
                                 }
                             }
                             Row{
@@ -372,15 +384,21 @@ Item {
                             height: parent.height
                             text: "delete"
                             contentItem: Image {
-                                source: inEditMode ? "qrc:/x" : "qrc:/delete"
+                                source: editMode != 0 ? "qrc:/x" : "qrc:/delete"
                                 fillMode: Image.PreserveAspectFit
                             }
                             onClicked: {
-                                if (inEditMode) {
-                                    inEditMode = false
-                                    infoPanelName.info = routesModel.getName(listView.currentIndex)
-                                }else{
-                                    routesModel.deleteItem(listView.currentIndex)
+                                switch (editMode) {
+                                case 0:
+                                    editMode = 2
+                                    break;
+                                case 1:
+                                    editMode = 0
+                                    infoPanelName.text = routesModel.getName(listView.currentIndex)
+                                    break;
+                                case 2:
+                                    editMode = 0
+                                    break;
                                 }
                             }
                         }
@@ -390,18 +408,24 @@ Item {
                             height: parent.height
                             text: "edit"
                             contentItem: Image {
-                                source: inEditMode ? "qrc:/ok" : "qrc:/edit"
+                                source: editMode != 0 ? "qrc:/ok" : "qrc:/edit"
                                 fillMode: Image.PreserveAspectFit
                             }
                             onClicked: {
-                                if (inEditMode) {
-                                    inEditMode = false
+                                switch (editMode) {
+                                case 0:
+                                    editMode = 1
+                                    infoPanelName.forceActiveFocus()
+                                    break;
+                                case 1:
+                                    editMode = 0
                                     routesModel.changeItemName(listView.currentIndex,infoPanelName.text)
                                     listView.update()
-                                }
-                                else {
-                                    inEditMode = true
-                                    infoPanelName.forceActiveFocus()
+                                    break;
+                                case 2:
+                                    editMode = 0
+                                    routesModel.deleteItem(listView.currentIndex)
+                                    break;
                                 }
                             }
                         }

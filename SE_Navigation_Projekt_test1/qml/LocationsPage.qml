@@ -104,7 +104,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignVCenter
-                                        text: mapInstance.position.coordinate +" "
+                                        text: mapInstance.pos.coordinate +" "
                                         color: "black"
                                         font.pointSize: 10
                                     }
@@ -137,7 +137,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignLeft
-                                        text: mapInstance.position.coordinate.latitude + "°"
+                                        text: mapInstance.pos.coordinate.latitude + "°"
                                         color: "black"
                                         font.pointSize: 7
                                     }
@@ -164,7 +164,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignLeft
-                                        text: mapInstance.position.coordinate.longitude +"°"
+                                        text: mapInstance.pos.coordinate.longitude +"°"
                                         color: "black"
                                         font.pointSize: 7
                                     }
