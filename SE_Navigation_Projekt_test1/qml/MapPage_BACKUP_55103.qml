@@ -202,6 +202,7 @@ Item {
                     map.center = positionSource.position.coordinate
                 }
                 if (recordRoute) {
+<<<<<<< HEAD
                     if (typeof(coord) != 'undefined' && !coord &&  !isNaN(coord) ) {
                         polyline.addCoordinate(coord)
                         console.log("Recorded Coordinate list:" + path)
@@ -210,6 +211,12 @@ Item {
                     }else {
 //                        console.log("current coord is NaN")
                     }
+=======
+                    polyline.addCoordinate(coord)
+                    console.log("Recorded Coordinate list:" + path)
+                    console.log(polylineItem.pathLength())
+                    updatePath()
+>>>>>>> a0b9b6f00692b54589f7e319906ce8fe9eb6f76a
                 }
             }else {
                 if (followPerson) {

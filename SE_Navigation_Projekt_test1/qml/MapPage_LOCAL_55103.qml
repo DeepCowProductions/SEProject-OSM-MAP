@@ -128,7 +128,7 @@ Item {
         map.addMapItem(locationMarker)
     }
     function updateCurrenPositionMarker (newCoord) {
-//        console.log("update current location marker")
+        console.log("update current location marker")
         map.removeMapItem(currentPositionMarker)
         currentPositionMarker.coordinate = newCoord
         map.addMapItem(currentPositionMarker)

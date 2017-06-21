@@ -1,62 +1,25 @@
 import QtQuick 2.7
-import QtQuick.Controls 2.2
+import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.0
 import QtPositioning 5.6
 import QtLocation 5.6
 import fhswf.se.nav.settings 1.0
-import Qt.labs.folderlistmodel 2.1
-import fhswf.se.nav.offlinemanager 1.0
 
 
 Item {
     property alias backButton: backButton
-    property alias offlineDirectorySize: currentlyUsedSize
-
-    property double offlineSize: Math.round((offlineManager.calculateUsedSpace("offline") / 1024 / 1024)*100) / 100
-    //    property var cacheSize: getSizeCache()
+    id: topParent
 
     signal deleteDirectory(string directory);
     signal configurationChanged ()
 
-    //    function getSizeOffline() {
-    //        console.log("call offline size calc")
-    //        var c = 0
-    //        for (var i = 0; i <folderOffline.count; i++  ){
-    //            c = c + folderOffline.get (i ,"fileSize")
-    //        }
-    //        return  Math.round(((c / 1024) /1024) * 100) / 100
-    //    }
-    id: topParent
-
     onConfigurationChanged:  {
         console.log("saving settings from qml")
         // instert new options here:
+        settings.offlineDirectory = offlineDirectory.text
         settings.maxOfflineMapSize = sizeOfOfflineDirectory.text * 1000000
-        settings.sdCard = sdCard.checked
-        settings.device = deviceStorage.checked
-
         settings.save()
     }
-
-
-    FolderListModel {
-        id: folderOffline
-        folder: "file://"+mapInstance.plugin.parameters[0].value
-    }
-    //    FolderListModel {
-    //        id: folderCache
-    ////        folder: "file://"+mapInstance.plugin.parameters[1].value
-    //    }
-
-
-    //    function getSizeCache() {
-    //        console.log("call cache size calc")
-    //        var c = 0
-    //        for (var i = 0; i <folderCache.count; i++  ){
-    //            c = c + folderCache.get (i ,"fileSize")
-    //        }
-    //        return  Math.round(((c / 1024) /1024) * 100) / 100
-    //    }
 
     Column{
         id:mainColumn
@@ -149,24 +112,11 @@ Item {
                                 font.pointSize: 12
                             }
                         }
-
-                    }
-                    Row {
-                        width: parent.width
-                        height: 50
-                        Rectangle{
-                            width: parent.width
-                            height: parent.height
-                            TextField {
-                                id: pathToOfflineDirecory
-                                width: parent.width
-                                text: settings.offlineDirectory
-                                //                            enabled: false
-                                wrapMode: TextField.Wrap
-                                verticalAlignment: Text.AlignVCenter
-                                horizontalAlignment: Text.AlignLeft
-                                font.pointSize: 8
-                            }
+                        TextField {
+                            id: pathToOfflineDirecory
+                            width: parent.width * 0.25
+                            text: settings.offlineDirectory
+                            //                            enabled: false
                         }
                     }
                     Row {
@@ -188,7 +138,7 @@ Item {
                         TextField {
                             id: sizeOfOfflineDirectory
                             width: parent.width * 0.25
-                            validator: RegExpValidator {regExp: /^\d+$/}
+                            inputMask: "9999"
                             text: settings.maxOfflineMapSize / 1000000
                             placeholderText: qsTr("Size in MB")
                             onEditingFinished: configurationChanged()
@@ -215,7 +165,7 @@ Item {
                         TextField {
                             id: currentlyUsedSize
                             width: parent.width * 0.25
-                            text:  offlineSize
+                            text: Math.round(((settings.usedOfflineDirectorySize / 1024) /1024) * 100) / 100
                             placeholderText: ""
                         }
                     }
@@ -242,8 +192,6 @@ Item {
                         RadioButton{
                             id: sdCard
                             ButtonGroup.group: storageGroup
-                            enabled: settings.existsSdCar
-                            checked: settings.sdCard
                             //                                checked: settings.
                         }
                     }
@@ -266,7 +214,7 @@ Item {
                         RadioButton{
                             id: deviceStorage
                             ButtonGroup.group: storageGroup
-                            checked: settings.device
+                            checked: true
                             //                                checked: settings.
                         }
                     }
@@ -276,7 +224,7 @@ Item {
                         Rectangle{
                             width: parent.width
                             height:  parent.height
-                            HighlightButton{
+                            Button{
                                 id: clearOfflineDirectory
                                 anchors.leftMargin: 10
                                 anchors.rightMargin: 10
@@ -286,10 +234,7 @@ Item {
                                 width: parent.width
                                 anchors.fill: parent
                                 text: qsTr("Clear offline directory")
-                                onClicked: {
-                                    offlineManager.deleteAll()
-                                    currentlyUsedSize.text = Math.round((offlineManager.calculateUsedSpace("offline") / 1024 / 1024)*100) / 100
-                                }
+                                onClicked: deleteDirectory("offline")
                             }
                         }
                     }
@@ -339,8 +284,32 @@ Item {
                         TextField {
                             id: currentlyCacheUsedSize
                             width: parent.width * 0.25
-                            text: Math.round((offlineManager.calculateUsedSpace("cache") / 1024 / 1024)*100) /100//Math.round(((settings.usedOfflineDirectorySize / 1024) /1024) * 100) / 100
+                            text: Math.round(((settings.usedOfflineDirectorySize / 1024) /1024) * 100) / 100
                             placeholderText: ""
+                        }
+                    }
+                    Row{
+                        width: parent.width
+                        height: 50
+                        Rectangle{
+                            width: parent.width
+                            height:  parent.height
+                            Button{
+                                id: clearCacheDirectory
+                                anchors.leftMargin: 10
+                                anchors.rightMargin: 10
+                                anchors.topMargin: 5
+                                anchors.bottomMargin: 5
+
+                                width: parent.width
+                                anchors.fill: parent
+                                text: qsTr("Clear Cache directory")
+                                onClicked: {
+                                    deleteDirectory("cache")
+                                    deleteDirectory("genericcache")
+                                }
+
+                            }
                         }
                     }
                 }
@@ -349,9 +318,7 @@ Item {
                     Keys.escapePressed.connect(backButton.clicked)
                     forceActiveFocus()
                 }
-                HeaderSpacer{
-                    height: 1
-                }
+
             }
         }
     }

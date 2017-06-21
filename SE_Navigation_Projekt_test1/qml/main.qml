@@ -300,7 +300,7 @@ ApplicationWindow {
         SettingsPage {
             id: settingsPage
             backButton.onClicked: {
-                configurationChanged()
+                settingsPage.configurationChanged()
                 if(settings.offlineDirectory !== mapInstance.plugin.parameters[0].value){
                     mainStack.pop(mapInstance)
                     initApp()

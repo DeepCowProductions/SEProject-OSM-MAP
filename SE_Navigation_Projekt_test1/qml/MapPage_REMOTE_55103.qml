@@ -20,15 +20,13 @@ Item {
     property alias plugin: osmPlugin
     property alias posSrc: positionSource
 
-    property var nullPos: QtPositioning.coordinate(10,10)
-
     property real fakedirection
     property int currentValue: 0
     property int amount: 100
     property bool showProgressBar: false
     property bool posSrcValid: positionSource.valid && positionSource.name != "geoclue" /*geoclue for desktop geoService usually not working */
 
-    property var pos: positionSource.valid ? positionSource.position : nullPos
+    property var pos: positionSource.valid ? positionSource.position : "undefined"
     property var posCoord: positionSource.valid ? positionSource.position.coordinate : map.center
 
     property bool followPerson
@@ -202,19 +200,12 @@ Item {
                     map.center = positionSource.position.coordinate
                 }
                 if (recordRoute) {
-                    if (typeof(coord) != 'undefined' && !coord &&  !isNaN(coord) ) {
-                        polyline.addCoordinate(coord)
-                        console.log("Recorded Coordinate list:" + path)
-                        console.log(polylineItem.pathLength())
-                        updatePath()
-                    }else {
-//                        console.log("current coord is NaN")
-                    }
+                    polyline.addCoordinate(coord)
+                    console.log("Recorded Coordinate list:" + path)
+                    console.log(polylineItem.pathLength())
+                    updatePath()
                 }
             }else {
-                if (followPerson) {
-                    updateCurrenPositionMarker(map.center)
-                }
                 if (recordRoute) {
                     polyline.addCoordinate(map.center)
                     updatePath()
@@ -222,6 +213,9 @@ Item {
                     //            map.addMapItem(marker)
                     console.log(polylineItem.pathLength())
                     console.log("Recorded Coordinate list:" + path)
+                }
+                if (followPerson) {
+                    updateCurrenPositionMarker(map.center)
                 }
             }
         }
@@ -366,10 +360,10 @@ Item {
                     //                geocodeModel.update()
                     if (posSrcValid) {
                         map.center = positionSource.position.coordinate
-                        updateCurrenPositionMarker(positionSource.position.coordinate)
+                        updateLocationMarker(positionSource.position.coordinate)
                     }
                     else {
-                        updateCurrenPositionMarker(map.center)
+                        updateLocationMarker(map.center)
                     }
                 }
                 contentItem: Image {
