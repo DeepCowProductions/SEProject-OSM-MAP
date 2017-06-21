@@ -20,13 +20,15 @@ Item {
     property alias plugin: osmPlugin
     property alias posSrc: positionSource
 
+    property var nullPos: QtPositioning.coordinate(10,10)
+
     property real fakedirection
     property int currentValue: 0
     property int amount: 100
     property bool showProgressBar: false
     property bool posSrcValid: positionSource.valid && positionSource.name != "geoclue" /*geoclue for desktop geoService usually not working */
 
-    property var pos: positionSource.valid ? positionSource.position : "undefined"
+    property var pos: positionSource.valid ? positionSource.position : nullPos
     property var posCoord: positionSource.valid ? positionSource.position.coordinate : map.center
 
     property bool followPerson
@@ -200,10 +202,14 @@ Item {
                     map.center = positionSource.position.coordinate
                 }
                 if (recordRoute) {
-                    polyline.addCoordinate(coord)
-                    console.log("Recorded Coordinate list:" + coordList)
-                    console.log(polylineItem.pathLength())
-                    updatePath()
+                    if (typeof(coord) != 'undefined' && !coord &&  !isNaN(coord) ) {
+                        polyline.addCoordinate(coord)
+                        console.log("Recorded Coordinate list:" + path)
+                        console.log(polylineItem.pathLength())
+                        updatePath()
+                    }else {
+//                        console.log("current coord is NaN")
+                    }
                 }
             }else {
                 if (followPerson) {

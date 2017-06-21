@@ -188,7 +188,7 @@ Item {
                         TextField {
                             id: sizeOfOfflineDirectory
                             width: parent.width * 0.25
-                            inputMask: "9999"
+                            validator: RegExpValidator {regExp: /^\d+$/}
                             text: settings.maxOfflineMapSize / 1000000
                             placeholderText: qsTr("Size in MB")
                             //                            onEditingFinished: configurationChanged()

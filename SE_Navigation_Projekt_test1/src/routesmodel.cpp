@@ -173,6 +173,10 @@ bool RoutesModel::addItem( QString name, QJSValue value )
 
 bool RoutesModel::deleteItem(const int &index)
 {
+    if (m_roads.isEmpty())
+        return false;
+    if (m_roads.isEmpty())
+        return false;
     beginRemoveRows(QModelIndex() , index , index);
 //    m_roads.clear();
     m_roads.removeAt(index);
@@ -183,6 +187,8 @@ bool RoutesModel::deleteItem(const int &index)
 
 bool RoutesModel::changeItemName(const int &i, const QVariant &value)
 {
+    if (m_roads.isEmpty())
+        return false;
 //    if (m_roads[i].name() != value) {
 //        m_roads[i].setName(value.toString());
 //        emit dataChanged(index(i,-1), index(i,-1), QVector<int>() << NameRole); // maybe not correct...
@@ -231,6 +237,9 @@ QList<QVariant> RoutesModel::getCoordsAtIndex(int index)
     //    return m_roads[index].coordinates();
     QVariantList tmp;
 
+    if (m_roads.isEmpty())
+        return tmp;
+
     tmp.reserve(m_roads[index].coordinates().size());
 
     for (const QGeoCoordinate& i: m_roads[index].coordinates())
@@ -241,6 +250,8 @@ QList<QVariant> RoutesModel::getCoordsAtIndex(int index)
 
 QString RoutesModel::getName(int index)
 {
+    if (m_roads.isEmpty())
+        return "";
     return m_roads[index].name();
 }
 
