@@ -18,14 +18,14 @@ Item {
     signal deleteDirectory(string directory);
     signal configurationChanged ()
 
-//    function getSizeOffline() {
-//        console.log("call offline size calc")
-//        var c = 0
-//        for (var i = 0; i <folderOffline.count; i++  ){
-//            c = c + folderOffline.get (i ,"fileSize")
-//        }
-//        return  Math.round(((c / 1024) /1024) * 100) / 100
-//    }
+    //    function getSizeOffline() {
+    //        console.log("call offline size calc")
+    //        var c = 0
+    //        for (var i = 0; i <folderOffline.count; i++  ){
+    //            c = c + folderOffline.get (i ,"fileSize")
+    //        }
+    //        return  Math.round(((c / 1024) /1024) * 100) / 100
+    //    }
     id: topParent
 
     onConfigurationChanged:  {
@@ -188,10 +188,9 @@ Item {
                         TextField {
                             id: sizeOfOfflineDirectory
                             width: parent.width * 0.25
-                            inputMask: "9999"
                             text: settings.maxOfflineMapSize / 1000000
                             placeholderText: qsTr("Size in MB")
-                            //                            onEditingFinished: configurationChanged()
+                            onEditingFinished: configurationChanged()
                         }
                     }
 
@@ -243,7 +242,7 @@ Item {
                             id: sdCard
                             ButtonGroup.group: storageGroup
                             enabled: settings.existsSdCar
-                            checked: false
+                            checked: settings.sdCard
                             //                                checked: settings.
                         }
                     }
@@ -266,7 +265,7 @@ Item {
                         RadioButton{
                             id: deviceStorage
                             ButtonGroup.group: storageGroup
-                            checked: true
+                            checked: settings.device
                             //                                checked: settings.
                         }
                     }

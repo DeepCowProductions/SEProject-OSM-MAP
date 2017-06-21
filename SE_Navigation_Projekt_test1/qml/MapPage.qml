@@ -126,7 +126,7 @@ Item {
         map.addMapItem(locationMarker)
     }
     function updateCurrenPositionMarker (newCoord) {
-        console.log("update current location marker")
+//        console.log("update current location marker")
         map.removeMapItem(currentPositionMarker)
         currentPositionMarker.coordinate = newCoord
         map.addMapItem(currentPositionMarker)
@@ -201,7 +201,7 @@ Item {
                 }
                 if (recordRoute) {
                     polyline.addCoordinate(coord)
-                    console.log("Recorded Coordinate list:" + coordList)
+                    console.log("Recorded Coordinate list:" + path)
                     console.log(polylineItem.pathLength())
                     updatePath()
                 }
