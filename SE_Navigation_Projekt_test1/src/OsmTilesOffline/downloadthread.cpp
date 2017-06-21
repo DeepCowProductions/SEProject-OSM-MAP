@@ -30,5 +30,6 @@ void DownloadThread::startDownload(QVariant center, QString provider, int zoomLe
     m_windowSize = QPoint(width, height);
     m_zoomLevel = zoomLevel;
     m_depth = depth;
+    this->setPriority(QThread::HighPriority);
     this->start();
 }

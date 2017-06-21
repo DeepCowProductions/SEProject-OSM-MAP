@@ -25,6 +25,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<PlacesModel>("fhswf.se.nav.models", 1, 0, "PlacesModel");
     qmlRegisterType<RoutesModel>("fhswf.se.nav.models", 1, 0, "RoutesModel");
     qmlRegisterType<LocationPin>("fhswf.se.nav.models", 1, 0, "LocationPin");
+    qmlRegisterType<TileOfflineManager>("fhswf.se.nav.offlinemanager", 1, 0, "TileManager");
 
 
     QQmlApplicationEngine engine;
@@ -38,12 +39,10 @@ int main(int argc, char *argv[])
     }
 
     DownloadThread * thread = new DownloadThread(item);
-    TileOfflineManager * offlineManager = new TileOfflineManager("jpg", item);
     QObject::connect(item, SIGNAL(saveTiles(QVariant, QString, int, int, int, int)), thread, SLOT(startDownload(QVariant, QString, int, int, int, int)));
 
-    QObject::connect(thread, SIGNAL(downloadFinished()), item, SIGNAL(enableButton()));
+    QObject::connect(thread, SIGNAL(downloadFinished()), item, SIGNAL(downloadFinished()));
 
-    QObject::connect(item, SIGNAL(clearDirectory(QString)), offlineManager, SLOT(deleteAll(QString)));
     QObject::connect(thread, SIGNAL(updateProgressBar(int,int)), item, SIGNAL(updateProgressBar(int, int )));
     //    TilesDownloader * downloader = new TilesDownloader(item, screenSize);
 

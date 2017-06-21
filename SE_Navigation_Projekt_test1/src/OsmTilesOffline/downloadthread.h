@@ -23,6 +23,7 @@ signals:
 
     void downloadFailed();
 
+
 public slots:
 
     void startDownload(QVariant center, QString provider, int zoomLevel, int depth, int width, int height);

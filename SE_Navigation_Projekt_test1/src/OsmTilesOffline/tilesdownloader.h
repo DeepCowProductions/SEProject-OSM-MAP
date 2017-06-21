@@ -16,6 +16,7 @@
 #include "tile.h"
 #include "tilereply.h"
 #include "tileofflinemanager.h"
+
 /**
  * @brief The TilesDownloader class Klasse zum runterladen von Tiles in Form von Bilddateien. Zunächst werden aus der Bildschirmgröße,
  *          dem Mittelpunkt des aktuell angezeigten Fensters und dem aktuellen Zoomlevel, die zu runterladenen Kacheln ermittelt und
@@ -80,7 +81,7 @@ private:
      *          runterladen der einzelnen Kacheln.
      * @param tile Kachel zu dem der Request erstellt werden soll
      */
-    void createRequest(Tile * tile);
+    QNetworkRequest createRequest(Tile * tile);
 
     /**
      * @brief sendingRequests startet das eigentliche runterladen der Kacheln.
@@ -113,9 +114,9 @@ private:
     QList<Tile *> m_downloadTiles;
 
     /**
-     * @brief m_requests List in der die Requests zu den Kacheln gespeichert werden.
+     * @brief m_downloadTiles Liste die die Daten zu den jeweiligen Kacheln enthält.
      */
-    QList<QNetworkRequest * > m_requests;
+    QList<Tile *> m_requests;
 
     /**
      * @brief m_counter Zählvariable in der die fertig runtergeladenen Kacheln mitgezählt werden.

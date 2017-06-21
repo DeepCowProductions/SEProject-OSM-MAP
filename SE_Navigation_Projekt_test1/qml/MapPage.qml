@@ -458,10 +458,12 @@ Item {
                     visible = false
                     map.forceActiveFocus()
                     saveTiles(map.center, "korona.geog.uni-heidelberg.de", map.zoomLevel,( zoomleveldepth-minZoom))
+                    showProgressBar = true
                     console.log(map.center+", " + "korona.geog.uni-heidelberg.de"+", " + map.zoomLevel +", "+ ( zoomleveldepth-minZoom))
                 }
                 onRejected: {
                     visible = false
+                    showProgressBar = false
                     map.forceActiveFocus()
                 }
                 Component.onCompleted: visible = true
@@ -543,6 +545,7 @@ Item {
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width * 0.6
+            height: parent.height * 0.05
             minnValue: 0
             value: currentValue
             maxValue: amount
