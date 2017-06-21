@@ -8,7 +8,7 @@ DownloadThread::DownloadThread(QObject* parent) : QThread(parent)
 void DownloadThread::run()
 {
     TilesDownloader downloader;
-    m_mutex.lock();
+//    m_mutex.lock();
     QVariant center = m_center;
     QString provider = m_provider;
     QPoint windowSize = m_windowSize;
@@ -18,7 +18,7 @@ void DownloadThread::run()
     connect(&downloader, SIGNAL(downloadFinished()), this, SIGNAL(downloadFinished()));
     QEventLoop loop;
     connect(&downloader, SIGNAL(downloadFinished()), &loop, SLOT(quit()));
-    m_mutex.unlock();
+//    m_mutex.unlock();
     downloader.downloadTiles(center, provider, zoomLevel, depth, windowSize);
     loop.exec();
 }
@@ -30,6 +30,6 @@ void DownloadThread::startDownload(QVariant center, QString provider, int zoomLe
     m_windowSize = QPoint(width, height);
     m_zoomLevel = zoomLevel;
     m_depth = depth;
-    this->setPriority(QThread::HighPriority);
+//    this->setPriority(QThread::HighPriority);
     this->start();
 }

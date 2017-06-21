@@ -43,20 +43,6 @@ Item {
         id: folderOffline
         folder: "file://"+mapInstance.plugin.parameters[0].value
     }
-    //    FolderListModel {
-    //        id: folderCache
-    ////        folder: "file://"+mapInstance.plugin.parameters[1].value
-    //    }
-
-
-    //    function getSizeCache() {
-    //        console.log("call cache size calc")
-    //        var c = 0
-    //        for (var i = 0; i <folderCache.count; i++  ){
-    //            c = c + folderCache.get (i ,"fileSize")
-    //        }
-    //        return  Math.round(((c / 1024) /1024) * 100) / 100
-    //    }
 
     Column{
         id:mainColumn

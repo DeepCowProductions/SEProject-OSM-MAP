@@ -40,8 +40,8 @@ void TilesDownloader::downloadTiles(QVariant center, QString tileProvider, int z
     int zLevel = m_startTile->zoomlevel();
 
     Tile* tile;
-    QTime time;
-    time.start();
+//    QTime time;
+//    time.start();
     //Äußere Schleife für zoomlevel
     for(int z = 0; z < depth+1; z++){
         //Schleife die abhängig von der Bildschirmgröße die benötigte Anzahl an Tiles für das aktuelle zoomlevel berechnet
@@ -61,7 +61,7 @@ void TilesDownloader::downloadTiles(QVariant center, QString tileProvider, int z
             }
         }
     }
-    qDebug() << "Time for creation(in msecs): " << time.elapsed() / 1000;
+//    qDebug() << "Time for creation(in msecs): " << time.elapsed() / 1000.0;
     if(!m_downloadTiles.isEmpty())
         sendingRequests();
     else
@@ -93,8 +93,8 @@ QNetworkRequest TilesDownloader::createRequest(Tile *tile)
 
 void TilesDownloader::saveTile(Tile *tile)
 {
-    m_tom->saveToFile(tile);
-    qDebug() << "Counter" << m_counter;
+    qDebug() << m_tom->saveToFile(tile);
+//    qDebug() << "Counter" << m_counter;
     delete static_cast<TileReply *>(sender());
     if(m_counter < m_downloadTiles.size()){
         emit nextTileDownloadStarted(m_counter, m_downloadTiles.size());

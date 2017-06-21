@@ -18,11 +18,13 @@ QHash<int, QByteArray> RoutesModel::roleNames() const
 
 int RoutesModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return m_roads.size();
 }
 
 int RoutesModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return 2;
 }
 
