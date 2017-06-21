@@ -238,7 +238,7 @@ Item {
                                 Rectangle{
                                     width: parent.width * 0.8
                                     height: parent.height
-                                    TextEdit{
+                                    TextInput{
                                         readOnly: !inEditMode
                                         property string info
                                         id: infoPanelName
@@ -249,6 +249,12 @@ Item {
                                         text: info + " "
                                         color: "black"
                                         font.pointSize: 12
+                                        onEditingFinished: {
+                                            console.log("edit fin")
+                                            inEditMode = false
+                                            placesModel.changeItemName(listView.currentIndex,infoPanelName.text)
+                                            listView.update()
+                                        }
                                     }
                                     border.color: inEditMode ? "lightblue" : "transparent"
                                     border.width: inEditMode ? 1 : 0

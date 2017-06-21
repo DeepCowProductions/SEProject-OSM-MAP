@@ -169,6 +169,8 @@ bool PlacesModel::addItem(QString name, QGeoCoordinate coord)
 
 bool PlacesModel::deleteItem(const int &index)
 {
+    if (m_places.isEmpty())
+        return false;
     beginRemoveRows(QModelIndex() , index , index);
 //    m_roads.clear();
     m_places.removeAt(index);
@@ -179,6 +181,8 @@ bool PlacesModel::deleteItem(const int &index)
 
 bool PlacesModel::changeItemName(const int &i, const QVariant &value)
 {
+    if (m_places.isEmpty())
+        return false;
     bool suc = setData(index(i,0),value,NameRole);
     writeUserData();
     return suc;
@@ -186,16 +190,22 @@ bool PlacesModel::changeItemName(const int &i, const QVariant &value)
 
 QString PlacesModel::getName(int index)
 {
+    if (m_places.isEmpty())
+        return "";
     return m_places[index].name();
 }
 
 double PlacesModel::getLatiAtIndex(int index)
 {
+    if (m_places.isEmpty())
+        return 0.0;
     return m_places[index].coordinate().latitude();
 }
 
 double PlacesModel::getLongiAtIndex(int index)
 {
+    if (m_places.isEmpty())
+        return 0.0;
     return m_places[index].coordinate().longitude();
 }
 

@@ -224,7 +224,7 @@ Item {
                                 Rectangle{
                                     width: parent.width * 0.8
                                     height: parent.height
-                                    TextField{
+                                    TextInput{
                                         readOnly: !inEditMode
                                         property string info
                                         id: infoPanelName
@@ -232,11 +232,15 @@ Item {
                                         anchors.leftMargin: 10
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
-                                        horizontalAlignment: Text.AlignLeft
                                         text: info + " "
                                         color: "black"
                                         font.pointSize: 12
-
+                                        onEditingFinished: {
+                                            console.log("edit fin")
+                                            inEditMode = false
+                                            routesModel.changeItemName(listView.currentIndex,infoPanelName.text)
+                                            listView.update()
+                                        }
                                     }
                                     border.color: inEditMode ? "lightblue" : "transparent"
                                     border.width: inEditMode ? 1 : 0
