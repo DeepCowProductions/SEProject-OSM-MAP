@@ -206,6 +206,9 @@ Item {
                     updatePath()
                 }
             }else {
+                if (followPerson) {
+                    updateCurrenPositionMarker(map.center)
+                }
                 if (recordRoute) {
                     polyline.addCoordinate(map.center)
                     updatePath()
@@ -213,9 +216,6 @@ Item {
                     //            map.addMapItem(marker)
                     console.log(polylineItem.pathLength())
                     console.log("Recorded Coordinate list:" + path)
-                }
-                if (followPerson) {
-                    updateCurrenPositionMarker(map.center)
                 }
             }
         }
@@ -360,10 +360,10 @@ Item {
                     //                geocodeModel.update()
                     if (posSrcValid) {
                         map.center = positionSource.position.coordinate
-                        updateLocationMarker(positionSource.position.coordinate)
+                        updateCurrenPositionMarker(positionSource.position.coordinate)
                     }
                     else {
-                        updateLocationMarker(map.center)
+                        updateCurrenPositionMarker(map.center)
                     }
                 }
                 contentItem: Image {
