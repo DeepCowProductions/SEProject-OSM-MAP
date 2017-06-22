@@ -12,7 +12,10 @@
 #endif
 /**
  * @brief The Settings class
- * Settings class to hold inforamtion about the current app status and settings.
+ * Settingsklasse specuhert und verwaltet Informationen und Einstellungen der App.
+ * Diese Klasse macht intern gebrauch der QSettings Klasse um eine config Datei zu speichern,
+ * welche global von der gesamten app gelesen werden kann.
+ * Die hier definierten Properties stellen teilweise Einstellungen dar, die auf diese weise gespeichert werden.
  *
  * [...]
  */
@@ -50,7 +53,13 @@ signals:
     void existsSdCarChanged(bool existsSdCar);
 
 public slots:
+    /**
+     * @brief save ruft writeSettings auf.
+     */
     void save();
+    /**
+     * @brief load ruft readSettings auf.
+     */
     void load();
 
     void setMaxOfflineMapSize(int maxOfflineMapSize);
@@ -64,7 +73,6 @@ protected:
     virtual void writeSettings();
 
 private:
-
 
     QSettings * m_settings = Q_NULLPTR;
 
