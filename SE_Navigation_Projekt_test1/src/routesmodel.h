@@ -137,7 +137,19 @@ public slots:
 public slots:
 
 protected:
+    /**
+     * @brief readUserDataFromJson
+     * Liest Daten aus einem QJsonObject in das Klassen eigene Array ein.
+     * @param object
+     * @return
+     */
     bool readUserDataFromJson (QJsonObject &object);
+    /**
+     * @brief writeUserDataToJson
+     * Schreibt Daten aus dem array in das QJsonObject.
+     * @param object
+     * @return
+     */
     bool writeUserDataToJson (QJsonObject &object);
 
     /**

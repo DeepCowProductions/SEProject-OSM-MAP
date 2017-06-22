@@ -103,9 +103,7 @@ Item {
         while (polyline.pathLength() > 0) {
             polylineItem.removeCoordinate(0)
         }
-        //        map.addMapItem(polyline)
         polyline.visible = false
-        //        polyline.update()
     }
 
     function updatePath (newPath) {
@@ -128,7 +126,7 @@ Item {
         map.addMapItem(locationMarker)
     }
     function updateCurrenPositionMarker (newCoord) {
-//        console.log("update current location marker")
+        console.log("update current location marker")
         map.removeMapItem(currentPositionMarker)
         currentPositionMarker.coordinate = newCoord
         map.addMapItem(currentPositionMarker)
@@ -143,7 +141,6 @@ Item {
     onFollowPersonChanged: {
         console.log("followPerson changed, new value is: " + followPerson)
         if (!followPerson) {
-            //            map.removeMapItem(currentPositionMarker)
         }
     }
 
@@ -161,7 +158,6 @@ Item {
         }
         updateLocationMarker(coord)
         map.center = coord
-//        map.zoomLevel = 10
     }
 
     onMapRequestRoute: {
@@ -182,7 +178,6 @@ Item {
             console.log("PositionSOurece is after start() : " + valid + " and " + active)
         }
         onPositionChanged: {
-            //            console.log("PositionChanged: recordroute is " + recordRoute + ", followPerson is " + followPerson)
             console.log("PositionChanged, new pos is: " +  positionSource.position.coordinate )
             if (posSrcValid) updateCurrenPositionMarker(positionSource.position.coordinate)
         }
@@ -190,7 +185,7 @@ Item {
 
     Timer {
         id: timer
-        interval: 500
+        interval: 400
         repeat: true
         onTriggered: {
             //            console.log("timer Timeout: recordroute is " + recordRoute + ", followPerson is " + followPerson)
@@ -208,7 +203,7 @@ Item {
                         console.log(polylineItem.pathLength())
                         updatePath()
                     }else {
-//                        console.log("current coord is NaN")
+                        console.log("current coord is NaN")
                     }
                 }
             }else {
@@ -218,8 +213,6 @@ Item {
                 if (recordRoute) {
                     polyline.addCoordinate(map.center)
                     updatePath()
-                    //            marker.coordinate = map.center
-                    //            map.addMapItem(marker)
                     console.log(polylineItem.pathLength())
                     console.log("Recorded Coordinate list:" + path)
                 }
@@ -272,34 +265,9 @@ Item {
         opacity: 0.8
     }
 
-    //    GeocodeModel {
-    //        id: geocodeModel
-    //        plugin: map.plugin
-    //        onLocationsChanged:
-    //        {
-    //            if (count == 1) {
-    //                map.center.latitude = get(0).coordinate.latitude
-    //                map.center.longitude = get(0).coordinate.longitude
-    //            }
-    //            upateLocationMarker(get(0).coordinate)
-    //        }
-    //    }
-
-    //    Address {
-    //        id :fromAddress
-    //        street: "Hochstraße 16"
-    //        city: "Iserlohn"
-    //        country: "Germany"
-    //        state : ""
-    //        postalCode: ""
-    //    }
-
-
     Plugin {
         id: osmPlugin
         name: "osm"
-        // specify plugin parameters if necessary
-
         PluginParameter {
             name: "osm.mapping.offline.directory"
             value: "file://" + settings.offlineDirectory
@@ -307,16 +275,9 @@ Item {
                 console.log(name + ", " +  value)
             }
         }
-
-        //        PluginParameter {
-        //            name: "osm.mapping.cache.directory"
-        //            value: StandardPaths.writableLocation(StandardPaths.standardLocations(1))
-        //        }
         Component.onCompleted: {
             console.log(settings.offlineDirectory)
-            console.log()
             console.log("OsmPlugin loaded")
-            //             console.log(osmPlugin.OfflineMappingFeature.)
         }
     }
 
@@ -362,8 +323,6 @@ Item {
                 height: parent.height
                 onClicked: {
                     console.log ("default hanlder for centerOnMeButton")
-                    //                geocodeModel.query = fromAddress
-                    //                geocodeModel.update()
                     if (posSrcValid) {
                         map.center = positionSource.position.coordinate
                         updateCurrenPositionMarker(positionSource.position.coordinate)
@@ -384,7 +343,6 @@ Item {
                 text: "toggleRecordRouteButton"
                 width: (parent.width-16) * 0.2
                 height: parent.height
-                //            text: map.center.map.center.latitude
                 onClicked: {
                     console.log ("default hanlder for toggleRecordRouteButton ")
                     toggleRecordRoute()
@@ -420,21 +378,88 @@ Item {
                 id : map
                 anchors.fill: parent
                 plugin: osmPlugin
-                center: positionSource.position.coordinate
+                center: pos.coordinate
                 zoomLevel: 10
+                Component.onCompleted: center = pos.coordinate
             }
+        }
+        RoundHighlightButton{
+            id: saveButton
+            enabled: saveButtonEnabled
+            text: "Save Data"
+            onClicked: {
+                saveTilesDialogComp.createObject(map)
+            }
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            contentItem: Image {
+                source: "qrc:/file"
+                fillMode: Image.PreserveAspectFit
+            }
+            radius: 9000
+        }
+        RoundHighlightButton{
+            id: pinButton
+            text: "Save Data"
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            contentItem: Image {
+                source: "qrc:/pindrop"
+                fillMode: Image.PreserveAspectFit
+            }
+            radius: 9000
+            onClicked: {
+                locationPin.setCoordinateEx(map.center)
+                updatePinPositionMarker(locationPin.coordinateEx())
+            }
+        }
+        RoundHighlightButton{
+            id: locatepinButton
+            text: "Save Data"
+            anchors.bottom: pinButton.top
+            anchors.right: parent.right
+            contentItem: Image {
+                source: "qrc:/locatePin"
+                fillMode: Image.PreserveAspectFit
+            }
+            radius: 9000
+            onClicked: {
+                updatePinPositionMarker(locationPin.coordinateEx())
+                map.center = locationPin.coordinateEx()
+            }
+        }
+        RoundHighlightButton{
+            id: infoButton
+            text: "Save Data"
+            anchors.bottom: saveButton.top
+            anchors.left: parent.lefre
+            contentItem: Image {
+                source: "qrc:/helpoutline"
+                fillMode: Image.PreserveAspectFit
+            }
+            radius: 9000
+        }
+        CustomProgressBar {
+            id: progressBar
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: parent.width * 0.6
+            height: parent.height * 0.05
+            minnValue: 0
+            value: currentValue
+            maxValue: amount
+            isActive: showProgressBar
         }
         Component{
             id: saveMsgOnRecordToggle
             SimpleTextDialog {
                 title: "Do you want to savee this route?"
-                labelText: "Enter a name to save"
+                labelText: "Enter a name to save \n  not saving will delete this route!"
                 onAccepted: {
                     console.log("input is: " + input)
                     console.log("path to save s : " + path)
                     console.log("qml: call roadsModel.addItem(...)")
                     routesModel.addItem(input,path)
-                    // TODO: option to keep path displayed???
                     clearPath()
                     visible = false
                     //                    updatePath()
@@ -445,9 +470,6 @@ Item {
                     console.log("This path will be gone: " + polyline.path)
                     visible = false
                     clearPath()
-                    //                    updatePath()
-                    //                    map.removeMapItem(polyline)
-                    //                    map.addMapItem(polyline)
                     map.forceActiveFocus()
                 }
                 Component.onCompleted: visible = true
@@ -475,91 +497,5 @@ Item {
                 Component.onCompleted: visible = true
             }
         }
-        RoundHighlightButton{
-            id: saveButton
-            enabled: saveButtonEnabled // && !headerSpacer.isActive
-            text: "Save Data"
-            //            onClicked: appWindow.saveTiles(map.center, map.zoomLevel)
-            onClicked: {
-                saveTilesDialogComp.createObject(map)
-            }
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            //            width: (parent.width -16)  * 0.16
-            //            height: (parent.height - 8) * 0.08
-
-            contentItem: Image {
-                source: "qrc:/file"
-                fillMode: Image.PreserveAspectFit
-            }
-            radius: 9000
-        }
-        RoundHighlightButton{
-            id: pinButton
-            text: "Save Data"
-            //            onClicked: appWindow.saveTiles(map.center, map.zoomLevel)
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            //            width: (parent.width -16)  * 0.16
-            //            height: (parent.height - 8) * 0.08
-
-            contentItem: Image {
-                source: "qrc:/pindrop"
-                fillMode: Image.PreserveAspectFit
-            }
-            radius: 9000
-            onClicked: {
-                locationPin.setCoordinateEx(map.center)
-                updatePinPositionMarker(locationPin.coordinateEx())
-            }
-        }
-        RoundHighlightButton{
-            id: locatepinButton
-            text: "Save Data"
-            anchors.bottom: pinButton.top
-            anchors.right: parent.right
-            //            width: (parent.width -16)  * 0.16
-            //            height: (parent.height - 8) * 0.08
-
-            contentItem: Image {
-                source: "qrc:/locatePin"
-                fillMode: Image.PreserveAspectFit
-            }
-            radius: 9000
-            onClicked: {
-                updatePinPositionMarker(locationPin.coordinateEx())
-                map.center = locationPin.coordinateEx()
-            }
-        }
-        RoundHighlightButton{
-            id: infoButton
-            text: "Save Data"
-            //            onClicked: appWindow.saveTiles(map.center, map.zoomLevel)
-            anchors.bottom: saveButton.top
-            anchors.left: parent.lefre
-            //            width: (parent.width -16)  * 0.16
-            //            height: (parent.height - 8) * 0.08
-
-            contentItem: Image {
-                source: "qrc:/helpoutline"
-                fillMode: Image.PreserveAspectFit
-            }
-            radius: 9000
-        }
-        CustomProgressBar {
-            id: progressBar
-            anchors.bottom: parent.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
-            width: parent.width * 0.6
-            height: parent.height * 0.05
-            minnValue: 0
-            value: currentValue
-            maxValue: amount
-            isActive: showProgressBar
-        }
     }
-    // Only Temporary
-//    Component.onCompleted: {
-//        map.addMapItem(polyline)
-//    }
 }

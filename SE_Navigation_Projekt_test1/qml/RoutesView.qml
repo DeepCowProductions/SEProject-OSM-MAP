@@ -81,7 +81,6 @@ Item {
                     infoPanelLength.info = pathLength(roadsListView.model.getCoordsAtIndex(index))
                     infoPanelNumber.info = roadsListView.model.getCoordsAtIndex(index).length
                     infoPanelDate.info = savedAtDate
-                    //                    infoPanelPos.info = ""
                     editMode = 0
                 }
                 onDoubleClicked: {
@@ -89,13 +88,12 @@ Item {
                 }
                 Component.onCompleted: {
                     if (firstItem) {
-                    roadsListView.currentIndex = index
-                    infoPanelName.info = name
-                    infoPanelLength.info = pathLength(roadsListView.model.getCoordsAtIndex(index))
-                    infoPanelNumber.info = roadsListView.model.getCoordsAtIndex(index).length
-                    infoPanelDate.info = savedAtDate
-                    //                    infoPanelPos.info = ""
-                    firstItem = false
+                        roadsListView.currentIndex = index
+                        infoPanelName.info = name
+                        infoPanelLength.info = pathLength(roadsListView.model.getCoordsAtIndex(index))
+                        infoPanelNumber.info = roadsListView.model.getCoordsAtIndex(index).length
+                        infoPanelDate.info = savedAtDate
+                        firstItem = false
                     }
                 }
             }
@@ -388,6 +386,7 @@ Item {
                                 fillMode: Image.PreserveAspectFit
                             }
                             onClicked: {
+                                if (listView.count != 0)
                                 switch (editMode) {
                                 case 0:
                                     editMode = 2
@@ -412,6 +411,7 @@ Item {
                                 fillMode: Image.PreserveAspectFit
                             }
                             onClicked: {
+                                if (listView.count != 0)
                                 switch (editMode) {
                                 case 0:
                                     editMode = 1

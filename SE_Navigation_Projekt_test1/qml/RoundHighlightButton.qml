@@ -14,8 +14,6 @@ RoundButton {
     text: "HighlightButton"
 
     background: Rectangle {
-//        implicitWidth: button.implicitWidth
-//        implicitHeight: button.implicitHeight
         radius: button.radius
         border.color: "#AAAAFF"
         border.width: 1

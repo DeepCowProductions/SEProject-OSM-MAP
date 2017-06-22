@@ -81,7 +81,6 @@ Item {
                     infoPanelLati.info = latitude + "°"
                     infoPanelLongi.info = longitude +"°"
                     infoPanelDate.info = savedAtDate
-                    //                    infoPanelPos.info = ""
                     editMode = 0
                 }
                 onDoubleClicked: {
@@ -89,12 +88,11 @@ Item {
                 }
                 Component.onCompleted: {
                     if (firstItem) {
-                    pLacesListView.currentIndex = index
-                    infoPanelName.info = name
-                    infoPanelLati.info = latitude + "°"
-                    infoPanelLongi.info = longitude +"°"
-                    infoPanelDate.info = savedAtDate
-                    //                    infoPanelPos.info = ""
+                        pLacesListView.currentIndex = index
+                        infoPanelName.info = name
+                        infoPanelLati.info = latitude + "°"
+                        infoPanelLongi.info = longitude +"°"
+                        infoPanelDate.info = savedAtDate
                         firstItem = false
                     }
                 }
@@ -198,21 +196,6 @@ Item {
                             delegate: itemDelegate
                             focus: true
                             onCurrentItemChanged: console.log(model.getName(pLacesListView.currentIndex) + ' selected')
-                        }
-
-                        RoundHighlightButton{
-                            id: newLocationButton
-                            text: "+"
-                            //            onClicked: appWindow.saveTiles(map.center, map.zoomLevel)
-                            anchors.bottom: listRect.bottom
-                            anchors.right: listRect.right
-                            width: implicitWidth * 0.7
-                            height: implicitHeight * 0.7
-                            contentItem: Image {
-                                source: "qrc:/add"
-                                fillMode: Image.PreserveAspectFit
-                            }
-                            radius: 9000
                         }
                     }
                 }
@@ -402,6 +385,7 @@ Item {
                                 fillMode: Image.PreserveAspectFit
                             }
                             onClicked: {
+                                if (listView.count != 0)
                                 switch (editMode) {
                                 case 0:
                                     editMode = 2
@@ -426,6 +410,7 @@ Item {
                                 fillMode: Image.PreserveAspectFit
                             }
                             onClicked: {
+                                if (listView.count != 0)
                                 switch (editMode) {
                                 case 0:
                                     editMode = 1

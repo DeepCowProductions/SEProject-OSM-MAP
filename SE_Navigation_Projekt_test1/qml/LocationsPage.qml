@@ -14,7 +14,6 @@ Item {
     property alias viewRoadsButton: viewRoadsButton
     property alias saveThisLocationButton: saveThisLocationButton
     property alias mainCol: mainCol
-    //    signal mapRequest(double latitude, double longitude)
 
     property alias clearMapItemsButton: clearMapItem
     property alias showPinButton: showPin
@@ -63,7 +62,6 @@ Item {
             height: parent.height - headerSpacer.height - buttonRow.height
             Flickable {
                 anchors.fill: parent
-                //                contentHeight: locationPage.height - headerSpacer.height - buttonRow.height
                 contentWidth: locationPage.width
                 boundsBehavior: Flickable.StopAtBounds
                 clip: true
@@ -74,8 +72,6 @@ Item {
                     Rectangle {
                         width: parent.width
                         height: 50
-                        //            border.color: "lightgray"
-                        //            border.width: 1
                         Column {
                             anchors.fill: parent
                             Row {
@@ -175,8 +171,6 @@ Item {
                     Rectangle {
                         width: parent.width
                         height: 50
-                        //            border.color: "lightgray"
-                        //            border.width: 1
                         Row {
                             anchors.fill: parent
                             padding: 1
@@ -214,8 +208,6 @@ Item {
                     Rectangle {
                         width: parent.width
                         height: 50
-                        //            border.color: "lightgray"
-                        //            border.width: 1
                         Row {
                             anchors.fill: parent
                             padding: 1
@@ -253,8 +245,6 @@ Item {
                     Rectangle {
                         width: parent.width
                         height: 50
-                        //            border.color: "lightgray"
-                        //            border.width: 1
                         Column {
                             anchors.fill: parent
                             Row {
@@ -356,8 +346,6 @@ Item {
                     Rectangle {
                         width: parent.width
                         height: 50
-                        //            border.color: "lightgray"
-                        //            border.width: 1
                         Row {
                             anchors.fill: parent
                             padding: 1
@@ -396,8 +384,6 @@ Item {
                     Rectangle {
                         width: parent.width
                         height: 50
-                        //            border.color: "lightgray"
-                        //            border.width: 1
                         Row {
                             anchors.fill: parent
                             padding: 1
@@ -435,8 +421,6 @@ Item {
                     Rectangle {
                         width: parent.width
                         height: 50
-                        //            border.color: "lightgray"
-                        //            border.width: 1
                         Column {
                             anchors.fill: parent
                             Row {
@@ -539,8 +523,6 @@ Item {
                     Rectangle {
                         width: parent.width
                         height: 50
-                        //            border.color: "lightgray"
-                        //            border.width: 1
                         Row {
                             anchors.fill: parent
                             padding: 1
@@ -578,8 +560,6 @@ Item {
                     Rectangle {
                         width: parent.width
                         height: 50
-                        //            border.color: "lightgray"
-                        //            border.width: 1
                         Row {
                             anchors.fill: parent
                             padding: 1
@@ -617,8 +597,6 @@ Item {
                     Rectangle {
                         width: parent.width
                         height: 50
-                        //            border.color: "lightgray"
-                        //            border.width: 1
                         Column {
                             anchors.fill: parent
                             Row {
@@ -664,7 +642,6 @@ Item {
                         }
 
                     }
-
 
                 }
                 // end main Column
