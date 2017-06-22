@@ -1,5 +1,6 @@
 #include "settings.h"
 #include <QStandardPaths>
+//#include <QtAndroid>
 #include "src/OsmTilesOffline/tileofflinemanager.h"
 
 Settings::Settings()
@@ -14,18 +15,25 @@ Settings::Settings()
     if(m_offlineDirectory.isEmpty())
         setOfflineDirectory(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
     if(m_maxOfflineMapSize <= 0)
-        setMaxOfflineMapSize(1000);
+        setMaxOfflineMapSize(1000000000);
     m_existsSdCar = false;
 
 #ifdef Q_OS_ANDROID
-    QAndroidJniObject mediaDir = QAndroidJniObject::callStaticObjectMethod("android/os/Environment", "getExternalStorageDirectory", "()Ljava/io/File;");
-    QAndroidJniObject mediaPath = mediaDir.callObjectMethod( "getAbsolutePath", "()Ljava/lang/String;" );
-    QDir sdCardDircectory(mediaPath.toString() + "/Android/data/");
-    if(sdCardDircectory.exists()){
-        m_existsSdCar = true;
-        m_sdCardPath = sdCardDircectory.absolutePath() + "osm-tiles";
-    }
 
+//    QAndroidJniObject storage = QAndroidJniObject::callStaticObjectMethod("android/content/ContextCompat", "getExternalFilesDirs", "(Landroid/support/v4/content/Context;Ljava/lang/String;)V", QtAndroid::androidContext() .toString(), "WRITE_EXTERNAL_STORAGE");
+
+
+//    QAndroidJniObject mediaDir = QAndroidJniObject::callStaticObjectMethod("android/os/Environment", "getExternalStorage", "()Ljava/io/File;");
+//    QAndroidJniObject mediaPath = mediaDir.callObjectMethod( "getAbsolutePath", "()Ljava/lang/String;" );
+//    QDir sdCardDircectory(mediaPath.toString());
+//    if(sdCardDircectory.exists()){
+//        m_existsSdCar = true;
+//        m_sdCardPath = sdCardDircectory.absolutePath() + "/osm-tiles";
+//    }
+//    if(!m_device && !m_sdCard)
+//        m_device = true;
+//    if(offlineDirectory().isEmpty() && m_device)
+//        setOfflineDirectory(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
 #endif
 
     qDebug() << "settings saved at: " << m_settings->fileName() << "  with organisation name: " << m_settings->organizationName();
@@ -136,6 +144,7 @@ void Settings::setSdCard(bool sdCard)
         offline.changeOfflineDirectory(m_sdCardPath);
         setOfflineDirectory(m_sdCardPath);
     }
+    qDebug() << "Current Path: " << m_offlineDirectory;
     emit sdCardChanged(sdCard);
 }
 
@@ -144,11 +153,12 @@ void Settings::setDevice(bool device)
     if (m_device == device)
         return;
     m_device = device;
-    if(m_sdCard){
+    if(m_device){
         TileOfflineManager offline;
         offline.changeOfflineDirectory(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
         setOfflineDirectory(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
     }
+    qDebug() << "Current Path: " << m_offlineDirectory;
     emit deviceChanged(device);
 }
 

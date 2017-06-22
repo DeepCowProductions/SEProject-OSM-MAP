@@ -16,6 +16,7 @@ class TileOfflineManager : public QObject
     Q_OBJECT
 public:
     explicit TileOfflineManager(QObject *parent = 0);
+    ~TileOfflineManager();
 
     /**
      * @brief saveToFile speichert das Tile in ein Standardverzeichnis
@@ -68,6 +69,12 @@ public:
      */
     Q_INVOKABLE int calculateUsedSpace(QString directory);
 
+    int offlineMapSize() const;
+    void setOfflineMapSize(int offlineMapSize);
+
+    QString offlinePath() const;
+    void setOfflinePath(const QString &offlinePath);
+
 signals:
 
 
@@ -77,10 +84,15 @@ signals:
 public slots:
 
 private:
-    Settings m_settings;
+    QSettings *m_settings;
+
+    int m_offlineMapSize;
+
+    QString m_offlinePath;
 
     int m_currentlyUsedSpace;
 
+    QDir m_cachedirectory;
 
     /**
      * @brief createFileName erstellt den Dateinamen unter dem das Tile gespeichert werden soll

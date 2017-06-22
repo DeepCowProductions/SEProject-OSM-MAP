@@ -21,11 +21,13 @@ QHash<int, QByteArray> PlacesModel::roleNames() const
 
 int PlacesModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return m_places.size();
 }
 
 int PlacesModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return 4;
 }
 

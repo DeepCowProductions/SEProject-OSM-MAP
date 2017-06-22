@@ -237,6 +237,7 @@ Item {
                                         readOnly: editMode != 1
                                         property string info
                                         id: infoPanelName
+
                                         anchors.leftMargin: 10
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
@@ -352,7 +353,7 @@ Item {
                                 Rectangle{
                                     width: parent.width *  0.3
                                     height: parent.height
-                                    TextEdit{
+                                    TextField{
                                         readOnly: true
                                         property string info
                                         id: infoPanelLength

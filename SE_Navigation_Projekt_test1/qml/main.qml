@@ -71,6 +71,7 @@ ApplicationWindow {
     onDownloadFinished: {
         console.log("Tiles saved in Offline directory!");
         mapInstance.saveButtonEnabled = true;
+        mapInstance.saveButton
         console.log(mapInstance.saveButtonEnabled);
         if(settingsInstance)
             settingsInstance.offlineDirectorySize.text = Math.round((offlineManager.calculateUsedSpace("offline") / 1024 / 1024)*100) / 100

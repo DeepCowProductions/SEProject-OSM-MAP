@@ -13,6 +13,7 @@ Item {
     property alias centerOnMeButton: centerOnMeButton
     property alias settingsPageButton: settingsPageButton
     property alias locationPageButton: locationPageButton
+    property alias saveButton: saveButton
     property alias helpPageButton: infoButton
     property alias path: polylineItem.path
     property alias polyline: polylineItem
@@ -390,6 +391,8 @@ Item {
             onClicked: {
                 saveTilesDialogComp.createObject(map)
             }
+            activeCondition: !enabled
+            activeColor: "#df6253"
             anchors.bottom: parent.bottom
             anchors.left: parent.left
             contentItem: Image {

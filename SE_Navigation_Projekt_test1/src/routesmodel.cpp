@@ -18,11 +18,13 @@ QHash<int, QByteArray> RoutesModel::roleNames() const
 
 int RoutesModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return m_roads.size();
 }
 
 int RoutesModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return 2;
 }
 
@@ -173,8 +175,6 @@ bool RoutesModel::addItem( QString name, QJSValue value )
 
 bool RoutesModel::deleteItem(const int &index)
 {
-    if (m_roads.isEmpty())
-        return false;
     if (m_roads.isEmpty())
         return false;
     beginRemoveRows(QModelIndex() , index , index);
