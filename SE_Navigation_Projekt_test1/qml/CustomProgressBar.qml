@@ -1,6 +1,11 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 
+/* CustomProgressBar.qml
+ * Verpackt eine normale ProgressBar in einem schoen Recheck mit Farbe.
+ * Stellt diverse properties bereit um auf die ProgressBar zuzugreifen.
+ * Diese ProgressBar wird nur visible wenn isActive auf true gesetzt wird, bzw das binding auf true geht
+ */
 Rectangle {
     id: spacer
     width: parent.width

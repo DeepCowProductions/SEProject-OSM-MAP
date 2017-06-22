@@ -6,6 +6,13 @@ import QtLocation 5.6
 import fhswf.se.nav.settings 1.0
 import fhswf.se.nav.models 1.0
 
+/*
+ *
+ *
+ *
+ *
+ *
+ */
 Item {
     id: roadsPage
     property alias model: roadsListView.model

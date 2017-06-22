@@ -3,6 +3,13 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.0
 
+/* HighlightCheckBox.qml
+ * Schoene version einer ChechBox
+ * Besitzt properties um 3 Farben darzustellen.
+ * HoverColor wenn der Mousezeiger über der Box und
+ * pressedColor wenn die Box gedrückt wird.
+ * Falls nichts davon zutrifft wird backgroundColor angezeigt
+ */
 CheckBox {
 
     property color backgroundColor: "white"

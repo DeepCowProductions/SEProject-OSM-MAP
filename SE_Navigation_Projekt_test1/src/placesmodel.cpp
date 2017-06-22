@@ -68,6 +68,15 @@ bool PlacesModel::setData(const QModelIndex &index, const QVariant &value, int r
 
 }
 
+bool PlacesModel::clearList()
+{
+    qDebug() << "clearListcalled";
+    beginRemoveRows(QModelIndex() , 0 , m_places.size()-1);
+    m_places.clear();
+    endRemoveRows();
+    return true;
+}
+
 bool PlacesModel::readUserDataFromJson(QJsonObject &object)
 {
     QJsonArray pa;
@@ -207,34 +216,4 @@ double PlacesModel::getLongiAtIndex(int index)
     if (m_places.isEmpty())
         return 0.0;
     return m_places[index].coordinate().longitude();
-}
-
-bool PlacesModel::clearList()
-{
-    qDebug() << "clearListcalled";
-    beginRemoveRows(QModelIndex() , 0 , m_places.size()-1);
-    m_places.clear();
-    endRemoveRows();
-    return true;
-}
-
-bool PlacesModel::writeTestData()
-{
-    Place p1;
-    p1.setCoordinate(QGeoCoordinate(50.0,50.0));
-    p1.setName("test1");
-    p1.setSavedAtDate(QDate::currentDate());
-    m_places.append(p1);
-    Place p2;
-    p2.setCoordinate(QGeoCoordinate(10.0,42.0));
-    p2.setName("test2");
-    p2.setSavedAtDate(QDate::currentDate());
-    m_places.append(p2);
-    Place p3;
-    p3.setCoordinate(QGeoCoordinate(60.0,60.0));
-    p3.setName("test3");
-    p3.setSavedAtDate(QDate::currentDate());
-    m_places.append(p3);
-    return true;
-//    writeUserData();
 }

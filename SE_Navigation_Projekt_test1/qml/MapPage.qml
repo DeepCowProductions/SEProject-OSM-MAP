@@ -6,7 +6,13 @@ import QtPositioning 5.6
 import QtLocation 5.6
 import Qt.labs.platform 1.0
 
-
+/*
+ *
+ *
+ *
+ *
+ *
+ */
 Item {
     property alias toggleTrackingButton: toggleTrackingButton
     property alias toggleRecordRouteButton: toggleRecordRouteButton
@@ -40,6 +46,7 @@ Item {
     signal mapRequestRoute(var coords)
     signal saveTiles(variant center,string fileProvider, int zoomlevel, int depth);
 
+    // translatePosError: übersetzt integer enum PositionSource.errors in lesbare strings
     function translatePosError(value) {
         var c = "";
         switch (value) {
@@ -62,12 +69,14 @@ Item {
         return c;
     }
 
+    // toggleFollow: schalte permante verfolgung ein und aus
     function toggleFollow () {
         console.log("toggle follow")
         followPerson = !followPerson
         toggleTimer()
     }
 
+    // toggleRecordRoute: schalte aufnahme der routen verfolgung ein und aus
     function toggleRecordRoute () {
         console.log("toggle Record Route")
         if (!recordRoute)
@@ -76,10 +85,7 @@ Item {
         toggleTimer()
     }
 
-    function toggleSaveButton () {
-        saveButton.enabled = !saveButton.enabled
-    }
-
+    // toggleTimer: schaltet den timer bei bedarf aus
     function toggleTimer() {
         if (timer.running) {
             if (recordRoute || followPerson) {
@@ -98,6 +104,7 @@ Item {
         }
     }
 
+    // clearPath: löscht alle items aus MapPolyline.path
     function clearPath () {
         console.log("clearing path")
         //        map.removeMapItem(polyline)
@@ -107,6 +114,7 @@ Item {
         polyline.visible = false
     }
 
+    // updatePath: aktualisiert den angezeigten pfad auf der Karte
     function updatePath (newPath) {
         console.log("updating path")
         map.removeMapItem(polyline)
@@ -120,18 +128,21 @@ Item {
         polyline.visible = true
     }
 
+    // updateLocationMarker: aktualisiert den rote marker auf der Karte
     function updateLocationMarker (newCoord) {
         console.log("update Loaction marker")
         map.removeMapItem(locationMarker)
         locationMarker.coordinate = newCoord
         map.addMapItem(locationMarker)
     }
+    // updateCurrenPositionMarker: aktualisiert den schwazen pfeil auf der Karte
     function updateCurrenPositionMarker (newCoord) {
         console.log("update current location marker")
         map.removeMapItem(currentPositionMarker)
         currentPositionMarker.coordinate = newCoord
         map.addMapItem(currentPositionMarker)
     }
+    // updatePinPositionMarker: aktualisiert den blauen marker auf der Karte
     function updatePinPositionMarker (newCoord) {
         console.log("update current pin marker")
         map.removeMapItem(pinPositionMarker)
@@ -374,7 +385,7 @@ Item {
         Rectangle {
             anchors.top: headerSpacer.bottom
             width: parent.width
-            height: parent.height - buttonRow.height -headerSpacer.height
+            height: parent.height - buttonRow.height - headerSpacer.height
             Map {
                 id : map
                 anchors.fill: parent

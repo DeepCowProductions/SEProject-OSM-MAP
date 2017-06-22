@@ -3,14 +3,16 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.0
 
+/* SimpleTextDialog.qml
+ * Dialog Popup zum speichern von Diversen Dingen.
+ * Besitzt ein TextFeld zum eingeben eines Names oder Textes Generell, dessen
+ * Inhalt in der aufrufenden Kompomnente verarbeitet werden kann.
+ */
 Dialog {
     property alias input: textInput.text
     property alias labelText: label.text
     id: stringDialog
     standardButtons: "NoButton"
-    //    onButtonClicked: ( buttonClicked === StandardButton.Ok ) ? accepted() : rejected()
-
-//    modality: Qt.WindowModal
     title: "Enter a name pls"
     Rectangle {
         color: "#EEEEFF"
@@ -24,7 +26,6 @@ Dialog {
             anchors.fill: parent
             Label {
                 id:label
-                //                anchors.top: parent.top
                 text: "Enter a name pls"
                 color: "navy"
             }
@@ -33,7 +34,6 @@ Dialog {
                 width: 200
                 height: 30
                 border.color: "black"
-                //                anchors.top : label.bottom
                 border.width: 1
                 TextInput {
                     anchors.fill: parent
@@ -41,19 +41,17 @@ Dialog {
                     width: 200
                     height: 30
                     Component.onCompleted: forceActiveFocus()
-                    //                    horizontalAlignment: TextInput.AlignHCenter
                     verticalAlignment: TextInput.AlignVCenter
                     anchors.leftMargin: 4
                     Keys.onEnterPressed: {textInput.text.trim(); accept();}
                     Keys.onEscapePressed: reject()
-                    Keys.onBackPressed: reject() // especially necessary on Android
+                    Keys.onBackPressed: reject()
                 }
             }
             Row {
                 width: 200
                 height: 40
                 spacing: 10
-                //                anchors.top : textRect.bottom
                 HighlightButton {
                     id: acceptButton
                     width: parent.width * 0.5
@@ -85,9 +83,8 @@ Dialog {
                 }
             }
         }
-//                Keys.onPressed: if (event.key === Qt.Key_R && (event.modifiers & Qt.ControlModifier)) filledDialog.click(StandardButton.Retry)
                 Keys.onEnterPressed: {textInput.text.trim(); accept();}
                 Keys.onEscapePressed: reject()
-                Keys.onBackPressed: reject() // especially necessary on Android
+                Keys.onBackPressed: reject()
     }
 }

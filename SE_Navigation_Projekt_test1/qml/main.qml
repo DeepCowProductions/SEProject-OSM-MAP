@@ -7,6 +7,18 @@ import fhswf.se.nav.settings 1.0
 import fhswf.se.nav.models 1.0
 import fhswf.se.nav.offlinemanager 1.0
 
+/* main.qml
+ * Einstieg und Rootitem der QMl Overfläche.
+ * Besitzt eine StackView um qmlSeiten darzustellen:
+ *   property variant mapInstance
+ *   property variant locationsInstance
+ *   property variant roadsInstance
+ *   property variant placesInstance
+ *   property variant settingsInstance
+ *   property variant helpInstance
+ * können verwendet werden um auf dessen Instanzen zuzugreifen.
+ * Beherbergt außerdem die aus C++ kommenden eingenen Komponenten und ein par ultility funktionen.
+ */
 ApplicationWindow {
     property alias mainStack: mainStack
     property alias settings : settingsObject

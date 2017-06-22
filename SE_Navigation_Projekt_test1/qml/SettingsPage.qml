@@ -7,7 +7,13 @@ import fhswf.se.nav.settings 1.0
 import Qt.labs.folderlistmodel 2.1
 import fhswf.se.nav.offlinemanager 1.0
 
-
+/* SettingsPage.qml
+ * Einfache Einstellungsseite für die App.
+ * Übernimmt beim start die Einstellungen aus dem Settings Objekt aus C++ und
+ * schreibt nach änderung in deiser Seite die Änderungen zurück in die C++ Klasse.
+ * Einige Einstellungen / Informationen werden dynamisch bereitgestellt und nicht gespeichert.
+ * (zum  beispiel Ordner größe/ speicherverbrauch).
+ */
 Item {
     property alias backButton: backButton
     property alias offlineDirectorySize: currentlyUsedSize
@@ -22,8 +28,8 @@ Item {
     onConfigurationChanged:  {
         console.log("saving settings from qml")
         settings.maxOfflineMapSize = sizeOfOfflineDirectory.text * 1000000
-        settings.sdCard = sdCard.checked
-        settings.device = deviceStorage.checked
+//        settings.sdCard = sdCard.checked
+//        settings.device = deviceStorage.checked
 
         settings.save()
     }
@@ -129,7 +135,7 @@ Item {
                                 id: pathToOfflineDirecory
                                 width: parent.width
                                 text: settings.offlineDirectory
-                                enabled: false
+                                readOnly: true
                                 wrapMode: TextField.Wrap
                                 verticalAlignment: Text.AlignVCenter
                                 horizontalAlignment: Text.AlignLeft
@@ -153,7 +159,8 @@ Item {
                                 font.pointSize: 12
                             }
                         }
-                        TextField {
+                        TextField{
+                            readOnly: false
                             id: sizeOfOfflineDirectory
                             width: parent.width * 0.25
                             validator: RegExpValidator {regExp: /^\d+$/}
@@ -181,6 +188,7 @@ Item {
                             }
                         }
                         TextField {
+                            readOnly: true
                             id: currentlyUsedSize
                             width: parent.width * 0.25
                             text:  offlineSize
@@ -305,6 +313,7 @@ Item {
                             }
                         }
                         TextField {
+                            readOnly: true
                             id: currentlyCacheUsedSize
                             width: parent.width * 0.25
                             text: Math.round((offlineManager.calculateUsedSpace("cache") / 1024 / 1024)*100) /100//Math.round(((settings.usedOfflineDirectorySize / 1024) /1024) * 100) / 100

@@ -6,6 +6,12 @@ import QtLocation 5.6
 import fhswf.se.nav.settings 1.0
 import fhswf.se.nav.models 1.0
 
+/* LocationPage.qml
+ * Positionanzeige und Übersicht über den aktuellen Status des Trackings/ GPS.
+ * Besitzt zwei Buttons um auf die Listenfenster mit Nutzrdaten zuzugreifen, sowie Buttons um Orte zu speichern.
+ * Zeigt an wie lang die aktuelle Route ist und wo der Schnellmarker sich befindet.
+ * Außerdem können hier die Marker von der Karte entfernt werden.
+ */
 Item {
     id: locationPage
     property alias backButton: backButton

@@ -72,7 +72,7 @@ bool RoutesModel::writeUserDataToJson(QJsonObject &object)
 // TODO: needs work
 bool RoutesModel::readUserData()
 {
-    clearList();
+//    clearList();
     QFile saveFile;
     saveFile.setFileName(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/" + saveFileNameRoads );
     qDebug() << "saveFile Location: " << saveFile.fileName();
@@ -264,26 +264,3 @@ bool RoutesModel::clearList()
     return true;
 }
 
-bool RoutesModel::writeTestData()
-{
-    Route p1;
-    p1.addCoordinate(QGeoCoordinate(50.0,50.0));
-    p1.addCoordinate(QGeoCoordinate(51.0,52.0));
-    p1.setName("test1");
-    p1.setSavedAtDate(QDate::currentDate());
-    m_roads.append(p1);
-    Route p2;
-    p2.addCoordinate(QGeoCoordinate(10.0,42.0));
-    p2.addCoordinate(QGeoCoordinate(8.0,20.0));
-    p2.addCoordinate(QGeoCoordinate(6.0,40.0));
-    p2.setName("test2");
-    p2.setSavedAtDate(QDate::currentDate());
-    m_roads.append(p2);
-    Route p3;
-    p3.addCoordinate(QGeoCoordinate(60.0,60.0));
-    p3.setName("test3");
-    p3.setSavedAtDate(QDate::currentDate());
-    m_roads.append(p3);
-    return true;
-    //    writeUserData();
-}

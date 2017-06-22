@@ -130,15 +130,6 @@ public slots:
       */
     Q_INVOKABLE bool clearList();
     /**
-      * @brief writeTestData
-      * @return
-      */
-    /**
-      * @brief writeTestData
-      * @return
-      */
-    Q_INVOKABLE bool writeTestData();
-    /**
       * @brief readUserData
       * @return
       */
