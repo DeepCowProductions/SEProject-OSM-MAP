@@ -123,14 +123,62 @@ public:
 signals:
 
 public slots:
+    /**
+      * @brief clearList
+      * entfernt alle items aus dem Datenarray
+      * @return true bei Erfolg
+      */
     Q_INVOKABLE bool clearList();
+    /**
+      * @brief readUserData
+      * liest die gespeicherten nutzerdaten aus des datei saveFileNameRoads
+      * @return true bei Erfolg
+      */
     Q_INVOKABLE bool readUserData();
+    /**
+      * @brief writeUserData
+      * schreibt die daten aus dem array in die datei saveFileNameRoads
+      * @return true bei Erfolg
+      */
     Q_INVOKABLE bool writeUserData();
-//    Q_INVOKABLE bool addItem(QString name, QList<QGeoCoordinate> coords);
+    /**
+      * @brief addItem
+      * fügt ein item dem array hinzu. datum wird automatisch gesetzt.
+      * die koordinaten liste de Route wird als js array über geben und wird entsprechent geparst.
+      * @param name name des ortes
+      * @param value liste aus qgeocoordinates
+      * @return true bei Erfolg
+      */
     Q_INVOKABLE bool addItem(QString name, QJSValue value);
+    /**
+      * @brief deleteItem
+      * entfernt das item mit index index an dieser stelle aus dem array.
+      * @param index index des items.
+      * @return true bei Erfolg
+      */
     Q_INVOKABLE bool deleteItem(const int &index);
+    /**
+      * @brief changeItemName
+      * ändert den namen des items an der stelle i im array.
+      * sendet dataCHanged signal
+      * @param i index des items
+      * @param value neuer name
+      * @return true bei Erfolg
+      */
     Q_INVOKABLE bool changeItemName(const int &index, const QVariant &value);
+    /**
+      * @brief getCoordsAtIndex
+      * gibt eine liste mit koordinaten zurück die den pfad der route darstellen.
+      * @param index index des items.
+      * @return QList mit QVariants welche qgeocoordinaten sind.
+      */
     Q_INVOKABLE QList<QVariant> getCoordsAtIndex(int index);
+    /**
+      * @brief getName
+      * gibt den namen des items im array an der stelle index zurück.
+      * @param index index des items.
+      * @return name des items.
+      */
     Q_INVOKABLE QString getName(int index);
 
 public slots:
@@ -162,6 +210,9 @@ protected:
 
 private:
 
+    /**
+     * @brief m_roads datenarray mit nutzerdaten (routen)
+     */
     QVector<Route> m_roads;
 
 };

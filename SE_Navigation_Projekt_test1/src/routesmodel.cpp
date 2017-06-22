@@ -69,14 +69,12 @@ bool RoutesModel::writeUserDataToJson(QJsonObject &object)
     return true;
 }
 
-// TODO: needs work
 bool RoutesModel::readUserData()
 {
-//    clearList();
+    clearList();
     QFile saveFile;
     saveFile.setFileName(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/" + saveFileNameRoads );
     qDebug() << "saveFile Location: " << saveFile.fileName();
-    // cal QDir::makePath?
     if (!saveFile.exists()){
         //        qDebug() << "saveFile not found - trying to create a fresh one";
         //        saveFile.open(QIODevice::ReadWrite);
@@ -87,10 +85,6 @@ bool RoutesModel::readUserData()
     if (saveFile.open(QIODevice::ReadOnly)){
         QByteArray saveData = saveFile.readAll();
         QJsonDocument placesJasonDoc (QJsonDocument::fromJson(saveData));
-        // TODO: handle errors
-        // TBI
-
-        // finally get data into workable memory
         QJsonObject jsonObject = placesJasonDoc.object() ;
         readUserDataFromJson(jsonObject);
         saveFile.close();
@@ -100,7 +94,6 @@ bool RoutesModel::readUserData()
 
 }
 
-// TODO: more error handling
 bool RoutesModel::writeUserData()
 {
     QFile saveFile;

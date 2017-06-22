@@ -126,55 +126,65 @@ signals:
 public slots:
     /**
       * @brief clearList
-      * @return
+      * entfernt alle items aus dem Datenarray
+      * @return true bei Erfolg
       */
     Q_INVOKABLE bool clearList();
     /**
       * @brief readUserData
-      * @return
+      * liest die gespeicherten nutzerdaten aus des datei saveFileNamePlaces
+      * @return true bei Erfolg
       */
     Q_INVOKABLE bool readUserData();
     /**
       * @brief writeUserData
-      * @return
+      * schreibt die daten aus dem array in die datei saveFileNamePlaces
+      * @return true bei Erfolg
       */
     Q_INVOKABLE bool writeUserData();
     /**
       * @brief addItem
-      * @param name
-      * @param coord
-      * @return
+      * fügt ein item dem array hinzu. datum wird automatisch gesetzt.
+      * @param name name des ortes
+      * @param coord geolocation des ortes
+      * @return true bei Erfolg
       */
     Q_INVOKABLE bool addItem(QString name, QGeoCoordinate coord);
     /**
       * @brief deleteItem
-      * @param index
-      * @return
+      * entfernt das item mit index index an dieser stelle aus dem array.
+      * @param index index des items.
+      * @return true bei Erfolg
       */
     Q_INVOKABLE bool deleteItem(const int &index);
     /**
       * @brief changeItemName
-      * @param i
-      * @param value
-      * @return
+      * ändert den namen des items an der stelle i im array.
+      * sendet dataCHanged signal
+      * @param i index des items
+      * @param value neuer name
+      * @return true bei Erfolg
       */
     Q_INVOKABLE bool changeItemName(const int &i, const QVariant &value);
     /**
       * @brief getName
-      * @param index
-      * @return
+      * gibt den namen des items im array an der stelle index zurück.
+      * @param index index des items.
+      * @return name des items.
       */
     Q_INVOKABLE QString getName(int index);
     /**
       * @brief getLatiAtIndex
-      * @param index
-      * @return
+      * gibt latitude des ortes des items im array an der stelle index zurück.
+      * @param index index des items
+      * @return latitude als winkel in grad
       */
     Q_INVOKABLE double getLatiAtIndex(int index);
     /**
       * @brief getLongiAtIndex
-      * @param index
-      * @return
+      * gibt longitude des ortes des items im array an der stelle index zurück.
+      * @param index index des items
+      * @return longitude als winkel in grad
       */
     Q_INVOKABLE double getLongiAtIndex(int index);
 

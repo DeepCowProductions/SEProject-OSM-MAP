@@ -6,12 +6,11 @@ import QtPositioning 5.6
 import QtLocation 5.6
 import Qt.labs.platform 1.0
 
-/*
- *
- *
- *
- *
- *
+/* MapPage.qml
+ * Zentrales Item dieser App und im prinzip Hauptfenster.
+ * Im Zentrum befindet sich ein Qt QMl Map Item mit osmPlugin.
+ * Buttonhandler der oberen Buttonbar und ein par der RoundButtons sind in der main.qml implmentiert.
+ * Besitzte zwei * zwei States um Routeen aufzuzeichen und/oder Standort verfolgen zu lassen. (Seperat steuerbar)
  */
 Item {
     property alias toggleTrackingButton: toggleTrackingButton
@@ -29,7 +28,7 @@ Item {
 
     property var nullPos: QtPositioning.coordinate(10,10)
 
-    property real fakedirection
+    property real fakedirection: 0
     property int currentValue: 0
     property int amount: 100
     property bool showProgressBar: false
@@ -202,14 +201,14 @@ Item {
         onTriggered: {
             //            console.log("timer Timeout: recordroute is " + recordRoute + ", followPerson is " + followPerson)
             if (posSrcValid) {
-                var coord = pos.coordinate;
-                //                console.log("Coordinate from positionSource:", coord.longitude, coord.latitude,coord.altitude);
+                var coord = pos.coordinate
+//                console.log("Coordinate from positionSource:", coord.longitude, coord.latitude,coord.altitude);
                 if (followPerson) {
                     updateCurrenPositionMarker(coord)
                     map.center = positionSource.position.coordinate
                 }
                 if (recordRoute) {
-                    if (typeof(coord) != 'undefined' && !coord &&  !isNaN(coord) ) {
+                    if (typeof(coord) != 'undefined' && coord && !isNaN(coord.longitude) && !isNaN(coord.latitude)) {
                         polyline.addCoordinate(coord)
                         console.log("Recorded Coordinate list:" + path)
                         console.log(polylineItem.pathLength())

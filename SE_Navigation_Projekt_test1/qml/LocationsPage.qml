@@ -139,7 +139,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignLeft
-                                        text: mapInstance.pos.coordinate.latitude + "°"
+                                        text: Math.round(mapInstance.pos.coordinate.latitude * 10000 ) / 10000 + "°"
                                         color: "black"
                                         font.pointSize: 7
                                     }
@@ -166,7 +166,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignLeft
-                                        text: mapInstance.pos.coordinate.longitude +"°"
+                                        text: Math.round(mapInstance.pos.coordinate.longitude * 10000)/10000 +"°"
                                         color: "black"
                                         font.pointSize: 7
                                     }
@@ -340,7 +340,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignLeft
-                                        text: pathLength(mapInstance.path)
+                                        text: Math.round(pathLength(mapInstance.path)*100)/100
                                         color: "black"
                                         font.pointSize: 7
                                     }
@@ -489,7 +489,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignLeft
-                                        text: locationPin.coordinateEx().latitude
+                                        text: Math.round( locationPin.coordinateEx().latitude *10000) / 10000 + "°"
                                         color: "black"
                                         font.pointSize: 7
                                     }
@@ -516,7 +516,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignLeft
-                                        text: locationPin.coordinateEx().longitude
+                                        text: Math.round( locationPin.coordinateEx().longitude * 10000)/10000 +  "°"
                                         color: "black"
                                         font.pointSize: 7
                                     }

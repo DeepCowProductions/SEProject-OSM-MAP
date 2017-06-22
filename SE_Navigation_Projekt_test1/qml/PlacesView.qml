@@ -6,12 +6,12 @@ import QtLocation 5.6
 import fhswf.se.nav.settings 1.0
 import fhswf.se.nav.models 1.0
 
-/*
- *
- *
- *
- *
- *
+/* PlacesView.qml
+ * Listenfenster zu ranzeige und verwaltung von vom Nutzer gespeicherten Standorten.
+ * Besitzt ein ListView mit Delegate und greift auf das model placesModel zu.
+ * Der status editMode gibt an wie sich die unterren drei Buttons verhalten sollen und
+ * steuert dessen Aussehen wenn der Nutzer editierrt oder löschen will.
+ * Buttonhandler sind hier mit ausnahme des backButton lokal implentiert.
  */
 Item {
     id: placesPage
@@ -85,8 +85,8 @@ Item {
                 onClicked: {
                     pLacesListView.currentIndex = index
                     infoPanelName.info = name
-                    infoPanelLati.info = latitude + "°"
-                    infoPanelLongi.info = longitude +"°"
+                    infoPanelLati.info = Math.round(latitude*10000)/10000 + "°"
+                    infoPanelLongi.info = Math.round(longitude*10000)/10000 +"°"
                     infoPanelDate.info = savedAtDate
                     editMode = 0
                 }
@@ -97,8 +97,8 @@ Item {
                     if (firstItem) {
                         pLacesListView.currentIndex = index
                         infoPanelName.info = name
-                        infoPanelLati.info = latitude + "°"
-                        infoPanelLongi.info = longitude +"°"
+                        infoPanelLati.info = Math.round(latitude*10000)/10000 + "°"
+                        infoPanelLongi.info = Math.round(longitude*10000)/10000 +"°"
                         infoPanelDate.info = savedAtDate
                         firstItem = false
                     }

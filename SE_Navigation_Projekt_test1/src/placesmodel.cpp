@@ -106,14 +106,12 @@ bool PlacesModel::writeUserDataToJson(QJsonObject &object)
     return true;
 }
 
-// TODO: needs work
 bool PlacesModel::readUserData()
 {
     clearList();
     QFile saveFile;
     saveFile.setFileName(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/" + saveFileNamePlaces );
     qDebug() << "saveFile Location: " << saveFile.fileName();
-    // cal QDir::makePath?
     if (!saveFile.exists()){
         //        qDebug() << "saveFile not found - trying to create a fresh one";
         //        saveFile.open(QIODevice::ReadWrite);
@@ -124,10 +122,6 @@ bool PlacesModel::readUserData()
     if (saveFile.open(QIODevice::ReadOnly)){
         QByteArray saveData = saveFile.readAll();
         QJsonDocument placesJasonDoc (QJsonDocument::fromJson(saveData));
-        // TODO: handle errors
-        // TBI
-
-        // finally get data into workable memory
         QJsonObject placesJsonObject = placesJasonDoc.object() ;
         readUserDataFromJson(placesJsonObject);
         saveFile.close();
@@ -137,7 +131,6 @@ bool PlacesModel::readUserData()
 
 }
 
-// TODO: more error handling
 bool PlacesModel::writeUserData()
 {
     QFile saveFile;

@@ -6,12 +6,13 @@ import QtLocation 5.6
 import fhswf.se.nav.settings 1.0
 import fhswf.se.nav.models 1.0
 
-/*
- *
- *
- *
- *
- *
+
+/* RoutesView.qml
+ * Listenfenster zu ranzeige und verwaltung von vom Nutzer gespeicherten Routen.
+ * Besitzt ein ListView mit Delegate und greift auf das model routesModel zu.
+ * Der status editMode gibt an wie sich die unterren drei Buttons verhalten sollen und
+ * steuert dessen Aussehen wenn der Nutzer editierrt oder löschen will.
+ * Buttonhandler sind hier mit ausnahme des backButton lokal implentiert.
  */
 Item {
     id: roadsPage
@@ -85,7 +86,7 @@ Item {
                 onClicked: {
                     roadsListView.currentIndex = index
                     infoPanelName.info = name
-                    infoPanelLength.info = pathLength(roadsListView.model.getCoordsAtIndex(index))
+                    infoPanelLength.info = Math.round(pathLength(roadsListView.model.getCoordsAtIndex(index))*100)/100
                     infoPanelNumber.info = roadsListView.model.getCoordsAtIndex(index).length
                     infoPanelDate.info = savedAtDate
                     editMode = 0
@@ -97,7 +98,7 @@ Item {
                     if (firstItem) {
                         roadsListView.currentIndex = index
                         infoPanelName.info = name
-                        infoPanelLength.info = pathLength(roadsListView.model.getCoordsAtIndex(index))
+                        infoPanelLength.info = Math.round(pathLength(roadsListView.model.getCoordsAtIndex(index))*100)/100
                         infoPanelNumber.info = roadsListView.model.getCoordsAtIndex(index).length
                         infoPanelDate.info = savedAtDate
                         firstItem = false
