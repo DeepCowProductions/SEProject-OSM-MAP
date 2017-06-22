@@ -92,6 +92,7 @@ private:
 
     int m_currentlyUsedSpace;
 
+    QDir m_cachedirectory;
 
     /**
      * @brief createFileName erstellt den Dateinamen unter dem das Tile gespeichert werden soll

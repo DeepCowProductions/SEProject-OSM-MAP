@@ -81,9 +81,7 @@ QNetworkRequest TilesDownloader::createRequest(Tile *tile)
 {
     QNetworkRequest request;
     request.setHeader(QNetworkRequest::UserAgentHeader, "Qt Location based application");
-    //    QString url = "http://" + m_tileProvider +  "/tiles/roads/x=" + QByteArray::number(m_tile.x()) + "&y=" + QByteArray::number(m_tile.y()) + "&z=" + QByteArray::number(m_tile.zoomlevel());
     QString url = "http://" + m_tileProvider +  "/tiles/roads/x=" + QByteArray::number(tile->x()) + "&y=" + QByteArray::number(tile->y()) + "&z=" + QByteArray::number(tile->zoomlevel());
-    //    QString url = "http://" + m_tileProvider +  "/" + QByteArray::number(tile->zoomlevel()) + "/" + QByteArray::number(tile->x()) + "/" + QByteArray::number(tile->y()) + ".png";
 
     request.setUrl(QUrl(url));
 

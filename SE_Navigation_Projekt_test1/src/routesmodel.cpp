@@ -177,8 +177,6 @@ bool RoutesModel::deleteItem(const int &index)
 {
     if (m_roads.isEmpty())
         return false;
-    if (m_roads.isEmpty())
-        return false;
     beginRemoveRows(QModelIndex() , index , index);
 //    m_roads.clear();
     m_roads.removeAt(index);

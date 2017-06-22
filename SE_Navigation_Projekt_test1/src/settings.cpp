@@ -1,6 +1,6 @@
 #include "settings.h"
 #include <QStandardPaths>
-#include <QtAndroid>
+//#include <QtAndroid>
 #include "src/OsmTilesOffline/tileofflinemanager.h"
 
 Settings::Settings()

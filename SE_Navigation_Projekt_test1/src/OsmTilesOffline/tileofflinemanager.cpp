@@ -7,7 +7,6 @@ TileOfflineManager::TileOfflineManager(QObject *parent) : QObject(parent)
     m_settings = new QSettings();
     setOfflineMapSize(m_settings->value("maxOfflineMapSize").toInt());
     setOfflinePath(m_settings->value("offlineDirectory").toString());
-
 }
 
 TileOfflineManager::~TileOfflineManager()
@@ -109,21 +108,26 @@ bool TileOfflineManager::copyChacheTileIfPossible(Tile * tile)
     bool ret = false;
     QDir saveDirectory;
     saveDirectory = QDir(m_offlinePath);
-    QString tileName = createFileName(tile) + "jpg";
-
+    tile->setFormat("jpg");
+    QString tileName = createFileName(tile);
+    qDebug() << "Try to copy: " << tileName;
     if(contains(tile, QStandardPaths::CacheLocation)){
         QString path = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
-        QDir cacheDirectory(searchSubdirectoriesForTile(tile, path));
+        QString oldDir = searchSubdirectoriesForTile(tile, path);
+        QDir cacheDirectory(oldDir);
         QFile cacheFile(cacheDirectory.filePath(tileName));
-        //        cacheFile.rename(cacheFile.fileName(), cacheFile)
+        tile->setFormat("png");
+        tileName = createFileName(tile);
         ret = cacheFile.copy(saveDirectory.filePath(tileName));
         cacheFile.remove();
-        qDebug() << "Got tiles from Cache";
-
     }
     else if(contains(tile, QStandardPaths::GenericCacheLocation)){
-        QDir generic(searchSubdirectoriesForTile(tile, QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation)));
+
+        QString oldDir = searchSubdirectoriesForTile(tile, QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation));
+        QDir generic(oldDir);
         QFile cacheFile(generic.absolutePath().append("/" + tileName));
+        tile->setFormat("png");
+        tileName = createFileName(tile);
         ret = cacheFile.copy(saveDirectory.filePath(tileName));
         cacheFile.remove();
         qDebug() << "Got tile from generic Cache";
@@ -139,7 +143,7 @@ QString TileOfflineManager::searchSubdirectoriesForTile(Tile *tile, QString dire
     QDirIterator it(directory,QDir::Dirs, QDirIterator::Subdirectories );
     while(it.hasNext() && !ret){
         QDir dir(it.next());
-        if(dir.entryList().contains(createFileName(tile) + "jpg")){
+        if(dir.entryList().contains(createFileName(tile))){
             tileDirectory = dir.absolutePath();
             ret = true;
         }
