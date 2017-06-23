@@ -22,7 +22,6 @@ Item {
     property alias helpPageButton: infoButton
     property alias path: polylineItem.path
     property alias polyline: polylineItem
-//    property alias map: map
     property alias plugin: osmPlugin
     property alias posSrc: positionSource
 
@@ -47,6 +46,7 @@ Item {
     signal mapRequestRoute(var coords)
     signal saveTiles(variant center,string fileProvider, int zoomlevel, int depth);
 
+    // ermittelt offline Verzeichnis zur Laufzeit und erstellt daraus ein Plugin für die Map
     function createPlugin(dir) {
         return Qt.createQmlObject(
            'import QtLocation 5.8;
@@ -58,6 +58,7 @@ Item {
                     ,mapInstance, "dynamic plugin")
     }
 
+    // erstellt das das Map Item neu, erforderlich weil das Plugin dnamisch generiert wird
     function connectMap(dir)
     {
         var plugin = createPlugin(dir)
@@ -80,8 +81,6 @@ Item {
         } else {
             map.zoomLevel = (map.maximumZoomLevel - map.minimumZoomLevel)/2
         }
-
-//        mapItem.forceActiveFocus()
     }
 
 
@@ -486,6 +485,11 @@ Item {
                 if (!map) return;
                 locationPin.setCoordinateEx(map.center)
                 updatePinPositionMarker(locationPin.coordinateEx())
+                if (locationsInstance) {
+                    locationsInstance.longPinText = Math.round( locationPin.coordinateEx().longitude * 10000)/10000 +  "°"
+                    locationsInstance.latiPinText = Math.round( locationPin.coordinateEx().latitude * 10000)/10000 +  "°"
+                    locationsInstance.locPinText = locationPin.coordinateEx().toString()
+                }
             }
         }
         RoundHighlightButton{

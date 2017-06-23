@@ -21,6 +21,10 @@ Item {
     property alias saveThisLocationButton: saveThisLocationButton
     property alias mainCol: mainCol
 
+    property alias latiPinText: latiPinText.text
+    property alias longPinText: longPinText.text
+    property alias locPinText: locPinText.text
+
     property alias clearMapItemsButton: clearMapItem
     property alias showPinButton: showPin
 
@@ -451,6 +455,7 @@ Item {
                                     width: parent.width * 0.6
                                     height: parent.height
                                     Text{
+                                        id: locPinText
                                         anchors.leftMargin: 10
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
@@ -485,6 +490,7 @@ Item {
                                     width: parent.width *  0.2
                                     height: parent.height
                                     Text{
+                                        id: latiPinText
                                         anchors.leftMargin: 10
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
@@ -512,6 +518,7 @@ Item {
                                     width: parent.width *  0.2
                                     height: parent.height
                                     Text{
+                                        id: longPinText
                                         anchors.leftMargin: 10
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter

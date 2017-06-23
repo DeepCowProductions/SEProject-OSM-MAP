@@ -183,7 +183,7 @@ ApplicationWindow {
                     saveRouteDialog.createObject(locationsInstance.mainCol)
             }
             showPinButton.onClicked: {
-                mapInstance.updateLocationMarker(locationPin.coordinateEx())
+                mapInstance.updatePinPositionMarker(locationPin.coordinateEx())
                 mainStack.pop(mapInstance)
                 mapInstance.forceActiveFocus()
             }
