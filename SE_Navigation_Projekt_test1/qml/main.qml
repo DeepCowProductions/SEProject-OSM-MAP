@@ -382,15 +382,15 @@ ApplicationWindow {
             onAccepted: {
                 console.log("saveDialog accepted")
                 console.log("input is: " + input)
-                console.log("path to save s : " + path)
+                console.log("path to save s : " + mapInstance.path)
                 console.log("qml: call roadsModel.addItem(...)")
-                routesModel.addItem(input,path)
+                routesModel.addItem(input,mapInstance.path)
                 visible = false
                 mainStack.forceActiveFocus()
             }
             onRejected: {
                 console.log("Rejected")
-                console.log("This path will be gone: " + polyline.path)
+                console.log("This path will be gone: " + mapInstance.path)
                 visible = false
                 mainStack.forceActiveFocus()
             }
