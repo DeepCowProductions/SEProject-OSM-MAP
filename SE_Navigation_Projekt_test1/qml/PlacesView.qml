@@ -393,18 +393,18 @@ Item {
                             }
                             onClicked: {
                                 if (listView.count != 0)
-                                switch (editMode) {
-                                case 0:
-                                    editMode = 2
-                                    break;
-                                case 1:
-                                    editMode = 0
-                                    infoPanelName.text = placesModel.getName(listView.currentIndex)
-                                    break;
-                                case 2:
-                                    editMode = 0
-                                    break;
-                                }
+                                    switch (editMode) {
+                                    case 0:
+                                        editMode = 2
+                                        break;
+                                    case 1:
+                                        editMode = 0
+                                        infoPanelName.text = placesModel.getName(listView.currentIndex)
+                                        break;
+                                    case 2:
+                                        editMode = 0
+                                        break;
+                                    }
                             }
                         }
                         HighlightButton {
@@ -418,21 +418,21 @@ Item {
                             }
                             onClicked: {
                                 if (listView.count != 0)
-                                switch (editMode) {
-                                case 0:
-                                    editMode = 1
-                                    infoPanelName.forceActiveFocus()
-                                    break;
-                                case 1:
-                                    editMode = 0
-                                    placesModel.changeItemName(listView.currentIndex,infoPanelName.text)
-                                    listView.update()
-                                    break;
-                                case 2:
-                                    editMode = 0
-                                    placesModel.deleteItem(listView.currentIndex)
-                                    break;
-                                }
+                                    switch (editMode) {
+                                    case 0:
+                                        editMode = 1
+                                        infoPanelName.forceActiveFocus()
+                                        break;
+                                    case 1:
+                                        editMode = 0
+                                        placesModel.changeItemName(listView.currentIndex,infoPanelName.text)
+                                        listView.update()
+                                        break;
+                                    case 2:
+                                        editMode = 0
+                                        placesModel.deleteItem(listView.currentIndex)
+                                        break;
+                                    }
                             }
                         }
                         HighlightButton {
@@ -445,7 +445,10 @@ Item {
                                 fillMode: Image.PreserveAspectFit
                             }
                             onClicked: {
-                                mapRequest(placesModel.getLatiAtIndex(listView.currentIndex), placesModel.getLongiAtIndex(listView.currentIndex))
+                                if (listView.count != 0) {
+                                    mapRequest(placesModel.getLatiAtIndex(listView.currentIndex), placesModel.getLongiAtIndex(listView.currentIndex))
+                                    mapInstance.forceActiveFocus()
+                                }
                             }
                         }
 

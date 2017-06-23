@@ -448,7 +448,10 @@ Item {
                                 fillMode: Image.PreserveAspectFit
                             }
                             onClicked: {
-                                mapRequest(routesModel.getCoordsAtIndex(listView.currentIndex))
+                                if (listView.count != 0) {
+                                    mapRequest(routesModel.getCoordsAtIndex(listView.currentIndex))
+                                    mapInstance.forceActiveFocus()
+                                }
                             }
                         }
                     }
