@@ -361,7 +361,7 @@ ApplicationWindow {
             labelText: "Enter a name to save"
             onAccepted: {
                 if (!mapInstance.map) return;
-                if (mapInstance.posSrcValid) placesModel.addItem(input,mapInstance.currentPosition)
+                if (mapInstance.posSrcValid) placesModel.addItem(input,mapInstance.pos)
                 else  placesModel.addItem(input,mapInstance.map.center)
                 visible = false
                 mainStack.forceActiveFocus()
