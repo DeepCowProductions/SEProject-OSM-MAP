@@ -36,7 +36,11 @@ ApplicationWindow {
     signal updateProgressBar(int currentValue, int amount);
     signal clearDirectory(string directory);
 
-    // pathLength: claculates the total length of a path/list of GeoCoordinates and returns it in km
+
+    function test () {
+        console.log("test2")
+    }
+
     function pathLength(cords) {
         if (cords.length <2)
             return 0;
@@ -47,7 +51,6 @@ ApplicationWindow {
         return c
     }
 
-    // distanceTo: calculates the distance between 2 GeoCoordinats and returns the value in specified unit
     function distanceTo(lat1, lon1, lat2, lon2, unit) {
           var rlat1 = Math.PI * lat1/180
           var rlat2 = Math.PI * lat2/180

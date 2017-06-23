@@ -23,7 +23,7 @@ public:
      * @param mapId Die MapId bestimmt den Maptyp der vom Plugin genutzt wird. Wird von der Tile-Klasse um hinterher daraus
      *          einen Dateinamen zu bilden.
      */
-    explicit Tile(int x , int y , int zoomlevel = 10, QString pluginName = "osm", int mapId = 0, QString format = ".png", QObject *parent = 0);
+    explicit Tile(int x , int y , int zoomlevel = 10, QString pluginName = "osm", int mapId = 0, QString format = "png", QObject *parent = 0);
     /**
      * @brief Tile Konstruktor falls die X- und Y-Werte nicht bekannt sind und diese per longitude und latitude ermittelt
      *          werden müssen.

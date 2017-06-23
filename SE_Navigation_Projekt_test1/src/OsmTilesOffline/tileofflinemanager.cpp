@@ -7,6 +7,7 @@ TileOfflineManager::TileOfflineManager(QObject *parent) : QObject(parent)
     m_settings = new QSettings();
     setOfflineMapSize(m_settings->value("maxOfflineMapSize").toInt());
     setOfflinePath(m_settings->value("offlineDirectory").toString());
+    findCacheDirectory();
 }
 
 TileOfflineManager::~TileOfflineManager()
@@ -64,97 +65,50 @@ bool TileOfflineManager::deleteAll()
 bool TileOfflineManager::deleteTile(Tile * tile)
 {
     bool ret = false;
-    if(m_offlinePath.isEmpty()){
-        QDir saveDirectory = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-        if(contains(tile, QStandardPaths::DataLocation)){
-            ret = QFile::remove(saveDirectory.filePath(createFileName(tile)));
-        }else{
-            ret = true;
-        }
+    if(!m_offlinePath.isEmpty()){
+        ret = QFile::remove(m_offlinePath + "/" + createFileName(tile) );
     }else{
-        QString directory = searchSubdirectoriesForTile(tile, m_offlinePath);
-        if(!(directory != "")){
-            ret = QFile::remove(directory + createFileName(tile) );
-        }else{
-            ret = true;
-        }
+        ret = true;
     }
     return ret;
 }
-
-bool TileOfflineManager::contains(Tile* tile, QStandardPaths::StandardLocation location)
-{
-    QDir saveDirectory = QStandardPaths::writableLocation(location);
-    bool ret = false;
-    if(searchSubdirectoriesForTile(tile, saveDirectory.absolutePath()) != "")
-        ret = true;
-    return ret;
-}
-
 
 bool TileOfflineManager::copyChacheTileIfPossible(Tile * tile)
 {
-    //    QTime time;
-    //    time.start();
     //Tile schon im Verzeichnis
     if(m_offlinePath != "" && QDir(m_offlinePath).entryList().contains(createFileName(tile))){
+        qDebug() << "Tile already in offline diretory";
         return true;
     }
-    if(contains(tile, QStandardPaths::DataLocation))
-        return true;
-
-    //    qDebug() << time.elapsed()/1000.0;
-    //Tile im Cache Verzeichnis
     bool ret = false;
     QDir saveDirectory;
     saveDirectory = QDir(m_offlinePath);
     tile->setFormat("jpg");
     QString tileName = createFileName(tile);
     qDebug() << "Try to copy: " << tileName;
-    if(contains(tile, QStandardPaths::CacheLocation)){
-        QString path = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
-        QString oldDir = searchSubdirectoriesForTile(tile, path);
-        QDir cacheDirectory(oldDir);
-        QFile cacheFile(cacheDirectory.filePath(tileName));
+    if(!m_cachedirectory.isEmpty()){
+        QDir saveDirectory = QDir(m_offlinePath);
+        QStringList filters;
+        filters << "*.jpg" << "*.png";
+        if(m_cachedirectory.entryList(filters).contains(createFileName(tile))){
+            QFile cacheFile(m_cachedirectory.absoluteFilePath(tileName));
+            tile->setFormat("png");
+            qDebug() << createFileName(tile);
+            qDebug() << saveDirectory.filePath(createFileName(tile));
+            ret = cacheFile.copy(saveDirectory.filePath(createFileName(tile)));
+            cacheFile.remove();
+        }
         tile->setFormat("png");
-        tileName = createFileName(tile);
-        ret = cacheFile.copy(saveDirectory.filePath(tileName));
-        cacheFile.remove();
+    }else{
+        findCacheDirectory();
     }
-    else if(contains(tile, QStandardPaths::GenericCacheLocation)){
-
-        QString oldDir = searchSubdirectoriesForTile(tile, QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation));
-        QDir generic(oldDir);
-        QFile cacheFile(generic.absolutePath().append("/" + tileName));
-        tile->setFormat("png");
-        tileName = createFileName(tile);
-        ret = cacheFile.copy(saveDirectory.filePath(tileName));
-        cacheFile.remove();
-        qDebug() << "Got tile from generic Cache";
-    }
-    //    qDebug() << "poit4 " << time.elapsed()/1000.0;
     return ret;
 }
 
-QString TileOfflineManager::searchSubdirectoriesForTile(Tile *tile, QString directory)
-{
-    QString tileDirectory = "";
-    bool ret = false;
-    QDirIterator it(directory,QDir::Dirs, QDirIterator::Subdirectories );
-    while(it.hasNext() && !ret){
-        QDir dir(it.next());
-        if(dir.entryList().contains(createFileName(tile))){
-            tileDirectory = dir.absolutePath();
-            ret = true;
-        }
-    }
-    return tileDirectory;
-}
 
 bool TileOfflineManager::changeOfflineDirectory(QString newDirectory)
 {
     QStorageInfo infoNewDirectory(newDirectory);
-    //    QStorageInfo infoOldDirectory(m_offlinePath);
 
     QDir dir(m_offlinePath);
     int copiedFiles = 0;
@@ -184,9 +138,13 @@ int TileOfflineManager::calculateUsedSpace(QString directory)
     QDir dir;
     if(directory == "offline")
         dir = QDir(m_offlinePath);
-    else if(directory == "cache")
-        dir = QDir(QStandardPaths::writableLocation(QStandardPaths::CacheLocation));
-
+    else if(directory == "cache"){
+        if(!m_cachedirectory.exists()){
+            dir = QDir(QStandardPaths::writableLocation(QStandardPaths::CacheLocation));
+        }else{
+            dir = m_cachedirectory;
+        }
+    }
 
     foreach (QString fileName, dir.entryList()) {
         QFile file(dir.absoluteFilePath(fileName));
@@ -215,6 +173,34 @@ void TileOfflineManager::setOfflinePath(const QString &offlinePath)
     m_offlinePath = offlinePath;
 }
 
+void TileOfflineManager::findCacheDirectory()
+{
+    QString directory = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+    QDirIterator it(directory,QDir::Dirs, QDirIterator::Subdirectories );
+    while(it.hasNext()){
+        QDir dir(it.next());
+        foreach (QString fileName, dir.entryList()) {
+            QRegExp rx("osm_100\\-l\\-\\d{1,1}\\-\\d{1,2}\\-\\d+\\-\\d+\\.png");
+            if(rx.exactMatch(fileName)){
+                m_cachedirectory = QDir(fileName);
+                return;
+            }
+        }
+    }
+    directory = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation);
+    QDirIterator it2(directory,QDir::Dirs, QDirIterator::Subdirectories );
+    while(it2.hasNext()){
+        QDir dir(it2.next());
+        foreach (QString fileName, dir.entryList()) {
+            QRegExp rx("osm_100-l-\\d{1,1}-\\d{1,2}-\\d+-\\d+\\.jpg");
+            if(rx.exactMatch(fileName)){
+                m_cachedirectory = dir;
+                return;
+            }
+        }
+    }
+}
+
 QString TileOfflineManager::createFileName(Tile *tile)
 {
     QString filename = tile->pluginName();
@@ -229,6 +215,5 @@ QString TileOfflineManager::createFileName(Tile *tile)
     filename += QString::number(tile->y());
     filename += ".";
     filename += tile->format();
-    //    filename += m_format;
     return filename;
 }

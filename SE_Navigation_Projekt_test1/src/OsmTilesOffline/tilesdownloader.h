@@ -68,11 +68,15 @@ signals:
 
     /**
      * @brief nextTileDownloadStarted Signal für Update der Progress bar.
-     * @param counter Die aktuell zu runterladene Kachel
+     * @param counter Die aktuelle Anzahl der runtergeladenen Kacheln
+     * @param amount Die Anzahl an Kacheln die runtergeladen werden soll
      */
-    void nextTileDownloadStarted(int counter);
-
     void nextTileDownloadStarted(int counter, int amount);
+
+    /**
+     * @brief errorOccured Signal das bei Fehlern versendet wird
+     */
+    void errorOccured();
 
 private:
 

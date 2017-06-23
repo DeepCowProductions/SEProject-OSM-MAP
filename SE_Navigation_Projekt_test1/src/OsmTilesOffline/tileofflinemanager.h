@@ -36,14 +36,6 @@ public:
     bool deleteTile(Tile *tile);
 
     /**
-     * @brief contains überprüft ob ein Tile bereits in dem Offline Verzeichnis gespeichert ist
-     * @param tile Tile das überprüft werden soll
-     * @return Gibt true zurück falls das Tile schon vorhanden ist.
-     *      Falls es nicht vorhanden ist gibt die Methode false zurück.
-     */
-    bool contains(Tile *tile, QStandardPaths::StandardLocation location);
-
-    /**
      * @brief copyChacheTileIfPossible Prüft ob sich das Tile im Cache befindet und kopiert es falls nötig
      *          in das Offline Verzeichnis
      * @param tile das Tile, das auf Existenz geprüft werden soll.
@@ -53,16 +45,11 @@ public:
     bool copyChacheTileIfPossible(Tile *tile);
 
     /**
-     * @brief searchSubdirectoriesForTile durchsucht das mitgegebene Verzeichnis nach dem tile und gibt den Pfad
-     *          zum tile zurück.
-     * @param tile das tile, das gesucht wird
-     * @param directory das Verzeichnis in dem gesucht wird
-     * @return Der Pfad zum Tile falls eins gefunden wurde ansonsten wird ein leerstring zurück gegeben.
+     * @brief changeOfflineDirectory Methode zum Wechseln des Offlineverzeichnis
+     * @param newDirectory das neue Offlineverzeichnis
+     * @return gibt an ob das Wechseln des Offlineverzeichnis erfolgreich war
      */
-    QString searchSubdirectoriesForTile(Tile * tile, QString directory);
-
     bool changeOfflineDirectory(QString newDirectory);
-
 
     /**
      * @brief calculateUsedSpace ermittelt wie viel Speicher bereits verbraucht wurde
@@ -78,20 +65,43 @@ public:
 signals:
 
 
-
+    /**
+     * @brief notEnoughSpace Signal das augelöst wird wennd er Speicher nicht ausreichend war
+     */
     void notEnoughSpace();
 
 public slots:
 
 private:
+
+    /**
+     * @brief findCacheDirectory Methode die das Cacheverzeichnis anhand der Kachelsignatur findet und dies zwischensspeichert
+     */
+    void findCacheDirectory();
+
+    /**
+     * @brief m_settings Variable zum lesen der vorher eingestellten Optionen
+     */
     QSettings *m_settings;
 
+    /**
+     * @brief m_offlineMapSize die maximale Größe des Offlineverzeichnis
+     */
     int m_offlineMapSize;
 
+    /**
+     * @brief m_offlinePath Pfad zum Offlineverzeichnis
+     */
     QString m_offlinePath;
 
+    /**
+     * @brief m_currentlyUsedSpace Variable für den bisher verbrauchten Speicherplatz
+     */
     int m_currentlyUsedSpace;
 
+    /**
+     * @brief m_cachedirectory Variable zum speichern des Cachedirectory
+     */
     QDir m_cachedirectory;
 
     /**
