@@ -13,9 +13,10 @@
 #endif
 /**
  * @brief The Settings class
- * Settings-Klasse um Einstellungen der App abzurufen und zu speichern
- *
- * [...]
+ * Settingsklasse specuhert und verwaltet Informationen und Einstellungen der App.
+ * Diese Klasse macht intern gebrauch der QSettings Klasse um eine config Datei zu speichern,
+ * welche global von der gesamten app gelesen werden kann.
+ * Die hier definierten Properties stellen teilweise Einstellungen dar, die auf diese weise gespeichert werden.
  */
 class Settings : public QObject
 {
@@ -54,7 +55,13 @@ signals:
     void existsSdCarChanged(bool existsSdCar);
 
 public slots:
+    /**
+     * @brief save ruft writeSettings auf.
+     */
     void save();
+    /**
+     * @brief load ruft readSettings auf.
+     */
     void load();
 
     void setMaxOfflineMapSize(int maxOfflineMapSize);

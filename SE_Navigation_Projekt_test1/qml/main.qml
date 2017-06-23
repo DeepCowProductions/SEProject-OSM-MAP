@@ -7,6 +7,18 @@ import fhswf.se.nav.settings 1.0
 import fhswf.se.nav.models 1.0
 import fhswf.se.nav.offlinemanager 1.0
 
+/* main.qml
+ * Einstieg und Rootitem der QMl Overfläche.
+ * Besitzt eine StackView um qmlSeiten darzustellen:
+ *   property variant mapInstance
+ *   property variant locationsInstance
+ *   property variant roadsInstance
+ *   property variant placesInstance
+ *   property variant settingsInstance
+ *   property variant helpInstance
+ * können verwendet werden um auf dessen Instanzen zuzugreifen.
+ * Beherbergt außerdem die aus C++ kommenden eingenen Komponenten und ein par ultility funktionen.
+ */
 ApplicationWindow {
     property alias mainStack: mainStack
     property alias settings : settingsObject
@@ -39,7 +51,6 @@ ApplicationWindow {
         return c
     }
 
-
     function distanceTo(lat1, lon1, lat2, lon2, unit) {
           var rlat1 = Math.PI * lat1/180
           var rlat2 = Math.PI * lat2/180
@@ -56,19 +67,14 @@ ApplicationWindow {
           return dist
     }
 
-
+    // initApp: creates first Item and puts it onto the mainStack, in this case: MapPage
     function initApp() {
         console.log("invoke initApp -  creating mapItem - started")
-        //        placesModelInstance = placesModelComp.createObject();
         mapInstance = mapPageComp.createObject(mainStack);
         console.log("invoke initApp -  creating mapItem - created dynamic items")
         mainStack.push(mapInstance)
-        //        settingsInstance = settingsPageComp.createObject(mainStack);
-        //        mainStack.push(settingsInstance)
-        //        mainStack.pop()
         mapInstance.forceActiveFocus()
         console.log("invoke initApp -  creating mapItem - finished")
-
     }
 
     id: appWindow
@@ -99,6 +105,16 @@ ApplicationWindow {
 
     TileManager{
         id: tileManagerObject
+    }
+
+    PlacesModel {
+        id: placesModel
+    }
+    RoutesModel {
+        id: routesModel
+    }
+    LocationPin {
+        id: locationPin
     }
 
     StackView {
@@ -140,7 +156,6 @@ ApplicationWindow {
 
         initialItem: Item {
             id: initPage
-            //            anchors.fill: parent
             Label {
                 anchors.fill: parent
                 text: "Loading... "
@@ -261,7 +276,7 @@ ApplicationWindow {
                 if (!settingsInstance) {
                     console.log("creating new instance of item")
                     settingsInstance = settingsPageComp.createObject(mainStack);
-                                    }
+                }
                 else{
                     console.log("item instance already here...")
                 }
@@ -338,8 +353,8 @@ ApplicationWindow {
             title: "Save this Location"
             labelText: "Enter a name to save"
             onAccepted: {
-//                placesModel.addItem(input,mapInstance.currentPosition)
-                placesModel.addItem(input,mapInstance.map.center)
+                if (mapInstance.posSrcValid) placesModel.addItem(input,mapInstance.currentPosition)
+                else placesModel.addItem(input,mapInstance.map.center)
                 visible = false
                 mainStack.forceActiveFocus()
             }
@@ -356,15 +371,11 @@ ApplicationWindow {
             title: "Save recorded Route"
             labelText: "Enter a name to save"
             onAccepted: {
-//                placesModel.addItem(input,mapInstance.currentPosition)
                 console.log("saveDialog accepted")
                 console.log("input is: " + input)
                 console.log("path to save s : " + path)
                 console.log("qml: call roadsModel.addItem(...)")
                 routesModel.addItem(input,path)
-                // TODO: option to keep path displayed???
-                // here we want the recording to stay active
-//                clearPath()
                 visible = false
                 mainStack.forceActiveFocus()
             }
@@ -372,20 +383,9 @@ ApplicationWindow {
                 console.log("Rejected")
                 console.log("This path will be gone: " + polyline.path)
                 visible = false
-//                clearPath()
                 mainStack.forceActiveFocus()
             }
             Component.onCompleted: visible = true
         }
-    }
-
-    PlacesModel {
-        id: placesModel
-    }
-    RoutesModel {
-        id: routesModel
-    }
-    LocationPin {
-        id: locationPin
     }
 }

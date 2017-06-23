@@ -3,6 +3,11 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.0
 
+/* SaveTilesDialog.qml
+ * Dialog Popup zum speichern von Kartenausschnitten.
+ * Besitzt einen Slider um den Zoomlevel auszuwählen (limit auf x+5).
+ * Berechnet nach silder.valueChanged die anzahl der Tiles.
+ */
 Dialog {
     property alias zoomleveldepth: slider.value
     property int tileCount
@@ -14,9 +19,7 @@ Dialog {
     property int screenHeight
     id: saveTilesDialog
     standardButtons: "NoButton"
-    //    onButtonClicked: ( buttonClicked === StandardButton.Ok ) ? accepted() : rejected()
 
-//    modality: Qt.WindowModal
     title: "Confirm Download"
     Rectangle {
         color: "#EEEEFF"
@@ -30,7 +33,6 @@ Dialog {
             anchors.fill: parent
             Label {
                 id:label
-                //                anchors.top: parent.top
                 text: "Download currently visible Map"
                 color: "navy"
             }
@@ -41,7 +43,6 @@ Dialog {
                 Text {
                     width: parent.width *0.4
                     height: parent.height
-                    //                    horizontalAlignment: TextInput.AlignHCenter
                     text: "Zoomlevel"
                     verticalAlignment: Text.AlignVCenter
                 }
@@ -49,7 +50,6 @@ Dialog {
                     width: parent.width *0.5
                     height: parent.height
                     id: slider
-                    //                    horizontalAlignment: TextInput.AlignHCenter
                     from: minZoom
                     to: maxZoom
                     value: defaultZoom
@@ -89,14 +89,12 @@ Dialog {
                 Text {
                     width: parent.width *0.8
                     height: parent.height
-                    //                    horizontalAlignment: TextInput.AlignHCenter
                     text: "Number of Tiles:"
                     verticalAlignment: Text.AlignVCenter
                 }
                 Text {
                     width: parent.width *0.2
                     height: parent.height
-                    //                    horizontalAlignment: TextInput.AlignHCenter
                     text: tileCount
                     verticalAlignment: Text.AlignVCenter
                 }
@@ -107,13 +105,11 @@ Dialog {
                 Text {
                     width: parent.width *0.8
                     height: parent.height
-                    //                    horizontalAlignment: TextInput.AlignHCenter
                     text: "aprox req. Memory: "
                 }
                 Text {
                     width: parent.width *0.2
                     height: parent.height
-                    //                    horizontalAlignment: TextInput.AlignHCenter
                     text: totalSize + " MB"
                 }
             }
@@ -121,7 +117,6 @@ Dialog {
                 width: 200
                 height: 40
                 spacing: 10
-                //                anchors.top : textRect.bottom
                 HighlightButton {
                     id: acceptButton
                     width: parent.width * 0.5
@@ -152,9 +147,8 @@ Dialog {
                 }
             }
         }
-//                Keys.onPressed: if (event.key === Qt.Key_R && (event.modifiers & Qt.ControlModifier)) filledDialog.click(StandardButton.Retry)
                 Keys.onEnterPressed: accept()
                 Keys.onEscapePressed: reject()
-                Keys.onBackPressed: reject() // especially necessary on Android
+                Keys.onBackPressed: reject()
     }
 }

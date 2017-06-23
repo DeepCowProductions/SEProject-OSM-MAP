@@ -6,6 +6,13 @@ import QtLocation 5.6
 import fhswf.se.nav.settings 1.0
 import fhswf.se.nav.models 1.0
 
+/* PlacesView.qml
+ * Listenfenster zu ranzeige und verwaltung von vom Nutzer gespeicherten Standorten.
+ * Besitzt ein ListView mit Delegate und greift auf das model placesModel zu.
+ * Der status editMode gibt an wie sich die unterren drei Buttons verhalten sollen und
+ * steuert dessen Aussehen wenn der Nutzer editierrt oder löschen will.
+ * Buttonhandler sind hier mit ausnahme des backButton lokal implentiert.
+ */
 Item {
     id: placesPage
     property alias model: pLacesListView.model
@@ -16,7 +23,8 @@ Item {
     property alias editLocationButton: editLocation
     property alias displayOnMapButton: displayOnMap
 
-    property bool inEditMode: false
+    property bool firstItem : true
+    property int  editMode: 0
 
     signal mapRequest(double latitude, double longitude)
 
@@ -77,14 +85,23 @@ Item {
                 onClicked: {
                     pLacesListView.currentIndex = index
                     infoPanelName.info = name
-                    infoPanelLati.info = latitude + "°"
-                    infoPanelLongi.info = longitude +"°"
+                    infoPanelLati.info = Math.round(latitude*10000)/10000 + "°"
+                    infoPanelLongi.info = Math.round(longitude*10000)/10000 +"°"
                     infoPanelDate.info = savedAtDate
-                    //                    infoPanelPos.info = ""
-                    inEditMode = false
+                    editMode = 0
                 }
                 onDoubleClicked: {
                     mapRequest(longitude, latitude)
+                }
+                Component.onCompleted: {
+                    if (firstItem) {
+                        pLacesListView.currentIndex = index
+                        infoPanelName.info = name
+                        infoPanelLati.info = Math.round(latitude*10000)/10000 + "°"
+                        infoPanelLongi.info = Math.round(longitude*10000)/10000 +"°"
+                        infoPanelDate.info = savedAtDate
+                        firstItem = false
+                    }
                 }
             }
         }
@@ -187,21 +204,6 @@ Item {
                             focus: true
                             onCurrentItemChanged: console.log(model.getName(pLacesListView.currentIndex) + ' selected')
                         }
-
-                        RoundHighlightButton{
-                            id: newLocationButton
-                            text: "+"
-                            //            onClicked: appWindow.saveTiles(map.center, map.zoomLevel)
-                            anchors.bottom: listRect.bottom
-                            anchors.right: listRect.right
-                            width: implicitWidth * 0.7
-                            height: implicitHeight * 0.7
-                            contentItem: Image {
-                                source: "qrc:/add"
-                                fillMode: Image.PreserveAspectFit
-                            }
-                            radius: 9000
-                        }
                     }
                 }
                 Column {
@@ -239,7 +241,7 @@ Item {
                                     width: parent.width * 0.8
                                     height: parent.height
                                     TextInput{
-                                        readOnly: !inEditMode
+                                        readOnly: editMode != 1
                                         property string info
                                         id: infoPanelName
                                         anchors.leftMargin: 10
@@ -249,15 +251,14 @@ Item {
                                         text: info + " "
                                         color: "black"
                                         font.pointSize: 12
-                                        onEditingFinished: {
-                                            console.log("edit fin")
-                                            inEditMode = false
+                                        onAccepted: {
+                                            editMode = 0
                                             placesModel.changeItemName(listView.currentIndex,infoPanelName.text)
                                             listView.update()
                                         }
                                     }
-                                    border.color: inEditMode ? "lightblue" : "transparent"
-                                    border.width: inEditMode ? 1 : 0
+                                    border.color: editMode == 1 ? "lightblue" : "transparent"
+                                    border.width: editMode == 1 ? 1 : 0
                                 }
                             }
                             Row{
@@ -328,7 +329,7 @@ Item {
                                     width: parent.width *  0.3
                                     height: parent.height
                                     TextEdit{
-                                        readOnly: !inEditMode
+                                        readOnly: true
                                         property string info
                                         id: infoPanelLati
                                         anchors.leftMargin: 10
@@ -358,7 +359,7 @@ Item {
                                     width: parent.width *  0.3
                                     height: parent.height
                                     TextEdit{
-                                        readOnly: !inEditMode
+                                        readOnly: true
                                         property string info
                                         id: infoPanelLongi
                                         anchors.leftMargin: 10
@@ -387,15 +388,22 @@ Item {
                             height: parent.height
                             text: "delete"
                             contentItem: Image {
-                                source: inEditMode ? "qrc:/x" : "qrc:/delete"
+                                source: editMode != 0 ? "qrc:/x" : "qrc:/delete"
                                 fillMode: Image.PreserveAspectFit
                             }
                             onClicked: {
-                                if (inEditMode) {
-                                    inEditMode = false
-                                    infoPanelName.info = placesModel.getName(listView.currentIndex)
-                                }else{
-                                    placesModel.deleteItem(listView.currentIndex)
+                                if (listView.count != 0)
+                                switch (editMode) {
+                                case 0:
+                                    editMode = 2
+                                    break;
+                                case 1:
+                                    editMode = 0
+                                    infoPanelName.text = placesModel.getName(listView.currentIndex)
+                                    break;
+                                case 2:
+                                    editMode = 0
+                                    break;
                                 }
                             }
                         }
@@ -405,18 +413,25 @@ Item {
                             height: parent.height
                             text: "edit"
                             contentItem: Image {
-                                source: inEditMode ? "qrc:/ok" : "qrc:/edit"
+                                source: editMode != 0 ? "qrc:/ok" : "qrc:/edit"
                                 fillMode: Image.PreserveAspectFit
                             }
                             onClicked: {
-                                if (inEditMode) {
-                                    inEditMode = false
+                                if (listView.count != 0)
+                                switch (editMode) {
+                                case 0:
+                                    editMode = 1
+                                    infoPanelName.forceActiveFocus()
+                                    break;
+                                case 1:
+                                    editMode = 0
                                     placesModel.changeItemName(listView.currentIndex,infoPanelName.text)
                                     listView.update()
-                                }
-                                else {
-                                    inEditMode = true
-                                    infoPanelName.forceActiveFocus()
+                                    break;
+                                case 2:
+                                    editMode = 0
+                                    placesModel.deleteItem(listView.currentIndex)
+                                    break;
                                 }
                             }
                         }

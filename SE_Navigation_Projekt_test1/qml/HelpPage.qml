@@ -3,6 +3,10 @@ import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.0
 import Qt.labs.folderlistmodel 2.1
 
+/* HelpPage.qml
+ * Verwendet um spezifische Informationen zur Hilfe/Erklärung/Debug darzustellen.
+ * Keine echte Funktionalität.
+ */
 Item {
     property alias backButton: backButton
     id: topParent

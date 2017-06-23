@@ -6,6 +6,12 @@ import QtLocation 5.6
 import fhswf.se.nav.settings 1.0
 import fhswf.se.nav.models 1.0
 
+/* LocationPage.qml
+ * Positionanzeige und Übersicht über den aktuellen Status des Trackings/ GPS.
+ * Besitzt zwei Buttons um auf die Listenfenster mit Nutzrdaten zuzugreifen, sowie Buttons um Orte zu speichern.
+ * Zeigt an wie lang die aktuelle Route ist und wo der Schnellmarker sich befindet.
+ * Außerdem können hier die Marker von der Karte entfernt werden.
+ */
 Item {
     id: locationPage
     property alias backButton: backButton
@@ -14,7 +20,6 @@ Item {
     property alias viewRoadsButton: viewRoadsButton
     property alias saveThisLocationButton: saveThisLocationButton
     property alias mainCol: mainCol
-    //    signal mapRequest(double latitude, double longitude)
 
     property alias clearMapItemsButton: clearMapItem
     property alias showPinButton: showPin
@@ -63,7 +68,6 @@ Item {
             height: parent.height - headerSpacer.height - buttonRow.height
             Flickable {
                 anchors.fill: parent
-                //                contentHeight: locationPage.height - headerSpacer.height - buttonRow.height
                 contentWidth: locationPage.width
                 boundsBehavior: Flickable.StopAtBounds
                 clip: true
@@ -74,8 +78,6 @@ Item {
                     Rectangle {
                         width: parent.width
                         height: 50
-                        //            border.color: "lightgray"
-                        //            border.width: 1
                         Column {
                             anchors.fill: parent
                             Row {
@@ -104,7 +106,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignVCenter
-                                        text: mapInstance.position.coordinate +" "
+                                        text: mapInstance.pos.coordinate +" "
                                         color: "black"
                                         font.pointSize: 10
                                     }
@@ -137,7 +139,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignLeft
-                                        text: mapInstance.position.coordinate.latitude + "°"
+                                        text: Math.round(mapInstance.pos.coordinate.latitude * 10000 ) / 10000 + "°"
                                         color: "black"
                                         font.pointSize: 7
                                     }
@@ -164,7 +166,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignLeft
-                                        text: mapInstance.position.coordinate.longitude +"°"
+                                        text: Math.round(mapInstance.pos.coordinate.longitude * 10000)/10000 +"°"
                                         color: "black"
                                         font.pointSize: 7
                                     }
@@ -175,8 +177,6 @@ Item {
                     Rectangle {
                         width: parent.width
                         height: 50
-                        //            border.color: "lightgray"
-                        //            border.width: 1
                         Row {
                             anchors.fill: parent
                             padding: 1
@@ -214,8 +214,6 @@ Item {
                     Rectangle {
                         width: parent.width
                         height: 50
-                        //            border.color: "lightgray"
-                        //            border.width: 1
                         Row {
                             anchors.fill: parent
                             padding: 1
@@ -253,8 +251,6 @@ Item {
                     Rectangle {
                         width: parent.width
                         height: 50
-                        //            border.color: "lightgray"
-                        //            border.width: 1
                         Column {
                             anchors.fill: parent
                             Row {
@@ -344,7 +340,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignLeft
-                                        text: pathLength(mapInstance.path)
+                                        text: Math.round(pathLength(mapInstance.path)*100)/100
                                         color: "black"
                                         font.pointSize: 7
                                     }
@@ -356,8 +352,6 @@ Item {
                     Rectangle {
                         width: parent.width
                         height: 50
-                        //            border.color: "lightgray"
-                        //            border.width: 1
                         Row {
                             anchors.fill: parent
                             padding: 1
@@ -396,8 +390,6 @@ Item {
                     Rectangle {
                         width: parent.width
                         height: 50
-                        //            border.color: "lightgray"
-                        //            border.width: 1
                         Row {
                             anchors.fill: parent
                             padding: 1
@@ -435,8 +427,6 @@ Item {
                     Rectangle {
                         width: parent.width
                         height: 50
-                        //            border.color: "lightgray"
-                        //            border.width: 1
                         Column {
                             anchors.fill: parent
                             Row {
@@ -499,7 +489,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignLeft
-                                        text: locationPin.coordinateEx().latitude
+                                        text: Math.round( locationPin.coordinateEx().latitude *10000) / 10000 + "°"
                                         color: "black"
                                         font.pointSize: 7
                                     }
@@ -526,7 +516,7 @@ Item {
                                         anchors.fill: parent
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignLeft
-                                        text: locationPin.coordinateEx().longitude
+                                        text: Math.round( locationPin.coordinateEx().longitude * 10000)/10000 +  "°"
                                         color: "black"
                                         font.pointSize: 7
                                     }
@@ -539,8 +529,6 @@ Item {
                     Rectangle {
                         width: parent.width
                         height: 50
-                        //            border.color: "lightgray"
-                        //            border.width: 1
                         Row {
                             anchors.fill: parent
                             padding: 1
@@ -578,8 +566,6 @@ Item {
                     Rectangle {
                         width: parent.width
                         height: 50
-                        //            border.color: "lightgray"
-                        //            border.width: 1
                         Row {
                             anchors.fill: parent
                             padding: 1
@@ -617,8 +603,6 @@ Item {
                     Rectangle {
                         width: parent.width
                         height: 50
-                        //            border.color: "lightgray"
-                        //            border.width: 1
                         Column {
                             anchors.fill: parent
                             Row {
@@ -664,7 +648,6 @@ Item {
                         }
 
                     }
-
 
                 }
                 // end main Column

@@ -7,36 +7,48 @@ import fhswf.se.nav.settings 1.0
 import Qt.labs.folderlistmodel 2.1
 import fhswf.se.nav.offlinemanager 1.0
 
-/* SettingsPage.qml
- * Einfache Einstellungsseite für die App.
- * Übernimmt beim start die Einstellungen aus dem Settings Objekt aus C++ und
- * schreibt nach änderung in deiser Seite die Änderungen zurück in die C++ Klasse.
- * Einige Einstellungen / Informationen werden dynamisch bereitgestellt und nicht gespeichert.
- * (zum  beispiel Ordner größe/ speicherverbrauch).
- */
+
 Item {
     property alias backButton: backButton
     property alias offlineDirectorySize: currentlyUsedSize
 
     property double offlineSize: Math.round((offlineManager.calculateUsedSpace("offline") / 1024 / 1024)*100) / 100
+    //    property var cacheSize: getSizeCache()
 
     signal deleteDirectory(string directory);
     signal configurationChanged ()
 
+    //    function getSizeOffline() {
+    //        console.log("call offline size calc")
+    //        var c = 0
+    //        for (var i = 0; i <folderOffline.count; i++  ){
+    //            c = c + folderOffline.get (i ,"fileSize")
+    //        }
+    //        return  Math.round(((c / 1024) /1024) * 100) / 100
+    //    }
     id: topParent
 
     onConfigurationChanged:  {
         console.log("saving settings from qml")
+        // instert new options here:
         settings.maxOfflineMapSize = sizeOfOfflineDirectory.text * 1000000
-//        settings.sdCard = sdCard.checked
-//        settings.device = deviceStorage.checked
+        settings.sdCard = sdCard.checked
+        settings.device = deviceStorage.checked
 
         settings.save()
+    }
+
+
+    FolderListModel {
+        id: folderOffline
+        folder: "file://"+mapInstance.plugin.parameters[0].value
     }
 
     Column{
         id:mainColumn
         anchors.fill: parent
+        //            width: topParent.width
+        //            height: topParent.height
         Row  {
             id: buttonRow
             width: parent.width
@@ -135,7 +147,7 @@ Item {
                                 id: pathToOfflineDirecory
                                 width: parent.width
                                 text: settings.offlineDirectory
-                                readOnly: true
+                                //                            enabled: false
                                 wrapMode: TextField.Wrap
                                 verticalAlignment: Text.AlignVCenter
                                 horizontalAlignment: Text.AlignLeft
@@ -159,8 +171,7 @@ Item {
                                 font.pointSize: 12
                             }
                         }
-                        TextField{
-                            readOnly: false
+                        TextField {
                             id: sizeOfOfflineDirectory
                             width: parent.width * 0.25
                             validator: RegExpValidator {regExp: /^\d+$/}
@@ -188,64 +199,63 @@ Item {
                             }
                         }
                         TextField {
-                            readOnly: true
                             id: currentlyUsedSize
                             width: parent.width * 0.25
                             text:  offlineSize
                             placeholderText: ""
                         }
                     }
-//                    ButtonGroup{
-//                        id: storageGroup
-//                    }
+                    ButtonGroup{
+                        id: storageGroup
+                    }
 
-//                    Row {
-//                        width: parent.width
-//                        height: 50
-//                        Rectangle{
-//                            width: parent.width * 0.7
-//                            height: parent.height
-//                            Text{
-//                                anchors.leftMargin: 10
-//                                anchors.fill: parent
-//                                verticalAlignment: Text.AlignVCenter
-//                                horizontalAlignment: Text.AlignLeft
-//                                text: qsTr("SD-Card")
-//                                color: "navy"
-//                                font.pointSize: 12
-//                            }
-//                        }
-//                        RadioButton{
-//                            id: sdCard
-//                            ButtonGroup.group: storageGroup
-//                            enabled: settings.existsSdCar
-//                            checked: settings.sdCard
-//                            //                                checked: settings.
-//                        }
-//                    }
-//                    Row {
-//                        width: parent.width
-//                        height: 50
-//                        Rectangle{
-//                            width: parent.width * 0.7
-//                            height: parent.height
-//                            Text{
-//                                anchors.leftMargin: 10
-//                                anchors.fill: parent
-//                                verticalAlignment: Text.AlignVCenter
-//                                horizontalAlignment: Text.AlignLeft
-//                                text: qsTr("Device storage")
-//                                color: "navy"
-//                                font.pointSize: 12
-//                            }
-//                        }
-//                        RadioButton{
-//                            id: deviceStorage
-//                            ButtonGroup.group: storageGroup
-//                            checked: settings.device
-//                            //                                checked: settings.
-//                        }
-//                    }
+                    Row {
+                        width: parent.width
+                        height: 50
+                        Rectangle{
+                            width: parent.width * 0.7
+                            height: parent.height
+                            Text{
+                                anchors.leftMargin: 10
+                                anchors.fill: parent
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                text: qsTr("SD-Card")
+                                color: "navy"
+                                font.pointSize: 12
+                            }
+                        }
+                        RadioButton{
+                            id: sdCard
+                            ButtonGroup.group: storageGroup
+                            enabled: settings.existsSdCar
+                            checked: settings.sdCard
+                            //                                checked: settings.
+                        }
+                    }
+                    Row {
+                        width: parent.width
+                        height: 50
+                        Rectangle{
+                            width: parent.width * 0.7
+                            height: parent.height
+                            Text{
+                                anchors.leftMargin: 10
+                                anchors.fill: parent
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                text: qsTr("Device storage")
+                                color: "navy"
+                                font.pointSize: 12
+                            }
+                        }
+                        RadioButton{
+                            id: deviceStorage
+                            ButtonGroup.group: storageGroup
+                            checked: settings.device
+                            //                                checked: settings.
+                        }
+                    }
                     Row{
                         width: parent.width
                         height: 50
@@ -313,7 +323,6 @@ Item {
                             }
                         }
                         TextField {
-                            readOnly: true
                             id: currentlyCacheUsedSize
                             width: parent.width * 0.25
                             text: Math.round((offlineManager.calculateUsedSpace("cache") / 1024 / 1024)*100) /100//Math.round(((settings.usedOfflineDirectorySize / 1024) /1024) * 100) / 100

@@ -15,19 +15,21 @@
 
 int main(int argc, char *argv[])
 {
+    // app eingenschaften
     QCoreApplication::setOrganizationName("FH-SWF");
     QCoreApplication::setOrganizationDomain("fh-swf.de");
     QCoreApplication::setApplicationName("SE-Projekt-Mobile-Navigation");
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
 
+    // eingene klassen in QML registieren:
     qmlRegisterType<Settings>("fhswf.se.nav.settings", 1, 0, "Settings");
     qmlRegisterType<PlacesModel>("fhswf.se.nav.models", 1, 0, "PlacesModel");
     qmlRegisterType<RoutesModel>("fhswf.se.nav.models", 1, 0, "RoutesModel");
     qmlRegisterType<LocationPin>("fhswf.se.nav.models", 1, 0, "LocationPin");
     qmlRegisterType<TileOfflineManager>("fhswf.se.nav.offlinemanager", 1, 0, "TileManager");
 
-
+    // init engine und laden von qml
     QQmlApplicationEngine engine;
     engine.load(QUrl(QLatin1String("qrc:/qml/main.qml")));
     QObject::connect(&engine, SIGNAL(quit()), qApp, SLOT(quit()));
@@ -38,6 +40,7 @@ int main(int argc, char *argv[])
         qDebug() << screen->name();
     }
 
+    // einrichten des downloadthreads
     DownloadThread * thread = new DownloadThread(item);
     QObject::connect(item, SIGNAL(saveTiles(QVariant, QString, int, int, int, int)), thread, SLOT(startDownload(QVariant, QString, int, int, int, int)));
 
@@ -47,13 +50,6 @@ int main(int argc, char *argv[])
     QMetaObject::invokeMethod(item, "initApp"
                               //                             , Q_ARG(QVariant, QVariant::fromValue(1))
                               );
-    QFile f;
-    f.setFileName(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/errorlog.txt");
-    f.open(QIODevice::WriteOnly);
-//    try {
-        return app.exec();
-//    } catch (const std::exception& ex) {
-//        f.write( ex.what());
-//    }
-
+    // start des eventloops
+    return app.exec();
 }
