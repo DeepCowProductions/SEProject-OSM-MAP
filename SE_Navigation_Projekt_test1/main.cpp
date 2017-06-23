@@ -42,13 +42,8 @@ int main(int argc, char *argv[])
     QObject::connect(item, SIGNAL(saveTiles(QVariant, QString, int, int, int, int)), thread, SLOT(startDownload(QVariant, QString, int, int, int, int)));
 
     QObject::connect(thread, SIGNAL(downloadFinished()), item, SIGNAL(downloadFinished()));
-
     QObject::connect(thread, SIGNAL(updateProgressBar(int,int)), item, SIGNAL(updateProgressBar(int, int )));
-    //    TilesDownloader * downloader = new TilesDownloader(item, screenSize);
 
-    //    QObject::connect(downloader, SIGNAL(downloadFinished()), item, SIGNAL(enableButton()));
-
-    //    QObject::connect(item, SIGNAL(saveTiles(QVariant,QString, int)), downloader, SLOT(downloadTiles(QVariant,QString, int)));
     QMetaObject::invokeMethod(item, "initApp"
                               //                             , Q_ARG(QVariant, QVariant::fromValue(1))
                               );

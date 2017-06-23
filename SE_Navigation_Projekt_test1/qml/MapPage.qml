@@ -203,13 +203,13 @@ Item {
                     map.center = positionSource.position.coordinate
                 }
                 if (recordRoute) {
-                    if (typeof(coord) != 'undefined' && !coord &&  !isNaN(coord) ) {
+                    if (typeof(coord) != 'undefined' && coord && !isNaN(coord.latitude) && !isNaN(coord.longitude)) {
                         polyline.addCoordinate(coord)
                         console.log("Recorded Coordinate list:" + path)
                         console.log(polylineItem.pathLength())
                         updatePath()
                     }else {
-//                        console.log("current coord is NaN")
+                        console.log("current coord is NaN")
                     }
                 }
             }else {

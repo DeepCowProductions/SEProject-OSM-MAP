@@ -1,6 +1,5 @@
 #include "settings.h"
 #include <QStandardPaths>
-//#include <QtAndroid>
 #include "src/OsmTilesOffline/tileofflinemanager.h"
 
 Settings::Settings()
@@ -20,20 +19,22 @@ Settings::Settings()
 
 #ifdef Q_OS_ANDROID
 
-//    QAndroidJniObject storage = QAndroidJniObject::callStaticObjectMethod("android/content/ContextCompat", "getExternalFilesDirs", "(Landroid/support/v4/content/Context;Ljava/lang/String;)V", QtAndroid::androidContext() .toString(), "WRITE_EXTERNAL_STORAGE");
 
+    QAndroidJniObject storage = QAndroidJniObject::callStaticObjectMethod("android/content/Context", "getExternalFilesDirs", "(Landroid/support/v4/content/Context;Ljava/lang/String;)[Ljava/io/File;", QtAndroid::androidActivity().object<jobject>(), "WRITE_EXTERNAL_STORAGE");
 
-//    QAndroidJniObject mediaDir = QAndroidJniObject::callStaticObjectMethod("android/os/Environment", "getExternalStorage", "()Ljava/io/File;");
-//    QAndroidJniObject mediaPath = mediaDir.callObjectMethod( "getAbsolutePath", "()Ljava/lang/String;" );
-//    QDir sdCardDircectory(mediaPath.toString());
-//    if(sdCardDircectory.exists()){
-//        m_existsSdCar = true;
-//        m_sdCardPath = sdCardDircectory.absolutePath() + "/osm-tiles";
-//    }
-//    if(!m_device && !m_sdCard)
-//        m_device = true;
-//    if(offlineDirectory().isEmpty() && m_device)
-//        setOfflineDirectory(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
+//    QAndroidJniObject mediaDirs
+
+    QAndroidJniObject mediaDir = QAndroidJniObject::callStaticObjectMethod("android/os/Environment", "getExternalStorage", "()Ljava/io/File;");
+    QAndroidJniObject mediaPath = mediaDir.callObjectMethod( "getAbsolutePath", "()Ljava/lang/String;" );
+    QDir sdCardDircectory(mediaPath.toString());
+    if(sdCardDircectory.exists()){
+        m_existsSdCar = true;
+        m_sdCardPath = sdCardDircectory.absolutePath() + "/osm-tiles";
+    }
+    if(!m_device && !m_sdCard)
+        m_device = true;
+    if(offlineDirectory().isEmpty() && m_device)
+        setOfflineDirectory(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
 #endif
 
     qDebug() << "settings saved at: " << m_settings->fileName() << "  with organisation name: " << m_settings->organizationName();

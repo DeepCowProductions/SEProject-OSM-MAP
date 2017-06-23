@@ -40,8 +40,6 @@ void TilesDownloader::downloadTiles(QVariant center, QString tileProvider, int z
     int zLevel = m_startTile->zoomlevel();
 
     Tile* tile;
-//    QTime time;
-//    time.start();
     //Äußere Schleife für zoomlevel
     for(int z = 0; z < depth+1; z++){
         //Schleife die abhängig von der Bildschirmgröße die benötigte Anzahl an Tiles für das aktuelle zoomlevel berechnet
@@ -54,14 +52,12 @@ void TilesDownloader::downloadTiles(QVariant center, QString tileProvider, int z
                 if(!m_tom->copyChacheTileIfPossible(tile)){
                     m_downloadTiles.append(tile);
                     requestCounter++;
-                    //                    sendRequest(tile);
                 }
                 tileCounter++;
 
             }
         }
     }
-//    qDebug() << "Time for creation(in msecs): " << time.elapsed() / 1000.0;
     if(!m_downloadTiles.isEmpty())
         sendingRequests();
     else
@@ -75,6 +71,7 @@ void TilesDownloader::sendingRequests()
     TileReply * tileReply = new TileReply(nm->get(createRequest(m_downloadTiles.at(m_counter))), m_downloadTiles.at(m_counter), this);
     connect(nm, SIGNAL(finished(QNetworkReply*)), tileReply, SLOT(networkReplyFinished(QNetworkReply*)));
     connect(tileReply, SIGNAL(saveTile(Tile*)), this, SLOT(saveTile(Tile*)));
+    connect(tileReply, SIGNAL(errorOccured()), this, SIGNAL(errorOccured()));
 }
 
 QNetworkRequest TilesDownloader::createRequest(Tile *tile)
@@ -85,14 +82,12 @@ QNetworkRequest TilesDownloader::createRequest(Tile *tile)
 
     request.setUrl(QUrl(url));
 
-//    qDebug() << "Creating Request finished";
     return request;
 }
 
 void TilesDownloader::saveTile(Tile *tile)
 {
     qDebug() << m_tom->saveToFile(tile);
-//    qDebug() << "Counter" << m_counter;
     delete static_cast<TileReply *>(sender());
     if(m_counter < m_downloadTiles.size()){
         emit nextTileDownloadStarted(m_counter, m_downloadTiles.size());
@@ -103,6 +98,7 @@ void TilesDownloader::saveTile(Tile *tile)
     }
     m_counter++;
 }
+
 
 
 

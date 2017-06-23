@@ -7,24 +7,19 @@ TileReply::TileReply(QNetworkReply * reply, Tile *tile, QObject *parent) : QObje
     }
 
     m_reply = reply;
-//    qDebug() << connect(m_reply, &QNetworkReply::finished, this, &TileReply::networkReplyFinished);
     connect(m_reply, SIGNAL(error(QNetworkReply::NetworkError)), this , SLOT(networkErrorOccured(QNetworkReply::NetworkError)));
-    m_finished = false;
     m_tile = tile;
 
 }
 
 void TileReply::networkReplyFinished(QNetworkReply *reply)
 {
-//    QNetworkReply * reply = static_cast<QNetworkReply *>(sender());
-//    qDebug() << "Read finished";
     reply->deleteLater();
     if (reply->error() != QNetworkReply::NoError){
         qDebug() << "Error ist aufgetreten: " << reply->errorString();
         return;
     }
     m_tile->setImageData(reply->readAll());
-    m_finished = true;
     emit saveTile(m_tile);
 }
 
@@ -33,10 +28,6 @@ void TileReply::networkErrorOccured(QNetworkReply::NetworkError error)
     m_reply->deleteLater();
     qDebug() << "Error occured:\n";
     qDebug() << error;
-
+    emit errorOccured();
 }
 
-bool TileReply::finished() const
-{
-    return m_finished;
-}

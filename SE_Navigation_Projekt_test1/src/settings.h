@@ -9,10 +9,11 @@
 
 #ifdef Q_OS_ANDROID
 #include <QAndroidJniObject>
+#include <QtAndroid>
 #endif
 /**
  * @brief The Settings class
- * Settings class to hold inforamtion about the current app status and settings.
+ * Settings-Klasse um Einstellungen der App abzurufen und zu speichern
  *
  * [...]
  */
@@ -27,6 +28,9 @@ class Settings : public QObject
     Q_PROPERTY(bool existsSdCar READ existsSdCar WRITE setExistsSdCar NOTIFY existsSdCarChanged)
 
 public:
+    /**
+     * @brief Settings Konstruktor der Klasse
+     */
     Settings();
     ~Settings();
 
@@ -65,15 +69,42 @@ protected:
 
 private:
 
-
+    /**
+     * @brief m_settings Settingsklasse mit deren Hilfe die Einstellungen gesichert und gelesen werden
+     */
     QSettings * m_settings = Q_NULLPTR;
 
+    /**
+     * @brief m_maxOfflineMapSize Maximale Offlineverzeichnisgröße
+     */
     int m_maxOfflineMapSize;
+
+    /**
+     * @brief m_offlineDirectory Pfad zum Offlineverzeichnis
+     */
     QString m_offlineDirectory;
+
+    /**
+     * @brief m_sdCard Variable ob SD-Karte gewählt wurde
+     *      Noch nicht implementiert
+     */
     bool m_sdCard;
+
+    /**
+     * @brief m_device Variable ob Gerätespeicher genutzt werden soll
+     *      Noch nicht implementiert
+     */
     bool m_device;
+
+    /**
+     * @brief m_existsSdCar Variable die angibt ob eine SD-Karte vorhanden ist
+     *      Noch nicht implementiert
+     */
     bool m_existsSdCar;
 
+    /**
+     * @brief m_sdCardPath Pfad zur SD-Karte
+     */
     QString m_sdCardPath;
 };
 

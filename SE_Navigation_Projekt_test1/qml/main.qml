@@ -24,6 +24,7 @@ ApplicationWindow {
     signal updateProgressBar(int currentValue, int amount);
     signal clearDirectory(string directory);
 
+
     function test () {
         console.log("test2")
     }
@@ -37,6 +38,7 @@ ApplicationWindow {
         }
         return c
     }
+
 
     function distanceTo(lat1, lon1, lat2, lon2, unit) {
           var rlat1 = Math.PI * lat1/180
