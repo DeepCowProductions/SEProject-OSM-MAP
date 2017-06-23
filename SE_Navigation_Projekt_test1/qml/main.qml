@@ -162,7 +162,7 @@ ApplicationWindow {
             id: initPage
             Label {
                 anchors.fill: parent
-                text: "Loading... "
+                text: "Loading... \nIf nothing happens try and restart the app"
             }
         }
     }
@@ -361,7 +361,8 @@ ApplicationWindow {
             labelText: "Enter a name to save"
             onAccepted: {
                 if (!mapInstance.map) return;
-                if (mapInstance.posSrcValid) placesModel.addItem(input,mapInstance.pos)
+                console.log(mapInstance.pos.coordinate)
+                if (mapInstance.posSrcValid) placesModel.addItem(input,mapInstance.pos.coordinate)
                 else  placesModel.addItem(input,mapInstance.map.center)
                 visible = false
                 mainStack.forceActiveFocus()
