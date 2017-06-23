@@ -188,6 +188,7 @@ ApplicationWindow {
                 mapInstance.forceActiveFocus()
             }
             clearMapItemsButton.onClicked: {
+                if (!mapInstance.map) return;
                 mapInstance.map.clearMapItems()
                 mainStack.pop(mapInstance)
                 mapInstance.forceActiveFocus()
@@ -359,8 +360,9 @@ ApplicationWindow {
             title: "Save this Location"
             labelText: "Enter a name to save"
             onAccepted: {
+                if (!mapInstance.map) return;
                 if (mapInstance.posSrcValid) placesModel.addItem(input,mapInstance.currentPosition)
-                else placesModel.addItem(input,mapInstance.map.center)
+                else  placesModel.addItem(input,mapInstance.map.center)
                 visible = false
                 mainStack.forceActiveFocus()
             }

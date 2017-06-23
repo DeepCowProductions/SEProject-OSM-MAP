@@ -37,7 +37,7 @@ Item {
     property bool posSrcValid: positionSource.valid && positionSource.name != "geoclue" /*geoclue for desktop geoService usually not working */
 
     property var pos: positionSource.valid ? positionSource.position : nullPos
-    property var posCoord: positionSource.valid ? positionSource.position.coordinate : map.center
+    property var posCoord: positionSource.valid ? positionSource.position.coordinate : (map ? map.center : nullPos)
 
     property bool followPerson
     property bool recordRoute
@@ -81,7 +81,7 @@ Item {
             map.zoomLevel = (map.maximumZoomLevel - map.minimumZoomLevel)/2
         }
 
-        map.forceActiveFocus()
+//        mapItem.forceActiveFocus()
     }
 
 
@@ -155,6 +155,7 @@ Item {
 
     // updatePath: aktualisiert den angezeigten pfad auf der Karte
     function updatePath (newPath) {
+        if (!map) return;
         console.log("updating path")
         map.removeMapItem(polyline)
         if ( typeof(newPath) == "undefined" || !newPath ) {
@@ -169,6 +170,7 @@ Item {
 
     // updateLocationMarker: aktualisiert den rote marker auf der Karte
     function updateLocationMarker (newCoord) {
+        if (!map) return;
         console.log("update Loaction marker")
         map.removeMapItem(locationMarker)
         locationMarker.coordinate = newCoord
@@ -176,6 +178,7 @@ Item {
     }
     // updateCurrenPositionMarker: aktualisiert den schwazen pfeil auf der Karte
     function updateCurrenPositionMarker (newCoord) {
+        if (!map) return;
         console.log("update current location marker")
         map.removeMapItem(currentPositionMarker)
         currentPositionMarker.coordinate = newCoord
@@ -183,6 +186,7 @@ Item {
     }
     // updatePinPositionMarker: aktualisiert den blauen marker auf der Karte
     function updatePinPositionMarker (newCoord) {
+        if (!map) return;
         console.log("update current pin marker")
         map.removeMapItem(pinPositionMarker)
         pinPositionMarker.coordinate = newCoord
@@ -208,6 +212,7 @@ Item {
             toggleFollow()
         }
         updateLocationMarker(coord)
+        if (map)
         map.center = coord
     }
 
@@ -245,7 +250,7 @@ Item {
 //                console.log("Coordinate from positionSource:", coord.longitude, coord.latitude,coord.altitude);
                 if (followPerson) {
                     updateCurrenPositionMarker(coord)
-                    map.center = positionSource.position.coordinate
+                    if (map) map.center = positionSource.position.coordinate
                 }
                 if (recordRoute) {
                     if (typeof(coord) != 'undefined' && coord && !isNaN(coord.longitude) && !isNaN(coord.latitude)) {
@@ -318,7 +323,6 @@ Item {
     Component {
         id: mapComponent
         Map {
-            id : mapItem
             anchors.fill: parent
             center: pos.coordinate
             zoomLevel: 10
@@ -391,7 +395,7 @@ Item {
                 onClicked: {
                     console.log ("default hanlder for centerOnMeButton")
                     if (posSrcValid) {
-                        map.center = positionSource.position.coordinate
+                        if (map) map.center = positionSource.position.coordinate
                         updateCurrenPositionMarker(positionSource.position.coordinate)
                     }
                     else {
@@ -479,6 +483,7 @@ Item {
             }
             radius: 9000
             onClicked: {
+                if (!map) return;
                 locationPin.setCoordinateEx(map.center)
                 updatePinPositionMarker(locationPin.coordinateEx())
             }
@@ -494,6 +499,7 @@ Item {
             }
             radius: 9000
             onClicked: {
+                if (!map) return;
                 updatePinPositionMarker(locationPin.coordinateEx())
                 map.center = locationPin.coordinateEx()
             }
@@ -533,14 +539,14 @@ Item {
                     clearPath()
                     visible = false
                     //                    updatePath()
-                    map.forceActiveFocus()
+                    if (map) map.forceActiveFocus()
                 }
                 onRejected: {
                     console.log("Rejected")
                     console.log("This path will be gone: " + polyline.path)
                     visible = false
                     clearPath()
-                    map.forceActiveFocus()
+                    if (map) map.forceActiveFocus()
                 }
                 Component.onCompleted: visible = true
             }
@@ -548,12 +554,13 @@ Item {
         Component{
             id: saveTilesDialogComp
             SaveTilesDialog {
-                minZoom: map.zoomLevel
+                minZoom: map ? map.zoomLevel : 1
                 screenWidth: appWindow.width
                 screenHeight: appWindow.height
 
                 onAccepted: {
                     visible = false
+                    if (!map) return;
                     map.forceActiveFocus()
                     saveTiles(map.center, "korona.geog.uni-heidelberg.de", map.zoomLevel,( zoomleveldepth-minZoom))
                     showProgressBar = true
@@ -562,6 +569,7 @@ Item {
                 onRejected: {
                     visible = false
                     showProgressBar = false
+                    if (!map) return;
                     map.forceActiveFocus()
                 }
                 Component.onCompleted: visible = true
