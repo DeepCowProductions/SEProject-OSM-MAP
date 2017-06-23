@@ -2,8 +2,8 @@ import QtQuick 2.7
 import QtQuick.Dialogs 1.2
 import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.0
-import QtPositioning 5.6
-import QtLocation 5.6
+import QtPositioning 5.8
+import QtLocation 5.8
 import Qt.labs.platform 1.0
 
 /* MapPage.qml
@@ -22,12 +22,14 @@ Item {
     property alias helpPageButton: infoButton
     property alias path: polylineItem.path
     property alias polyline: polylineItem
-    property alias map: map
+//    property alias map: map
     property alias plugin: osmPlugin
     property alias posSrc: positionSource
 
-    property var nullPos: QtPositioning.coordinate(10,10)
+    property var map
+    property real bearing: map ? map.bearing : 0
 
+    property var nullPos: QtPositioning.coordinate(10,10)
     property real fakedirection: 0
     property int currentValue: 0
     property int amount: 100
@@ -44,6 +46,44 @@ Item {
     signal mapRequestPosition (var coord)
     signal mapRequestRoute(var coords)
     signal saveTiles(variant center,string fileProvider, int zoomlevel, int depth);
+
+    function createPlugin(dir) {
+        return Qt.createQmlObject(
+           'import QtLocation 5.8;
+            Plugin {
+                id: osmPlugin
+                name: "osm"
+                PluginParameter{ name: "osm.mapping.offline.directory"; value: "' + dir +'"}
+           }'
+                    ,mapInstance, "dynamic plugin")
+    }
+
+    function connectMap(dir)
+    {
+        var plugin = createPlugin(dir)
+
+        var zoomLevel = null
+        var center = null
+        if (map) {
+            map.clearMapItems()
+            zoomLevel = map.zoomLevel
+            center = map.center
+            map.destroy()
+        }
+
+        map = mapComponent.createObject(mapParent);
+        map.plugin = plugin;
+
+        if (zoomLevel != null) {
+            map.zoomLevel = zoomLevel
+            map.center = center
+        } else {
+            map.zoomLevel = (map.maximumZoomLevel - map.minimumZoomLevel)/2
+        }
+
+        map.forceActiveFocus()
+    }
+
 
     // translatePosError: übersetzt integer enum PositionSource.errors in lesbare strings
     function translatePosError(value) {
@@ -244,7 +284,7 @@ Item {
             id:markerImage1
             source: "qrc:/navdot"
             scale: 0.7
-            rotation: (posSrcValid && positionSource.position.directionValid) ? positionSource.position.direction - map.bearing :  fakedirection -map.bearing
+            rotation: (posSrcValid && positionSource.position.directionValid) ? positionSource.position.direction - bearing :  fakedirection -bearing
         }
         anchorPoint.x: Math.cos (((markerImage1.rotation+45)/360)*2*Math.PI)* markerImage1.rl
         anchorPoint.y: Math.sin (((markerImage1.rotation+45)/360)*2*Math.PI)* markerImage1.rl
@@ -275,18 +315,34 @@ Item {
         smooth: false
         opacity: 0.8
     }
+    Component {
+        id: mapComponent
+        Map {
+            id : mapItem
+            anchors.fill: parent
+            center: pos.coordinate
+            zoomLevel: 10
+            Component.onCompleted: center = pos.coordinate
+            onErrorChanged: console.log(errorString)
+        }
+    }
 
     Plugin {
         id: osmPlugin
         name: "osm"
         PluginParameter {
             name: "osm.mapping.offline.directory"
-            value: "file://" + settings.offlineDirectory
+            value: /*"file://" +*/ settings.offlineDirectory
+//            value: "/home/student/.local/share/FH-SWF/SE-Projekt-Mobile-Navigation"
             Component.onCompleted: {
                 console.log(name + ", " +  value)
+                console.log(settings.offlineDirectory)
+                console.log("/home/student/.local/share/FH-SWF/SE-Projekt-Mobile-Navigation")
+                value = settings.offlineDirectory
             }
         }
         Component.onCompleted: {
+            console.log(osmPlugin.parameters[0].value)
             console.log(settings.offlineDirectory)
             console.log("OsmPlugin loaded")
         }
@@ -385,14 +441,15 @@ Item {
             anchors.top: headerSpacer.bottom
             width: parent.width
             height: parent.height - buttonRow.height - headerSpacer.height
-            Map {
-                id : map
-                anchors.fill: parent
-                plugin: osmPlugin
-                center: pos.coordinate
-                zoomLevel: 10
-                Component.onCompleted: center = pos.coordinate
-            }
+            id: mapParent
+//            Map {
+//                id : map
+//                anchors.fill: parent
+//                center: pos.coordinate
+//                zoomLevel: 10
+//                Component.onCompleted: center = pos.coordinate
+//                onErrorChanged: console.log(errorString)
+//            }
         }
         RoundHighlightButton{
             id: saveButton

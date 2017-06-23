@@ -7,10 +7,6 @@
 #include <QDir>
 //#include "src/OsmTilesOffline/tileofflinemanager.h"
 
-#ifdef Q_OS_ANDROID
-#include <QAndroidJniObject>
-#include <QtAndroid>
-#endif
 /**
  * @brief The Settings class
  * Settingsklasse specuhert und verwaltet Informationen und Einstellungen der App.

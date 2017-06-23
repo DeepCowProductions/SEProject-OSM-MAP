@@ -69,8 +69,11 @@ ApplicationWindow {
 
     // initApp: creates first Item and puts it onto the mainStack, in this case: MapPage
     function initApp() {
+//        if (mapInstance)
+//            mapInstance.destroy()
         console.log("invoke initApp -  creating mapItem - started")
         mapInstance = mapPageComp.createObject(mainStack);
+        mapInstance.connectMap(settings.offlineDirectory)
         console.log("invoke initApp -  creating mapItem - created dynamic items")
         mainStack.push(mapInstance)
         mapInstance.forceActiveFocus()
@@ -92,6 +95,7 @@ ApplicationWindow {
             settingsInstance.offlineDirectorySize.text = Math.round((offlineManager.calculateUsedSpace("offline") / 1024 / 1024)*100) / 100
         if(mapInstance.showProgressBar)
             mapInstance.showProgressBar = false
+        mapInstance.connectMap(settings.offlineDirectory)
     }
     onUpdateProgressBar: {
         mapInstance.currentValue = currentValue
@@ -307,6 +311,8 @@ ApplicationWindow {
                 console.log("adding instance of item to mainStack")
                 mainStack.push(helpInstance)
                 helpInstance.forceActiveFocus()
+//                mapInstance.map.clearData()
+//                mapInstance.map.prefetchData()
             }
 
             Component.onCompleted: console.log("mapPage complete")

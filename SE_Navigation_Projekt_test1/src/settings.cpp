@@ -17,26 +17,6 @@ Settings::Settings()
         setMaxOfflineMapSize(1000000000);
     m_existsSdCar = false;
 
-#ifdef Q_OS_ANDROID
-
-
-    QAndroidJniObject storage = QAndroidJniObject::callStaticObjectMethod("android/content/Context", "getExternalFilesDirs", "(Landroid/support/v4/content/Context;Ljava/lang/String;)[Ljava/io/File;", QtAndroid::androidActivity().object<jobject>(), "WRITE_EXTERNAL_STORAGE");
-
-//    QAndroidJniObject mediaDirs
-
-    QAndroidJniObject mediaDir = QAndroidJniObject::callStaticObjectMethod("android/os/Environment", "getExternalStorage", "()Ljava/io/File;");
-    QAndroidJniObject mediaPath = mediaDir.callObjectMethod( "getAbsolutePath", "()Ljava/lang/String;" );
-    QDir sdCardDircectory(mediaPath.toString());
-    if(sdCardDircectory.exists()){
-        m_existsSdCar = true;
-        m_sdCardPath = sdCardDircectory.absolutePath() + "/osm-tiles";
-    }
-    if(!m_device && !m_sdCard)
-        m_device = true;
-    if(offlineDirectory().isEmpty() && m_device)
-        setOfflineDirectory(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
-#endif
-
     qDebug() << "settings saved at: " << m_settings->fileName() << "  with organisation name: " << m_settings->organizationName();
 }
 
